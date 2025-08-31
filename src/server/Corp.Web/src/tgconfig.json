@@ -1,0 +1,12 @@
+{
+  "outputPath": "..\\..\\..\\client\\templateplaceholder.1-common\\src\\models",
+  "csNullableTranslation": "optional",
+  "customTypeMappings": {
+    "System.DateOnly": "Date",
+    "System.TimeOnly": "Date"
+  },
+  "enumStringInitializers": true,
+  "enumStringInitializersConverters": [ "PascalCaseToCamelCase" ],
+  "enumValueNameConverters": [ "PascalCaseToCamelCase" ],
+  "generationSpecs": [ "AppGenerationSpec" ]
+}

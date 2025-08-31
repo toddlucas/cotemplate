@@ -1,0 +1,17 @@
+{
+  "profiles": {
+    "Corp.Background": {
+      "commandName": "Project",
+      "environmentVariables": {
+        "DOTNET_ENVIRONMENT": "Development",
+        "ConnectionStrings:SqliteCorpDbContextConnection": "Data Source=../../../../../Corp.Web/src/templateplaceholder.1.db",
+        "ConnectionStrings:SqliteMyOtherDbContextConnection": "Data Source=../../../../../Corp.Web/src/myother.db",
+        "ConnectionStrings:SqliteDefaultHangfireConnection": "../../../background.db"
+      }
+    },
+    "Container (Dockerfile)": {
+      "commandName": "Docker"
+    }
+  },
+  "$schema": "https://json.schemastore.org/launchsettings.json"
+}
