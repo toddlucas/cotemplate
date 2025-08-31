@@ -31,6 +31,7 @@
     <PackageReference Include="Scalar.AspNetCore" Version="2.7.2" />
     <PackageReference Include="Seq.Extensions.Logging" Version="8.0.0" />
     <PackageReference Include="TypeGen" Version="6.0.3" />
+    <PackageReference Include="Vite.AspNetCore" Version="2.4.1" />
   </ItemGroup>
 
   <ItemGroup>

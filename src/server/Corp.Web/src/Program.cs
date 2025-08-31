@@ -8,12 +8,12 @@ using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.Net.Http.Headers;
 
 using Hangfire;
+using Scalar.AspNetCore;
+using Vite.AspNetCore;
 
 using Corp.Data;
 using Corp.Identity;
 using Corp.Settings;
-
-using Scalar.AspNetCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -56,8 +56,8 @@ builder.Services.AddCors(options =>
     options.AddDefaultPolicy(policy => policy
         .AllowAnyMethod()
         .WithOrigins(
-            "http://localhost:8686", // app
-            "http://localhost:8787", // admin
+            "http://localhost:8383", // app
+            "http://localhost:8484", // sys
             "http://localhost:5173") // Vite default port
         .WithHeaders(
             HeaderNames.Authorization,
@@ -103,6 +103,13 @@ builder.Services.AddControllers();
 //builder.Services.AddControllersWithViews()
 //    ;
 
+builder.Services.AddProblemDetails();
+
+builder.Services.AddViteServices(options =>
+{
+    options.Server.Port = 8383;
+});
+
 builder.Services.AddTransient<IEmailSender, AuthSendGridSender>();
 builder.Services.Configure<AuthSendGridOptions>(builder.Configuration.GetSection(nameof(AuthSendGridOptions)));
 
@@ -130,10 +137,23 @@ app.UseAuthorization();
 app.UseRateLimiter();
 //app.MapStaticAssets();
 
+// Proxy to the Vite Development Server.
 if (app.Environment.IsDevelopment())
 {
-    app.MapOpenApi();               // http://localhost:8585/openapi/v1.json
-    app.MapScalarApiReference();    // http://localhost:8585/scalar/v1
+    // WebSockets support is required for HMR (hot module reload).
+    // Uncomment the following line if your pipeline doesn't contain it.
+    app.UseWebSockets();
+
+    // Enable all required features to use the Vite Development Server.
+    // Pass true if you want to use the integrated middleware.
+    //app.UseViteDevelopmentServer(/* false */);
+    app.UseViteDevelopmentServer(true);
+}
+
+if (app.Environment.IsDevelopment())
+{
+    app.MapOpenApi();               // http://localhost:8181/openapi/v1.json
+    app.MapScalarApiReference();    // http://localhost:8181/scalar/v1
 }
 
 app.MapGroup("/api/auth")
@@ -154,10 +174,30 @@ app.MapControllers()
 // TODO: Secure with policy.
 app.UseEndpoints(endpoints =>
 {
-    endpoints.MapHangfireDashboard();   // http://localhost:8585/hangfire
+    endpoints.MapHangfireDashboard();   // http://localhost:8181/hangfire
 });
 #pragma warning restore ASP0014
 
+#if DEBUG
+app.MapGet(
+    "/",
+    () =>
+        Results.Content("""
+            <!doctype html>
+            <html lang='en'>
+            <title>CorpOS</title>
+            <body>
+                <div><a href="http://localhost:8383">App</a></div>
+                <div><a href="http://localhost:8484">Admin</a></div>
+                <div><a href="http://localhost:8181/hangfire">Hangfire</a></div>
+                <div><a href="http://localhost:8181/scalar/v1">Scalar API</a></div>
+                <div><a href="http://localhost:8181/openapi/v1.json">OpenAPI JSON</a></div>
+            </body>
+            </html>
+            """,
+        MediaTypeNames.Text.Html))
+    .ExcludeFromDescription();
+#endif
 
 app.Run();
 
