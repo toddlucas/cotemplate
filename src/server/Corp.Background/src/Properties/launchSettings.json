@@ -4,7 +4,7 @@
       "commandName": "Project",
       "environmentVariables": {
         "DOTNET_ENVIRONMENT": "Development",
-        "ConnectionStrings:SqliteCorpDbContextConnection": "Data Source=../../../../../Corp.Web/src/templateplaceholder.1.db",
+        "ConnectionStrings:SqliteCorpDbContextConnection": "Data Source=../../../../../Corp.Web/src/corp.db",
         "ConnectionStrings:SqliteMyOtherDbContextConnection": "Data Source=../../../../../Corp.Web/src/myother.db",
         "ConnectionStrings:SqliteDefaultHangfireConnection": "../../../background.db"
       }

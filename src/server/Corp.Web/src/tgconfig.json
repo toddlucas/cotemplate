@@ -1,5 +1,5 @@
 {
-  "outputPath": "..\\..\\..\\client\\templateplaceholder.1-common\\src\\models",
+  "outputPath": "..\\..\\..\\client\\lib\\src\\models",
   "csNullableTranslation": "optional",
   "customTypeMappings": {
     "System.DateOnly": "Date",
