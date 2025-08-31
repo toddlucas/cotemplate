@@ -1,0 +1,63 @@
+bin/
+obj/
+.vs/
+
+dist/
+dist-electron/
+release/
+
+Migrations/
+.vite/
+
+**/node_modules/*
+**/TestResults/*
+
+doc/archive/
+doc/references/
+doc/HISTORY.md
+doc/TODO.md
+
+**/wwwroot/assets/
+**/wwwroot/css/
+**/wwwroot/files/
+**/wwwroot/hosting/
+**/wwwroot/js/
+**/wwwroot/lib/
+**/wwwroot/modules/
+**/wwwroot/scripts/
+**/wwwroot/styles/
+
+**/wwwroot/index.html
+**/wwwroot/vite.svg
+
+**/wwwroot/uploads/
+**/storage/uploads/
+
+*.user
+
+*.db
+*.db-shm
+*.db-wal
+
+*.lutconfig
+
+*.tsbuildinfo
+
+env-*.cmd
+
+.env.local
+.env.*.local
+
+# SpecStory explanation file
+.specstory/.what-is-this.md
+.specstory/.gitignore
+.specstory/history/
+
+# src/client/admin/**
+# src/client/app/**
+# src/client/lib/**
+# src/client/web/**
+src/client/app.old/**
+src/client/scribe/**
+src/client/samples/**
+src/client/samples-built/**
