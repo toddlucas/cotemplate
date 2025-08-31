@@ -1,0 +1,35 @@
+{
+  "name": "corpos-lib",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "description": "CorpOS Shared Library",
+  "license": "UNLICENSED",
+  "author": "Todd Lucas",
+  "homepage": "https://corpos.ai",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/toddlucas/corpos"
+  },
+  "scripts": {
+    "build": "tsc",
+    "test": "vitest",
+    "test:ui": "vitest --ui --api.port=6170",
+    "test:watch": "vitest --watch",
+    "test:coverage": "vitest run --coverage"
+  },
+  "dependencies": {
+    "inversify": "^6.0.2",
+    "react": "^19.1.0",
+    "reflect-metadata": "^0.2.1",
+    "zustand": "^5.0.5"
+  },
+  "devDependencies": {
+    "@types/node": "^24.0.3",
+    "@types/react": "^19.1.2",
+    "@vitest/ui": "^3.2.4",
+    "jsdom": "^26.1.0",
+    "typescript": "~5.8.3",
+    "vitest": "^3.2.4"
+  }
+}

@@ -1,17 +1,21 @@
 {
   "compilerOptions": {
-    "tsBuildInfoFile": "./node_modules/.tmp/tsconfig.node.tsbuildinfo",
-    "target": "ES2023",
+    /* Language and environment */
+    "target": "ES2022",
+    "jsx": "react-jsx",
     "lib": ["ES2023"],
-    "module": "ESNext",
     "skipLibCheck": true,
 
-    /* Bundler mode */
+    /* Modules */
+    "module": "ESNext",
     "moduleResolution": "bundler",
-    "allowImportingTsExtensions": true,
-    "verbatimModuleSyntax": true,
     "moduleDetection": "force",
+    "allowImportingTsExtensions": true,
+
+    /* Emit, JS, interop, etc. */
     "noEmit": true,
+    "verbatimModuleSyntax": true,
+    "tsBuildInfoFile": "./node_modules/.tmp/tsconfig.node.tsbuildinfo",
 
     /* Linting */
     "strict": true,
