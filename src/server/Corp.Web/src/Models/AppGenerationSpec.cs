@@ -8,22 +8,24 @@ using Corp.Http;
 
 namespace Corp.Models;
 
-public class AppGenerationSpec : GenerationSpec
+public class AppGenerationSpec : BaseGenerationSpec
 {
     public AppGenerationSpec()
     {
         // /api/auth
-        AddInterface<RegisterRequest>();
-        AddInterface<LoginRequest>();
-        AddInterface<RefreshRequest>();
-        AddInterface<AccessTokenResponse>();
-        AddInterface<ResendConfirmationEmailRequest>();
-        AddInterface<ForgotPasswordRequest>();
-        AddInterface<ResetPasswordRequest>();
-        AddInterface<TwoFactorRequest>();
-        AddInterface<TwoFactorResponse>();
-        AddInterface<InfoRequest>();
-        AddInterface<InfoResponse>();
+        const string authPath = "auth";
+
+        AddInterface<RegisterRequest>(authPath);
+        AddInterface<LoginRequest>(authPath);
+        AddInterface<RefreshRequest>(authPath);
+        AddInterface<AccessTokenResponse>(authPath);
+        AddInterface<ResendConfirmationEmailRequest>(authPath);
+        AddInterface<ForgotPasswordRequest>(authPath);
+        AddInterface<ResetPasswordRequest>(authPath);
+        AddInterface<TwoFactorRequest>(authPath);
+        AddInterface<TwoFactorResponse>(authPath);
+        AddInterface<InfoRequest>(authPath);
+        AddInterface<InfoResponse>(authPath);
 
         // Identity
         AddInterface<IdentityUserModel>();
