@@ -1,15 +1,15 @@
-import { useState } from 'react'
 import { Link } from 'react-router-dom'
+import { useAuthentication } from '$/hooks/AuthHooks';
 import reactLogo from './assets/react.svg'
 import viteLogo from '/vite.svg'
 import './App.css'
 
 function App() {
-  const [count, setCount] = useState(0)
+  const { isAuthenticated, loading } = useAuthentication();
 
   return (
-    <>
-      <div>
+    <div className="text-center">
+      <div className="logo-container">
         <a href="https://vite.dev" target="_blank">
           <img src={viteLogo} className="logo" alt="Vite logo" />
         </a>
@@ -17,23 +17,22 @@ function App() {
           <img src={reactLogo} className="logo react" alt="React logo" />
         </a>
       </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
+      <h1>CorpOS</h1>
+      <div>
+        <Link to="/auth-test" className="text-blue-600 hover:text-blue-800">Auth test</Link>
+        <span> &middot; </span>
+        {!loading && (
+          isAuthenticated ? (
+            <Link to="/signout" className="text-blue-600 hover:text-blue-800">Sign out</Link>
+          ) : (
+            <Link to="/signin" className="text-blue-600 hover:text-blue-800">Sign in</Link>
+          )
+        )}
+        {loading && (
+          <span className="text-gray-500">Checking authentication...</span>
+        )}
       </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-      <p>
-        <Link to="/">Home</Link>
-        <Link to="/signin">Sign In</Link>
-      </p>
-    </>
+    </div>
   )
 }
 
