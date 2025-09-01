@@ -1,6 +1,6 @@
 # Components
 
-This directory contains reusable React components for the CorpOS application.
+This directory contains reusable React components for the application.
 
 ## Available Components
 

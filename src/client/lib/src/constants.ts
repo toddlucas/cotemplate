@@ -1,5 +1,5 @@
 const constants = {
-  title: "CorpOS",
+  title: "Corp",
   api: {
     auth: "/api/auth",
   },

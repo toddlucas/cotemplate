@@ -185,7 +185,7 @@ app.MapGet(
         Results.Content("""
             <!doctype html>
             <html lang='en'>
-            <title>CorpOS</title>
+            <title>Corp</title>
             <body>
                 <div><a href="http://localhost:8383">App</a></div>
                 <div><a href="http://localhost:8484">Admin</a></div>

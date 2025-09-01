@@ -17,7 +17,7 @@ function App() {
           <img src={reactLogo} className="logo react" alt="React logo" />
         </a>
       </div>
-      <h1>CorpOS</h1>
+      <h1>Corp</h1>
       <div>
         <Link to="/auth-test" className="text-blue-600 hover:text-blue-800">Auth test</Link>
         <span> &middot; </span>

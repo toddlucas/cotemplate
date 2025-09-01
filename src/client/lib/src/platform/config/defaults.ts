@@ -21,8 +21,8 @@ export const defaultWebConfig: WebAppConfig = {
   ...defaultCoreConfig,
   web: {
     storage: {
-      localStoragePrefix: 'corpos_',
-      sessionStoragePrefix: 'corpos_session_',
+      localStoragePrefix: 'corp_',
+      sessionStoragePrefix: 'corp_session_',
     },
     browser: {
       enableNotifications: true,

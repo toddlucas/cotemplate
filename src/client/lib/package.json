@@ -1,13 +1,13 @@
 {
-  "name": "corpos-lib",
+  "name": "corp-lib",
   "private": true,
   "version": "0.0.0",
   "type": "module",
-  "description": "CorpOS Shared Library",
+  "description": "Corp Shared Library",
   "license": "UNLICENSED",
   "author": "Todd Lucas",
-  "homepage": "https://corpos.ai",
-  "repository": "https://github.com/toddlucas/corpos",
+  "homepage": "https://corp.com",
+  "repository": "https://github.com/toddlucas/corp",
   "scripts": {
     "build": "tsc",
     "test": "vitest",

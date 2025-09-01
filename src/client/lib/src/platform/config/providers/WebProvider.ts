@@ -4,7 +4,7 @@ export class WebProvider implements ConfigurationProvider {
   private localStoragePrefix: string;
   private sessionStoragePrefix: string;
 
-  constructor(localStoragePrefix = 'corpos_', sessionStoragePrefix = 'corpos_session_') {
+  constructor(localStoragePrefix = 'corp_', sessionStoragePrefix = 'corp_session_') {
     this.localStoragePrefix = localStoragePrefix;
     this.sessionStoragePrefix = sessionStoragePrefix;
   }
