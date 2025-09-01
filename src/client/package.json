@@ -1,0 +1,9 @@
+{
+  "name": "corpos",
+  "description": "CorpOS",
+  "license": "UNLICENSED",
+  "author": "Todd Lucas",
+  "homepage": "https://corpos.ai",
+  "repository": "https://github.com/toddlucas/corpos",
+  "workspaces": ["app", "lib"]
+}

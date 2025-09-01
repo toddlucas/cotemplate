@@ -7,10 +7,7 @@
   "license": "UNLICENSED",
   "author": "Todd Lucas",
   "homepage": "https://corpos.ai",
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/toddlucas/corpos"
-  },
+  "repository": "https://github.com/toddlucas/corpos",
   "scripts": {
     "dev": "vite",
     "build": "tsc -b && vite build",
