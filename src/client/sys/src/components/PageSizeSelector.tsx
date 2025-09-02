@@ -4,17 +4,17 @@ interface PageSizeSelectorProps {
   options?: number[];
 }
 
-const PageSizeSelector = ({ 
-  pageSize, 
-  onPageSizeChange, 
-  options = [5, 10, 25, 50, 100] 
+const PageSizeSelector = ({
+  pageSize,
+  onPageSizeChange,
+  options = [5, 10, 25, 50, 100]
 }: PageSizeSelectorProps) => {
   return (
-    <div className="page-size-selector d-flex align-items-start">
-      <span className="me-2 text-muted">Show:</span>
+    <div className="flex items-center space-x-2 text-sm">
+      <span className="text-gray-600 font-medium">Show:</span>
       <select
         id="pageSize"
-        className="form-select form-select-sm me-2"
+        className="px-3 py-1.5 text-sm text-gray-900 bg-white border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500 focus:outline-none transition-colors duration-200"
         style={{ width: 'auto' }}
         value={pageSize}
         onChange={(e) => onPageSizeChange(Number(e.target.value))}
@@ -23,9 +23,9 @@ const PageSizeSelector = ({
           <option key={option} value={option}>{option}</option>
         ))}
       </select>
-      <span className="text-muted">per page</span>
+      <span className="text-gray-500">per page</span>
     </div>
   );
 };
 
-export default PageSizeSelector; 
+export default PageSizeSelector;

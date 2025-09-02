@@ -23,8 +23,8 @@ const TableFooter = ({
   pageSizeOptions = [5, 10, 25, 50, 100]
 }: TableFooterProps) => {
   return (
-    <div className="d-flex justify-content-between align-items-start">
-      <div className="flex-grow-1">
+    <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+      <div className="flex-1">
         <Paginator
           currentPage={currentPage}
           totalPages={totalPages}

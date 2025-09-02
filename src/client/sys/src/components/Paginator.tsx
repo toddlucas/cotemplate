@@ -38,7 +38,7 @@ const Paginator: React.FC<PaginatorProps> = ({
   // Generate page numbers to display
   const getPageNumbers = () => {
     const pages: (number | string)[] = [];
-    
+
     if (totalPages <= 1) {
       return pages;
     }
@@ -77,36 +77,48 @@ const Paginator: React.FC<PaginatorProps> = ({
   }
 
   return (
-    <div className={`paginator ${className}`}>
+    <div className={className}>
       <nav aria-label="Page navigation">
-        <ul className="pagination pagination-sm mb-0">
+        <ul className="flex items-center space-x-1">
           {/* First Page */}
-          <li className={`page-item ${currentPage === 0 ? 'disabled' : ''}`}>
+          <li>
             <button
               onClick={() => onPageChange(0)}
               disabled={currentPage === 0}
-              className="page-link"
+              className={`inline-flex items-center px-2 py-1 text-sm font-medium rounded-md transition-colors duration-200 ${
+                currentPage === 0
+                  ? 'text-gray-400 bg-gray-100 cursor-not-allowed'
+                  : 'text-gray-500 bg-white border border-gray-300 hover:bg-gray-50 hover:text-gray-700'
+              }`}
               aria-label="First page"
               title="First page"
               tabIndex={currentPage === 0 ? -1 : undefined}
               aria-disabled={currentPage === 0}
             >
-              <span aria-hidden="true">&laquo;</span>
+              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 19l-7-7 7-7m8 14l-7-7 7-7" />
+              </svg>
             </button>
           </li>
 
           {/* Previous Page */}
-          <li className={`page-item ${currentPage === 0 ? 'disabled' : ''}`}>
+          <li>
             <button
               onClick={() => onPageChange(currentPage - 1)}
               disabled={currentPage === 0}
-              className="page-link"
+              className={`inline-flex items-center px-2 py-1 text-sm font-medium rounded-md transition-colors duration-200 ${
+                currentPage === 0
+                  ? 'text-gray-400 bg-gray-100 cursor-not-allowed'
+                  : 'text-gray-500 bg-white border border-gray-300 hover:bg-gray-50 hover:text-gray-700'
+              }`}
               aria-label="Previous page"
               title="Previous page"
               tabIndex={currentPage === 0 ? -1 : undefined}
               aria-disabled={currentPage === 0}
             >
-              <span aria-hidden="true">&lsaquo;</span>
+              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+              </svg>
             </button>
           </li>
 
@@ -114,18 +126,23 @@ const Paginator: React.FC<PaginatorProps> = ({
           {pageNumbers.map((page, index) => (
             <React.Fragment key={index}>
               {typeof page === 'number' ? (
-                <li className={`page-item ${page - 1 === currentPage ? 'active' : ''}`} aria-current={page - 1 === currentPage ? 'page' : undefined}>
+                <li>
                   <button
                     onClick={() => onPageChange(page - 1)}
-                    className="page-link"
+                    className={`inline-flex items-center px-3 py-1 text-sm font-medium rounded-md transition-colors duration-200 ${
+                      page - 1 === currentPage
+                        ? 'text-white bg-blue-600 border border-blue-600'
+                        : 'text-gray-500 bg-white border border-gray-300 hover:bg-gray-50 hover:text-gray-700'
+                    }`}
                     aria-label={`Page ${page}`}
+                    aria-current={page - 1 === currentPage ? 'page' : undefined}
                   >
                     {page}
                   </button>
                 </li>
               ) : (
-                <li className="page-item disabled">
-                  <span className="page-link" aria-hidden="true">
+                <li>
+                  <span className="inline-flex items-center px-3 py-1 text-sm text-gray-400" aria-hidden="true">
                     {page}
                   </span>
                 </li>
@@ -134,32 +151,44 @@ const Paginator: React.FC<PaginatorProps> = ({
           ))}
 
           {/* Next Page */}
-          <li className={`page-item ${currentPage >= totalPages - 1 ? 'disabled' : ''}`}>
+          <li>
             <button
               onClick={() => onPageChange(currentPage + 1)}
               disabled={currentPage >= totalPages - 1}
-              className="page-link"
+              className={`inline-flex items-center px-2 py-1 text-sm font-medium rounded-md transition-colors duration-200 ${
+                currentPage >= totalPages - 1
+                  ? 'text-gray-400 bg-gray-100 cursor-not-allowed'
+                  : 'text-gray-500 bg-white border border-gray-300 hover:bg-gray-50 hover:text-gray-700'
+              }`}
               aria-label="Next page"
               title="Next page"
               tabIndex={currentPage >= totalPages - 1 ? -1 : undefined}
               aria-disabled={currentPage >= totalPages - 1}
             >
-              <span aria-hidden="true">&rsaquo;</span>
+              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+              </svg>
             </button>
           </li>
 
           {/* Last Page */}
-          <li className={`page-item ${currentPage >= totalPages - 1 ? 'disabled' : ''}`}>
+          <li>
             <button
               onClick={() => onPageChange(totalPages - 1)}
               disabled={currentPage >= totalPages - 1}
-              className="page-link"
+              className={`inline-flex items-center px-2 py-1 text-sm font-medium rounded-md transition-colors duration-200 ${
+                currentPage >= totalPages - 1
+                  ? 'text-gray-400 bg-gray-100 cursor-not-allowed'
+                  : 'text-gray-500 bg-white border border-gray-300 hover:bg-gray-50 hover:text-gray-700'
+              }`}
               aria-label="Last page"
               title="Last page"
               tabIndex={currentPage >= totalPages - 1 ? -1 : undefined}
               aria-disabled={currentPage >= totalPages - 1}
             >
-              <span aria-hidden="true">&raquo;</span>
+              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 5l7 7-7 7" />
+              </svg>
             </button>
           </li>
         </ul>
@@ -167,22 +196,22 @@ const Paginator: React.FC<PaginatorProps> = ({
 
       {/* Page Info */}
       {showPageInfo && (
-        <div className="page-info small text-muted mt-2">
+        <div className="text-sm text-gray-500 mt-3">
           Page {currentPage + 1} of {totalPages}
         </div>
       )}
 
       {/* Page Size Selector */}
       {showPageSize && pageSize && onPageSizeChange && (
-        <div className="page-size-controls d-flex align-items-center gap-2 mt-2">
-          <label htmlFor="page-size" className="form-label small mb-0">
+        <div className="flex items-center space-x-2 mt-3">
+          <label htmlFor="page-size" className="text-sm font-medium text-gray-700">
             Show:
           </label>
           <select
             id="page-size"
             value={pageSize}
             onChange={handlePageSizeChange}
-            className="form-select form-select-sm"
+            className="px-3 py-1.5 text-sm text-gray-900 bg-white border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500 focus:outline-none transition-colors duration-200"
             style={{ width: 'auto' }}
           >
             {pageSizeOptions.map(size => (
@@ -191,7 +220,7 @@ const Paginator: React.FC<PaginatorProps> = ({
               </option>
             ))}
           </select>
-          <span className="page-size-text small text-muted">per page</span>
+          <span className="text-sm text-gray-500">per page</span>
         </div>
       )}
     </div>
