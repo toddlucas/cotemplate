@@ -33,5 +33,8 @@ public class AppGenerationSpec : BaseGenerationSpec
 
         AddInterface<ProblemDetailsModel>();
         AddInterface<ValidationProblemDetailsModel>();
+
+        AddInterface<PagedQuery>();
+        AddInterface(typeof(PagedResult<>));
     }
 }

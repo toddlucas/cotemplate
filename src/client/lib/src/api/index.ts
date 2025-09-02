@@ -1,6 +1,7 @@
 import { authManager } from '../services/auth/authManager';
 
 export { ApiError } from './ApiError';
+export { expect, makePageQueryString } from './utils';
 
 const APPLICATION_JSON = 'application/json';
 

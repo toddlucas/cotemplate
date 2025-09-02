@@ -4,6 +4,8 @@
  */
 
 export * from './identity-user-model';
+export * from './paged-query';
+export * from './paged-result';
 export * from './problem-details-model';
 export * from './validation-problem-details-model';
 export * from './auth';

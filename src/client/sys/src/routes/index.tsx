@@ -42,6 +42,9 @@ import TwoFactorAuthentication from "$/features/auth/views/account/TwoFactorAuth
 import AuthViewsIndex from "$/features/auth/views";
 import AuthTestPage from "$/features/auth/views/AuthTestPage";
 
+// Identity views
+import UserList from "../features/identity/views/UserList";
+
 const PlatformRoutes = () => (
   <Routes>
     {/* Public routes */}
@@ -87,6 +90,8 @@ const PlatformRoutes = () => (
         <Route path="account/set-password" element={<SetPassword />} />
         <Route path="account/show-recovery-codes" element={<ShowRecoveryCodes />} />
         <Route path="account/two-factor-authentication" element={<TwoFactorAuthentication />} />
+
+        <Route path="identity/user/list" element={<UserList />} />
       </Route>
     </Route>
   </Routes>

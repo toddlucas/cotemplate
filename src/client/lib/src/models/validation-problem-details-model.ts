@@ -3,7 +3,7 @@
  * Any changes made to this file can be lost when this file is regenerated.
  */
 
-import type { ProblemDetailsModel } from "./problem-details-model";
+import { ProblemDetailsModel } from "./problem-details-model";
 
 export interface ValidationProblemDetailsModel extends ProblemDetailsModel {
     errors?: { [key: string]: string[]; };

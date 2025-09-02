@@ -23,7 +23,7 @@ public class UserController(
     /// <param name="id">The ID of the user.</param>
     /// <param name="cancellationToken">A cancellation token.</param>
     /// <returns>A user object.</returns>
-    [HttpGet("{id}")]
+    [HttpGet]
     // [EndpointSummary("/api/demographics/profile")]
     [EndpointDescription("Returns a user details object.")]
     public async Task<ActionResult> Get(string id, CancellationToken cancellationToken)
@@ -44,11 +44,11 @@ public class UserController(
     /// </summary>
     /// <param name="cancellationToken">A cancellation token.</param>
     /// <returns>A list of users.</returns>
-    [HttpGet]
+    [HttpGet("list")]
     [EndpointDescription("Returns a paginated list of users.")]
-    public async Task<ActionResult> List(CancellationToken cancellationToken)
+    public async Task<ActionResult> List([FromQuery] PagedQuery query, CancellationToken cancellationToken)
     {
         IdentityUser[] results = await _userManager.Users.ToArrayAsync();
-        return Ok(results.ToModels());
+        return Ok(PagedResult.Create(results.ToModels(), results.Length, (string?)null));
     }
 }
