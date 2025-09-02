@@ -44,6 +44,7 @@ import AuthTestPage from "$/features/auth/views/AuthTestPage";
 
 // Identity views
 import UserList from "../features/identity/views/UserList";
+import ThemeView from "$/features/theme/views/ThemeView";
 
 const PlatformRoutes = () => (
   <Routes>
@@ -72,6 +73,8 @@ const PlatformRoutes = () => (
       {/* Test routes */}
       <Route path="auth-test" element={<AuthViewsIndex />} />
       <Route path="auth-system-test" element={<AuthTestPage />} />
+
+      <Route path="theme-test" element={<ThemeView />} />
     </Route>
 
     {/* Routes that require authentication */}

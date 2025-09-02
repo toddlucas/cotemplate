@@ -32,6 +32,12 @@ function App() {
           <span className="text-gray-500">Checking authentication...</span>
         )}
       </div>
+      <div>
+        <ul>
+          <li><Link to="/identity/user/list">Users</Link></li>
+          <li><Link to="/theme-test">Theme</Link></li>
+        </ul>
+      </div>
     </div>
   )
 }

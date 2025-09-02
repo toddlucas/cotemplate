@@ -1,7 +1,7 @@
 /* Shared styles */
 @custom-variant dark (&:where(.dark, .dark *));
-/* @import "./brand/theme.css"; */
-/* @import "./brand/patterns.css"; */
+@import "./brand/theme.css";
+@import "./brand/patterns.css";
 
 :root {
   background-color: var(--color-ambient);
