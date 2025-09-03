@@ -128,10 +128,12 @@
   --color-border-emphasis: #007acc; /* Focus/active borders */
 
   /* Text Hierarchy */
-  --color-text-primary: #333;     /* Primary text */
-  --color-text-secondary: #666;   /* Secondary text */
-  --color-text-tertiary: #999;    /* Tertiary text */
-  --color-text-muted: #6b7280;   /* Muted text */
+/*
+  --color-text-primary: #333;     /* Primary text * /
+  --color-text-secondary: #666;   /* Secondary text * /
+  --color-text-tertiary: #999;    /* Tertiary text * /
+  --color-text-muted: #6b7280;   /* Muted text * /
+*/
 }
 
 /* Dark theme overrides */
@@ -219,8 +221,10 @@
   --color-border-emphasis: #3b82f6;
 
   /* Text Hierarchy - Dark Mode */
+  /*
   --color-text-primary: #f9fafb;
   --color-text-secondary: #d1d5db;
   --color-text-tertiary: #9ca3af;
   --color-text-muted: #6b7280;
+  */
 }

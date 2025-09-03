@@ -157,23 +157,90 @@ The app uses a three-layer theming architecture that provides clear separation o
 }
 ```
 
-### Reusable CSS Classes
-```css
-/* Surface Patterns */
-.panel { background-color: var(--color-panel); color: var(--color-on-panel); }
-.header { background-color: var(--color-header); color: var(--color-on-header); }
-.card { background-color: var(--color-card); color: var(--color-on-card); }
+### Utility Classes (Recommended Approach)
+Instead of the verbose `color:var(--color-panel)` syntax, we now provide clean utility classes:
 
-/* Border Patterns */
+```css
+/* Background Utilities */
+.bg-surface { background-color: var(--color-surface); }
+.bg-panel { background-color: var(--color-panel); }
+.bg-header { background-color: var(--color-header); }
+.bg-card { background-color: var(--color-card); }
+
+/* Text Color Utilities */
+.text-surface { color: var(--color-on-surface); }
+.text-panel { color: var(--color-on-panel); }
+.text-header { color: var(--color-on-header); }
+.text-card { color: var(--color-on-card); }
+.text-muted { color: var(--color-text-muted); }
+.text-secondary { color: var(--color-text-secondary); }
+.text-tertiary { color: var(--color-text-tertiary); }
+
+/* Border Utilities */
 .border-standard { border-color: var(--color-border); }
 .border-light { border-color: var(--color-border-light); }
 .border-emphasis { border-color: var(--color-border-emphasis); }
 
-/* Text Patterns */
-.text-primary { color: var(--color-text-primary); }
-.text-secondary { color: var(--color-text-secondary); }
-.text-tertiary { color: var(--color-text-tertiary); }
-.text-muted { color: var(--color-text-muted); }
+/* Interactive State Utilities */
+.hover-panel:hover { background-color: var(--color-panel-hover); }
+.hover-card:hover { background-color: var(--color-card-hover); }
+.hover-header:hover { background-color: var(--color-header-hover); }
+.hover-surface:hover { background-color: var(--color-surface-hover); }
+
+.active-panel:active { background-color: var(--color-panel-active); }
+.active-card:active { background-color: var(--color-card-active); }
+.active-header:active { background-color: var(--color-header-active); }
+.active-surface:active { background-color: var(--color-surface-active); }
+
+/* Common Pattern Utilities */
+.surface-elevated {
+  background-color: var(--color-card);
+  border: 1px solid var(--color-border);
+  border-radius: 6px;
+}
+
+.surface-flat {
+  background-color: var(--color-panel);
+  border: 1px solid var(--color-border-light);
+}
+
+.surface-inset {
+  background-color: var(--color-header);
+  border: 1px solid var(--color-border);
+  border-radius: 4px;
+}
+
+.text-label {
+  color: var(--color-text-secondary);
+  font-size: 0.875rem;
+  font-weight: 500;
+}
+
+.text-caption {
+  color: var(--color-text-muted);
+  font-size: 0.75rem;
+}
+
+/* Focus and Selection Utilities */
+.focus-emphasis:focus {
+  border-color: var(--color-border-emphasis);
+  outline: none;
+}
+
+.focus-ring:focus {
+  outline: 2px solid var(--color-border-emphasis);
+  outline-offset: 2px;
+}
+
+.selected {
+  background-color: var(--color-selected);
+  color: var(--color-on-selected);
+}
+
+.drag {
+  background-color: var(--color-drag);
+  color: var(--color-on-drag);
+}
 ```
 
 ### Component Patterns
@@ -253,19 +320,35 @@ The app uses a three-layer theming architecture that provides clear separation o
 
 ### Usage Examples
 ```html
-<!-- Panel with header -->
+<!-- Before: Verbose syntax -->
+<div class="bg-[color:var(--color-panel)] text-[color:var(--color-text-secondary)] border-[color:var(--color-border)]">
+
+<!-- After: Clean utility classes -->
+<div class="bg-panel text-secondary border-standard">
+
+<!-- Surface patterns -->
+<div class="surface-elevated p-4">
+  <h4 class="text-label">Card Title</h4>
+  <p class="text-caption">Card description</p>
+</div>
+
+<!-- Interactive elements -->
+<div class="bg-card hover:bg-card-hover active:bg-card-active p-4 rounded">
+  Interactive card with hover and active states
+</div>
+
+<!-- Focus states -->
+<button class="bg-primary text-on-primary focus:focus-ring">
+  Button with focus ring
+</button>
+
+<!-- Legacy classes (still available) -->
 <div class="panel-container">
   <div class="panel-header">Panel Header</div>
   <div class="panel-content">Panel content goes here</div>
 </div>
 
-<!-- Card container -->
-<div class="card-container">
-  <h4 class="text-primary">Card Title</h4>
-  <p class="text-secondary">Card description</p>
-</div>
-
-<!-- Layer 2 buttons -->
+<!-- Component patterns -->
 <button class="button-primary">Primary Action</button>
 <button class="button-secondary">Secondary Action</button>
 <button class="button-surface">Surface Action</button>
@@ -372,13 +455,18 @@ Layer 2 also supports direct CSS variable references for one-off styling needs:
 - **Layer 2**: Custom properties section with structural colors for CSS classes
 - **Dark mode**: Comprehensive overrides for both layers
 
-### patterns.css
-- **Surface patterns**: `.panel`, `.header`, `.card`
-- **Border patterns**: `.border-standard`, `.border-light`, `.border-emphasis`
-- **Text patterns**: `.text-primary`, `.text-secondary`, `.text-tertiary`, `.text-muted`
-- **Interactive patterns**: Hover and focus states
-- **Component patterns**: Buttons, inputs, panels, cards
-- **Workspace-specific patterns**: File tree items, header buttons, dividers
+### utilities.css
+- **Background utilities**: `.bg-surface`, `.bg-panel`, `.bg-header`, `.bg-card`
+- **Text utilities**: `.text-surface`, `.text-panel`, `.text-header`, `.text-card`, `.text-muted`, `.text-secondary`, `.text-tertiary`
+- **Border utilities**: `.border-standard`, `.border-light`, `.border-emphasis`
+- **Interactive utilities**: `.hover-panel`, `.hover-card`, `.hover-header`, `.hover-surface`
+- **Common patterns**: `.surface-elevated`, `.surface-flat`, `.surface-inset`, `.text-label`, `.text-caption`
+- **Focus utilities**: `.focus-emphasis`, `.focus-ring`, `.selected`, `.drag`
+
+### components.css
+- **Button patterns**: `.button-primary`, `.button-secondary`, `.button-surface`
+- **Input patterns**: `.input-field`
+- **Legacy patterns**: `.panel`, `.header`, `.card` (for backward compatibility)
 
 ## Decision Framework
 
@@ -389,10 +477,10 @@ Layer 2 also supports direct CSS variable references for one-off styling needs:
 - **Examples**: Primary actions, success/error states, brand elements
 - **Pattern**: `bg-primary`, `text-on-primary`, `bg-success`, `text-on-success`
 
-#### Layer 2 (Structural Colors)
+#### Layer 2 (Structural Colors & Utilities)
 - **Use for**: UI structure, reusable patterns, component styling
 - **Examples**: Panel backgrounds, borders, text hierarchy, form elements
-- **Pattern**: `.panel-container`, `.button-primary`, `.input-field`, `.text-primary`
+- **Pattern**: `.bg-panel`, `.text-secondary`, `.surface-elevated`, `.button-primary`
 
 #### Layer 3 (Utility Classes)
 - **Use for**: Implementation details, layout, spacing, typography
@@ -416,12 +504,22 @@ Layer 2 also supports direct CSS variable references for one-off styling needs:
 - Focus on layout, spacing, and typography
 - Don't override Layer 1 or Layer 2 decisions
 
-### 4. Maintain Separation
+### 4. Prefer Utility Classes Over Direct Variables
+- **Use**: `.bg-panel`, `.text-secondary`, `.border-standard`
+- **Avoid**: `bg-[color:var(--color-panel)]`, `text-[color:var(--color-text-secondary)]`
+- **Exception**: One-off custom styling that doesn't warrant a utility class
+
+### 5. Maintain Separation
 - Don't use Layer 3 for semantic decisions
 - Don't use Layer 1 for structural decisions
 - Keep concerns separated and clear
 
 ## Benefits
+
+### Cleaner, More Readable Code
+- **Before**: `bg-[color:var(--color-panel)] text-[color:var(--color-text-secondary)]`
+- **After**: `bg-panel text-secondary`
+- **Result**: 50% reduction in class name length, much better readability
 
 ### Clear Separation of Concerns
 - **Semantic decisions** stay at Layer 1
@@ -450,16 +548,16 @@ Layer 2 also supports direct CSS variable references for one-off styling needs:
 2. Set up dark mode overrides
 3. Test theme switching functionality
 
-### Phase 2: Patterns
-1. Create Layer 2 structural colors
-2. Build reusable component classes
-3. Test patterns in theme page
+### Phase 2: Utility Classes
+1. ✅ Create Layer 2 utility classes
+2. ✅ Replace verbose `color:var()` syntax
+3. ✅ Test utility classes in components
 
-### Phase 3: Workspace Integration
-1. Start with workspace container
-2. Migrate panel components
-3. Update interactive elements
-4. Refine based on real usage
+### Phase 3: Component Integration
+1. ✅ Start with workspace container
+2. ✅ Migrate panel components
+3. ✅ Update interactive elements
+4. ✅ Refine based on real usage
 
 ### Phase 4: Optimization
 1. Review and refine patterns
