@@ -1,0 +1,56 @@
+/* Layer 2: Reusable Utility Patterns */
+
+/* ==========================================================================
+   Surface Patterns
+   ========================================================================== */
+
+.panel {
+  background-color: var(--color-panel);
+  color: var(--color-on-panel);
+}
+
+.header {
+  background-color: var(--color-header);
+  color: var(--color-on-header);
+}
+
+.card {
+  background-color: var(--color-card);
+  color: var(--color-on-card);
+}
+
+/* ==========================================================================
+   Border Patterns
+   ========================================================================== */
+
+.border-standard {
+  border-color: var(--color-border);
+}
+
+.border-light {
+  border-color: var(--color-border-light);
+}
+
+.border-emphasis {
+  border-color: var(--color-border-emphasis);
+}
+
+/* ==========================================================================
+   Text Patterns
+   ========================================================================== */
+
+/* .text-primary {
+  color: var(--color-text-primary);
+}
+
+.text-secondary {
+  color: var(--color-text-secondary);
+}
+
+.text-tertiary {
+  color: var(--color-text-tertiary);
+}
+
+.text-muted {
+  color: var(--color-text-muted);
+} */

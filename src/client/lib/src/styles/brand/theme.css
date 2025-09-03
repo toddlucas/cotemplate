@@ -21,6 +21,15 @@
 
 /* Layer 1: Theme Colors (for Tailwind utilities) */
 @theme static {
+  /*
+  Default text and ambient background are set at the root level.
+  These are aliases that can be used to explicitly match those colors.
+  */
+  --color-ambient: #fff; /* Same as ::root background-color */
+  --color-on-ambient: #000; /* Same as ::root color */
+  --color-default: #000; /* default == on-ambient (text-default bg-ambient) */
+  --color-muted: #888;
+
   /* Core color roles (theme anchors) */
   --color-primary: #284b63ff; /* indigo-dye */ /* was jet */
   --color-secondary: #3c6e71ff; /* caribbean-current */
@@ -85,29 +94,17 @@
   --color-on-drag: #ffffff;
   --color-selected: #3b82f6ff;
   --color-on-selected: #ffffff;
-
-  /* Structural Colors (Surface Layers) */
-  --color-surface: #fff;
-
-  --color-on-surface: #000;
-
-  /*
-  Default text and ambient background are set at the root level.
-  These are aliases that can be used to explicitly match those colors.
-  */
-  --color-ambient: #fff;
-  --color-on-ambient: #000;
-  --color-default: #000; /* default == on-ambient (text-default bg-ambient) */
-  --color-muted: #888;
 }
 
 /* Layer 2: Structural Colors (for CSS classes) */
 :root {
   /* Surface Hierarchy */
+  --color-surface: #fff;
   --color-panel: #f8f9fa;        /* Panel backgrounds */
   --color-header: #f1f3f4;       /* Header/toolbar backgrounds */
   --color-card: #ffffff;          /* Card/module backgrounds */
 
+  --color-on-surface: #000;
   --color-on-panel: #000;
   --color-on-header: #000;
   --color-on-card: #000;
@@ -121,7 +118,10 @@
   --color-header-active: #d1d5dbff;
   --color-card-hover: #f9fafbff;
   --color-card-active: #f3f4f6ff;
+}
 
+/* Layer 2: Structural Colors (for CSS classes) for REVIEW */
+:root {
   /* Border Hierarchy */
   --color-border: #e0e0e0;       /* Standard borders */
   --color-border-light: #f0f0f0; /* Light borders */
@@ -135,15 +135,14 @@
 }
 
 /* Dark theme overrides */
+/* NOTE: These aren't applied using dark:bg-primary, etc.
+    Instead, they use the dark class applied to the root element. */
+/* Layer 1 overrides */
 .dark {
-  /* Layer 1 overrides */
-  /* NOTE: These aren't applied using dark:bg-primary, etc.
-     Instead, they use the dark class applied to the root element. */
   --color-ambient: #2f3e46;
   --color-on-ambient: #fff;
   --color-default: #fff; /* default == on-ambient (text-default bg-ambient) */
-  --color-surface: #2f3e46;
-  --color-on-surface: #fff;
+  --color-muted: #888;
 
   /* Interactive States - Primary (Dark) */
   --color-primary-hover: #6099beff;
@@ -187,12 +186,16 @@
   --color-on-drag: #ffffff;
   --color-selected: #1e40afff;
   --color-on-selected: #ffffff;
+}
 
-  /* Layer 2 overrides */
+/* Layer 2: Structural Colors (for CSS classes) */
+.dark {
+  --color-surface: #2f3e46;
   --color-panel: #374151;
   --color-header: #4b5563;
   --color-card: #1f2937;
 
+  --color-on-surface: #fff;
   --color-on-panel: #fff;
   --color-on-header: #fff;
   --color-on-card: #fff;
@@ -206,7 +209,10 @@
   --color-header-active: #9ca3afff;
   --color-card-hover: #374151ff;
   --color-card-active: #4b5563ff;
+}
 
+/* Layer 2: Structural Colors (for CSS classes) for REVIEW */
+.dark {
   /* Border Hierarchy - Dark Mode */
   --color-border: #4b5563;
   --color-border-light: #6b7280;
