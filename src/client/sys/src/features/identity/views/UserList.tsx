@@ -30,7 +30,7 @@ const ActionColumn = ({ id }: { id: string }) => {
   return (
     <div className="flex items-center gap-2">
       <Link
-        className="inline-flex items-center justify-center w-8 h-8 text-gray-500 hover:text-blue-600 transition-colors duration-200 rounded-md hover:bg-blue-50"
+        className="inline-flex items-center justify-center w-8 h-8 text-muted hover:text-primary transition-colors duration-200 rounded-md hover:bg-surface-hover"
         title="View"
         to={`/identity/user/${id}`}
       >
@@ -40,7 +40,7 @@ const ActionColumn = ({ id }: { id: string }) => {
         </svg>
       </Link>
       <a
-        className="inline-flex items-center justify-center w-8 h-8 text-gray-500 hover:text-amber-600 transition-colors duration-200 rounded-md hover:bg-amber-50"
+        className="inline-flex items-center justify-center w-8 h-8 text-muted hover:text-warning transition-colors duration-200 rounded-md hover:bg-surface-hover"
         title="Edit"
         href={`/identity/user/${id}/edit`}
       >
@@ -127,7 +127,7 @@ const UserList = () => {
         id: 'name',
         header: 'User Name',
         cell: info => (
-          <div className="font-medium text-gray-900">{info.getValue()}</div>
+          <div className="font-medium text-on-surface">{info.getValue()}</div>
         ),
         enableSorting: true,
       }),
@@ -135,7 +135,7 @@ const UserList = () => {
         id: 'id',
         header: 'ID',
         cell: info => (
-          <div className="text-sm text-gray-500 font-mono bg-gray-100 px-2 py-1 rounded">
+          <div className="text-sm text-muted font-mono bg-panel px-2 py-1 rounded">
             {info.getValue()}
           </div>
         ),
@@ -145,7 +145,7 @@ const UserList = () => {
         id: 'email',
         header: 'Email',
         cell: info => (
-          <div className="text-sm text-gray-600">{info.getValue()}</div>
+          <div className="text-sm border-primary text-secondary">{info.getValue()}</div>
         ),
         enableSorting: true,
       }),
@@ -223,15 +223,15 @@ const UserList = () => {
   });
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-ambient">
       {/* Header */}
-      <div className="bg-white shadow-sm border-b border-gray-200">
+      <div className="bg-surface shadow-sm border-b border-standard">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="py-6">
             <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
               <div>
-                <h1 className="text-2xl font-bold text-gray-900">Users</h1>
-                <p className="mt-1 text-sm text-gray-500">
+                <h1 className="text-2xl font-bold text-on-surface">Users</h1>
+                <p className="mt-1 text-sm text-muted">
                   Manage user accounts and permissions
                 </p>
               </div>
@@ -249,24 +249,24 @@ const UserList = () => {
         {isLoading && (
           <div className="flex items-center justify-center py-12">
             <div className="flex items-center space-x-3">
-              <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-blue-600"></div>
-              <span className="text-gray-600">Loading users...</span>
+              <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-primary"></div>
+              <span className="text-secondary">Loading users...</span>
             </div>
           </div>
         )}
 
         {/* Error State */}
         {error && (
-          <div className="bg-red-50 border border-red-200 rounded-lg p-4 mb-6">
+          <div className="bg-error/10 border border-error/20 rounded-lg p-4 mb-6">
             <div className="flex">
               <div className="flex-shrink-0">
-                <svg className="h-5 w-5 text-red-400" viewBox="0 0 20 20" fill="currentColor">
+                <svg className="h-5 w-5 text-error" viewBox="0 0 20 20" fill="currentColor">
                   <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clipRule="evenodd" />
                 </svg>
               </div>
               <div className="ml-3">
-                <h3 className="text-sm font-medium text-red-800">Error loading users</h3>
-                <div className="mt-2 text-sm text-red-700">{error}</div>
+                <h3 className="text-sm font-medium text-error">Error loading users</h3>
+                <div className="mt-2 text-sm text-error">{error}</div>
               </div>
             </div>
           </div>
@@ -274,19 +274,19 @@ const UserList = () => {
 
         {/* Users Table */}
         {users.length > 0 && !isLoading && (
-          <div className="bg-white shadow-sm rounded-lg border border-gray-200 overflow-hidden">
+          <div className="bg-card shadow-sm rounded-lg border border-standard overflow-hidden">
             <div className="overflow-x-auto">
-              <table className="min-w-full divide-y divide-gray-200">
-                <thead className="bg-gray-50">
+              <table className="min-w-full divide-y divide-standard">
+                <thead className="bg-panel">
                   {table.getHeaderGroups().map(headerGroup => (
                     <tr key={headerGroup.id}>
                       {headerGroup.headers.map(header => (
                         <th
                           key={header.id}
                           onClick={header.column.getToggleSortingHandler()}
-                          className={`px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider ${
+                          className={`px-6 py-3 text-left text-xs font-medium text-secondary uppercase tracking-wider ${
                             header.column.getCanSort()
-                              ? 'cursor-pointer hover:bg-gray-100 transition-colors duration-150'
+                              ? 'cursor-pointer hover:bg-surface-hover transition-colors duration-150'
                               : ''
                           }`}
                         >
@@ -298,7 +298,7 @@ const UserList = () => {
                               )}
                             </span>
                             {header.column.getCanSort() && (
-                              <span className="text-gray-400">
+                              <span className="text-tertiary">
                                 {{
                                   asc: '↑',
                                   desc: '↓',
@@ -311,13 +311,13 @@ const UserList = () => {
                     </tr>
                   ))}
                 </thead>
-                <tbody className="bg-white divide-y divide-gray-200">
+                <tbody className="bg-card divide-y divide-standard">
                   {table.getRowModel().rows.map((row, rowIndex) => (
                     <tr
                       key={row.id}
                       className={`${
-                        rowIndex % 2 === 0 ? 'bg-white' : 'bg-gray-50'
-                      } hover:bg-blue-50 transition-colors duration-150`}
+                        rowIndex % 2 === 0 ? 'bg-card' : 'bg-panel'
+                      } hover:bg-surface-hover transition-colors duration-150`}
                     >
                       {row.getVisibleCells().map(cell => (
                         <td key={cell.id} className="px-6 py-4 whitespace-nowrap">
@@ -334,7 +334,7 @@ const UserList = () => {
             </div>
 
             {/* Table Footer with Pagination */}
-            <div className="bg-gray-50 px-6 py-3 border-t border-gray-200">
+            <div className="bg-panel px-6 py-3 border-t border-standard">
               <TableFooter
                 currentPage={currentPage}
                 totalPages={totalPages}
@@ -349,11 +349,11 @@ const UserList = () => {
         {/* Empty State */}
         {users.length === 0 && !isLoading && !error && (
           <div className="text-center py-12">
-            <svg className="mx-auto h-12 w-12 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <svg className="mx-auto h-12 w-12 text-muted" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197m13.5-9a2.5 2.5 0 11-5 0 2.5 2.5 0 015 0z" />
             </svg>
-            <h3 className="mt-2 text-sm font-medium text-gray-900">No users found</h3>
-            <p className="mt-1 text-sm text-gray-500">
+            <h3 className="mt-2 text-sm font-medium text-on-surface">No users found</h3>
+            <p className="mt-1 text-sm text-secondary">
               Get started by creating a new user account.
             </p>
           </div>

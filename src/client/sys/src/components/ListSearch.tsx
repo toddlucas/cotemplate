@@ -19,7 +19,7 @@ const ListSearch = ({ onSearch, placeholder = "Search...", className = "" }: Lis
       <form onSubmit={handleSubmit} className="flex">
         <div className="relative flex-1 min-w-0">
           <input
-            className="block w-full px-3 py-2 text-sm text-gray-900 bg-white border border-gray-300 rounded-l-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500 focus:outline-none transition-colors duration-200"
+            className="block w-full px-3 py-2 text-sm text-on-surface bg-surface border border-standard rounded-l-md focus:ring-2 focus:ring-primary focus:border-primary focus:outline-none transition-colors duration-200"
             type="text"
             name="search"
             placeholder={placeholder}
@@ -30,7 +30,7 @@ const ListSearch = ({ onSearch, placeholder = "Search...", className = "" }: Lis
           />
         </div>
         <button
-          className="inline-flex items-center px-4 py-2 text-sm font-medium text-white bg-blue-600 border border-blue-600 rounded-r-md hover:bg-blue-700 hover:border-blue-700 focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 focus:outline-none transition-colors duration-200"
+          className="inline-flex items-center px-4 py-2 text-sm font-medium text-on-primary bg-primary border border-primary rounded-r-md hover:bg-primary-hover hover:border-primary-hover focus:ring-2 focus:ring-primary-focus focus:ring-offset-2 focus:outline-none transition-colors duration-200"
           type="submit"
           id="search-submit"
         >

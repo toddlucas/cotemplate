@@ -87,8 +87,8 @@ const Paginator: React.FC<PaginatorProps> = ({
               disabled={currentPage === 0}
               className={`inline-flex items-center px-2 py-1 text-sm font-medium rounded-md transition-colors duration-200 ${
                 currentPage === 0
-                  ? 'text-gray-400 bg-gray-100 cursor-not-allowed'
-                  : 'text-gray-500 bg-white border border-gray-300 hover:bg-gray-50 hover:text-gray-700'
+                  ? 'text-tertiary bg-header cursor-not-allowed'
+                  : 'text-secondary bg-surface border border-standard hover:bg-surface-hover hover:text-primary'
               }`}
               aria-label="First page"
               title="First page"
@@ -108,8 +108,8 @@ const Paginator: React.FC<PaginatorProps> = ({
               disabled={currentPage === 0}
               className={`inline-flex items-center px-2 py-1 text-sm font-medium rounded-md transition-colors duration-200 ${
                 currentPage === 0
-                  ? 'text-gray-400 bg-gray-100 cursor-not-allowed'
-                  : 'text-gray-500 bg-white border border-gray-300 hover:bg-gray-50 hover:text-gray-700'
+                  ? 'text-tertiary bg-header cursor-not-allowed'
+                  : 'text-secondary bg-surface border border-standard hover:bg-surface-hover hover:text-primary'
               }`}
               aria-label="Previous page"
               title="Previous page"
@@ -131,8 +131,8 @@ const Paginator: React.FC<PaginatorProps> = ({
                     onClick={() => onPageChange(page - 1)}
                     className={`inline-flex items-center px-3 py-1 text-sm font-medium rounded-md transition-colors duration-200 ${
                       page - 1 === currentPage
-                        ? 'text-white bg-blue-600 border border-blue-600'
-                        : 'text-gray-500 bg-white border border-gray-300 hover:bg-gray-50 hover:text-gray-700'
+                        ? 'text-on-primary bg-primary border border-primary'
+                        : 'text-secondary bg-surface border border-standard hover:bg-surface-hover hover:text-primary'
                     }`}
                     aria-label={`Page ${page}`}
                     aria-current={page - 1 === currentPage ? 'page' : undefined}
@@ -142,7 +142,7 @@ const Paginator: React.FC<PaginatorProps> = ({
                 </li>
               ) : (
                 <li>
-                  <span className="inline-flex items-center px-3 py-1 text-sm text-gray-400" aria-hidden="true">
+                  <span className="inline-flex items-center px-3 py-1 text-tertiary" aria-hidden="true">
                     {page}
                   </span>
                 </li>
@@ -157,8 +157,8 @@ const Paginator: React.FC<PaginatorProps> = ({
               disabled={currentPage >= totalPages - 1}
               className={`inline-flex items-center px-2 py-1 text-sm font-medium rounded-md transition-colors duration-200 ${
                 currentPage >= totalPages - 1
-                  ? 'text-gray-400 bg-gray-100 cursor-not-allowed'
-                  : 'text-gray-500 bg-white border border-gray-300 hover:bg-gray-50 hover:text-gray-700'
+                  ? 'text-tertiary bg-header cursor-not-allowed'
+                  : 'text-secondary bg-surface border border-standard hover:bg-surface-hover hover:text-primary'
               }`}
               aria-label="Next page"
               title="Next page"
@@ -178,8 +178,8 @@ const Paginator: React.FC<PaginatorProps> = ({
               disabled={currentPage >= totalPages - 1}
               className={`inline-flex items-center px-2 py-1 text-sm font-medium rounded-md transition-colors duration-200 ${
                 currentPage >= totalPages - 1
-                  ? 'text-gray-400 bg-gray-100 cursor-not-allowed'
-                  : 'text-gray-500 bg-white border border-gray-300 hover:bg-gray-50 hover:text-gray-700'
+                  ? 'text-tertiary bg-header cursor-not-allowed'
+                  : 'text-secondary bg-surface border border-standard hover:bg-surface-hover hover:text-primary'
               }`}
               aria-label="Last page"
               title="Last page"
@@ -196,7 +196,7 @@ const Paginator: React.FC<PaginatorProps> = ({
 
       {/* Page Info */}
       {showPageInfo && (
-        <div className="text-sm text-gray-500 mt-3">
+        <div className="text-sm text-muted mt-3">
           Page {currentPage + 1} of {totalPages}
         </div>
       )}
@@ -204,14 +204,14 @@ const Paginator: React.FC<PaginatorProps> = ({
       {/* Page Size Selector */}
       {showPageSize && pageSize && onPageSizeChange && (
         <div className="flex items-center space-x-2 mt-3">
-          <label htmlFor="page-size" className="text-sm font-medium text-gray-700">
+          <label htmlFor="page-size" className="text-sm font-medium text-primary">
             Show:
           </label>
           <select
             id="page-size"
             value={pageSize}
             onChange={handlePageSizeChange}
-            className="px-3 py-1.5 text-sm text-gray-900 bg-white border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500 focus:outline-none transition-colors duration-200"
+            className="px-3 py-1.5 text-sm text-on-surface bg-surface border border-standard rounded-md focus:ring-2 focus:ring-primary focus:border-primary focus:outline-none transition-colors duration-200"
             style={{ width: 'auto' }}
           >
             {pageSizeOptions.map(size => (
@@ -220,7 +220,7 @@ const Paginator: React.FC<PaginatorProps> = ({
               </option>
             ))}
           </select>
-          <span className="text-sm text-gray-500">per page</span>
+          <span className="text-sm text-muted">per page</span>
         </div>
       )}
     </div>
