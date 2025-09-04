@@ -44,6 +44,7 @@ import AuthTestPage from "$/features/auth/views/AuthTestPage";
 
 // Identity views
 import UserList from "../features/identity/views/UserList";
+import Users from "../features/identity/views/Users";
 import ThemeView from "$/features/theme/views/ThemeView";
 
 const PlatformRoutes = () => (
@@ -95,6 +96,7 @@ const PlatformRoutes = () => (
         <Route path="account/two-factor-authentication" element={<TwoFactorAuthentication />} />
 
         <Route path="identity/user/list" element={<UserList />} />
+        <Route path="identity/users" element={<Users />} />
       </Route>
     </Route>
   </Routes>

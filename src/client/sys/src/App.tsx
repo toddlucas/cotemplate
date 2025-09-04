@@ -35,6 +35,7 @@ function App() {
       <div>
         <ul>
           <li><Link to="/identity/user/list">Users</Link></li>
+          <li><Link to="/identity/users">Users 2</Link></li>
           <li><Link to="/theme-test">Theme</Link></li>
         </ul>
       </div>
