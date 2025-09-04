@@ -1,0 +1,234 @@
+---
+alwaysApply: true
+---
+
+# Project Summary
+
+## Common
+
+### Project Overview
+- **Purpose**: AI-powered product platform (exact purpose TBD)
+- **Architecture**: Full-stack application with separate frontend and backend
+- **Development**: Multi-project solution with shared libraries
+
+### Development Environment
+- **IDE**: Cursor
+- **Version Control**: Git
+- **Operating System**: Windows 10/11
+- **Shell**: cmd.exe (primary), PowerShell 7 (secondary)
+
+### Project Structure
+```
+project-base/
+├── src/
+│   ├── client/          # Frontend applications
+│   │   ├── lib/         # Shared React library
+│   │   ├── app/         # Electron desktop app
+│   │   └── web/         # Web application
+│   └── server/          # Backend .NET solution
+│       ├── Corp.Web/  # Main web API
+│       ├── Corp.Services/ # Business logic
+│       ├── Corp.Data/ # Data access layer
+│       └── [other .NET projects]
+└── doc/                 # Documentation
+```
+
+### Port Configuration
+- **Frontend Apps**:
+  - Electron App: 8585
+  - Web App: 8383
+  - Admin: 8484
+- **Backend APIs**:
+  - HTTP: 8181
+  - HTTPS: 8282
+
+## Frontend
+
+### Technology Stack
+- **Core**: React 19.1.0 + TypeScript 5.8.3
+- **Build Tool**: Vite 6.3.5
+- **UI Framework**: Tailwind CSS 4.1.5
+- **State Management**: Zustand 5.0.4
+- **Testing**: Vitest 3.1.3 + Testing Library
+- **Development Tools**: ESLint 9.25.0 + Prettier 3.5.3
+
+### Architecture Components
+
+#### Dependency Injection System
+- **Framework**: Inversify-based DI container
+- **Pattern**: Constructor injection with `@injectable()` decorator
+- **Configuration**: Type symbols defined in `src/platform/di/types.ts`
+- **Scopes**: Singleton and transient scope management
+- **Benefits**: Clean separation of concerns and testability
+
+#### Key Libraries
+- **Form Handling**: React Hook Form + Zod validation
+- **Routing**: React Router DOM 7.6.3
+- **Icons**: Phosphor Icons
+- **Rich Text**: Plate.js editor
+- **Utilities**: clsx, tailwind-merge
+
+### Applications
+
+#### Shared Library (`src/client/lib`)
+- **Purpose**: Common components, utilities, and services
+- **Testing**: `npm test` with Vitest
+- **Build**: TypeScript compilation
+
+#### Electron App (`src/client/app`)
+- **Purpose**: Desktop application
+- **Framework**: Electron 30.0.1
+- **Build**: Vite + Electron Builder
+- **Testing**: `npm test` with Vitest
+
+#### Web App (`src/client/web`)
+- **Purpose**: Browser-based application
+- **Framework**: React + Vite
+- **Testing**: `npm test` with Vitest
+
+### Development Guidelines
+1. Use TypeScript for all new code
+2. Follow established project structure
+3. Write tests for new components and features
+4. Use Tailwind CSS for styling
+5. Follow ESLint and Prettier configurations
+6. Use Zustand for state management
+7. Use Dependency Injection for all services and major components
+8. Keep components modular and reusable
+9. Document complex logic and components
+
+### Testing Strategy
+1. Unit tests for utilities and hooks
+2. Component tests using React Testing Library
+3. Integration tests for key user flows
+4. Coverage reporting for critical paths
+
+### Build and Deployment
+1. Production builds use TypeScript compilation
+2. Assets are optimized during build
+3. Environment-specific configurations
+4. Source maps for debugging
+5. Static file serving from public directory
+
+### Coding Preferences
+- Don't put tests in `__tests__` directories, use the `.test.ts` extension instead alongside the subject file
+- Don't remove special comments with keywords: REVIEW, TODO, BUGBUG, or NOTE
+- Minimize use of `any` in TypeScript
+- Don't use `I` prefix for interfaces. Rather, give the implementation a meaningful qualified name, or an `Impl` suffix if none are obvious
+
+## Backend
+
+### Technology Stack
+- **Framework**: .NET 9.0
+- **Language**: C#
+- **Architecture**: Clean Architecture with layered approach
+- **Database**: Entity Framework Core with PostgreSQL/SQLite
+- **Identity**: ASP.NET Core Identity
+- **API**: RESTful Web API (with Scalar)
+- **Background Jobs**: Hangfire
+- **Testing**: xUnit
+
+### Solution Structure
+
+#### Core Projects
+- **Corp.Web**: Main web API and controllers
+- **Corp.Services**: Business logic and service layer
+- **Corp.Data**: Data access layer and Entity Framework models
+- **Corp.Contracts**: Shared contracts and DTOs
+- **Corp.Common**: Common utilities and extensions
+
+#### Data Projects
+- **Corp.Data.Npgsql**: PostgreSQL data provider
+- **Corp.Data.Sqlite**: SQLite data provider
+
+#### Background Processing
+- **Corp.Background**: Background service host
+- **Corp.Background.Tasks**: Background job implementations
+
+### Key Features
+- **Identity Management**: User authentication and authorization
+- **AI Integration**: OpenAI API integration for content generation
+- **Database Support**: Multi-database support (PostgreSQL/SQLite)
+- **Background Processing**: Job scheduling with Hangfire
+- **API Documentation**: OpenAPI/Swagger integration
+- **Type Generation**: TypeGen for client-side type generation
+
+### Development Guidelines
+1. Follow Clean Architecture principles
+2. Use dependency injection throughout
+3. Write unit tests for business logic
+4. Use Entity Framework for data access
+5. Follow C# coding conventions
+6. Document API endpoints
+7. Use async/await patterns
+8. Implement proper error handling
+
+### Testing Strategy
+1. Unit tests for business logic
+2. Integration tests for API endpoints
+3. Database tests with in-memory providers
+4. End-to-end tests for critical flows
+
+### Database Management
+- **Migrations**: Entity Framework migrations
+- **Seeding**: Database seeding for development
+- **Multi-provider**: Support for PostgreSQL and SQLite
+- **Identity**: User management with ASP.NET Core Identity
+
+### Coding Preferences
+- Use primary constructors for dependency injection
+
+## Environment-Specific Instructions
+
+### General Prompt Guidelines
+1. Maintain a professional and concise communication style
+2. Focus on document research and editing assistance
+3. Provide clear, actionable responses
+4. Include relevant citations and references when applicable
+5. Maintain context awareness across interactions
+6. Prioritize accuracy and precision in responses
+
+### General Coding Preferences
+- When writing comments, unless it's a short, imperative statement, use periods.
+
+### Development Environment
+1. **Operating System**: Windows 10/11
+2. **Shell Preferences**:
+   - Primary: cmd.exe (Windows Command Prompt)
+   - Secondary: PowerShell (when cmd.exe is not available)
+3. **Development Server**:
+   - The development server (`npm run dev`) is always running in the background
+   - Don't ask to start/restart the dev server - just ask the user to test changes
+   - The user can test changes immediately in their running application
+4. **Command Execution**:
+   - Execute one command at a time
+   - Wait for command completion before proceeding
+   - Avoid chaining multiple commands
+   - Use explicit paths when necessary
+   - Use Windows-style paths (backslashes)
+   - When using PowerShell, wrap commands with `cmd /c` if needed
+5. **File System**:
+   - Use Windows-style paths (backslashes)
+   - Handle case-insensitive file operations
+   - Consider Windows-specific file permissions
+
+### Project Specific Instructions
+
+#### Client Projects
+- **Shared Library**: `src/client/lib` - `npm test <optional-arguments>`
+- **Admin App**: `src/client/sys` - `npm test <optional-arguments>`
+- **Web App**: `src/client/app` - `npm test <optional-arguments>`
+
+> NOTE: The client projects use npm workspaces, so npm must be run with the -w/--workspace flag.
+
+#### Server Projects
+- **Project Directory**: `src/server`
+- **Testing**: `dotnet test`
+- **Package Manager**: NuGet
+- **Build Tool**: dotnet
+- **Testing Framework**: xUnit
+
+##### Development Environment
+1. Package Manager: NuGet
+2. Build Tool: dotnet
+3. Testing Framework: xUnit
