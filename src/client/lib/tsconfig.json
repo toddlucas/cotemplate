@@ -3,6 +3,10 @@
   "compilerOptions": {
     "experimentalDecorators": true,
 
+    "paths": {
+      "@/*": ["./src/*"]
+    },
+
     "outDir": "./dist",
     "rootDir": "./src"
   },

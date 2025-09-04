@@ -20,7 +20,7 @@
     "moduleDetection": "force",
     "allowImportingTsExtensions": true,
     "paths": {
-      // "@/*": ["src/*"],
+      "@/*": ["./src/*"],
       "$/*": ["../lib/src/*"]
     },
 

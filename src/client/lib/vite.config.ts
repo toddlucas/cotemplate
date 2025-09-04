@@ -10,10 +10,9 @@ export default defineConfig({
   resolve: {
     alias: {
       "@": path.resolve(__dirname, "./src"),
-      "$": path.resolve(__dirname, "../lib/src"),
     },
   },
   server: {
-    port: 8484,
+    port: 6170,
   },
 })
