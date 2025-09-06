@@ -20,15 +20,7 @@ import {
   TableRow,
 } from '$/components/ui/table';
 import { Button } from '$/components/ui/button';
-import {
-  Pagination,
-  PaginationContent,
-  PaginationItem,
-  PaginationLink,
-  PaginationNext,
-  PaginationPrevious,
-  PaginationEllipsis,
-} from '$/components/ui/pagination';
+import TableFooter from '$/components/ui/tables/TableFooter';
 import {
   useUserStore,
   selectItems,
@@ -310,94 +302,16 @@ const Users = () => {
 
             {/* Table Footer with Pagination */}
             <div className="bg-muted/50 px-6 py-3 border-t">
-              <div className="flex items-center justify-between">
-                <div className="flex items-center space-x-2">
-                  <span className="text-sm text-muted-foreground">Rows per page:</span>
-                  <select
-                    value={pageSize}
-                    onChange={(e) => handlePageSizeChangeWrapper(Number(e.target.value))}
-                    className="px-2 py-1 border border-input rounded bg-background text-foreground"
-                  >
-                    {[10, 20, 30, 40, 50].map((size) => (
-                      <option key={size} value={size}>
-                        {size}
-                      </option>
-                    ))}
-                  </select>
-                </div>
-                <div className="flex items-center space-x-4">
-                  <span className="text-sm text-muted-foreground">
-                    Page {currentPage + 1} of {totalPages}
-                  </span>
-                  <Pagination>
-                    <PaginationContent>
-                      <PaginationItem>
-                        <PaginationPrevious
-                          href="#"
-                          size="default"
-                          onClick={(e) => {
-                            e.preventDefault();
-                            if (currentPage > 0) {
-                              handlePageChange(currentPage - 1);
-                            }
-                          }}
-                          className={currentPage === 0 ? 'pointer-events-none opacity-50' : ''}
-                        />
-                      </PaginationItem>
-
-                      {/* Generate page numbers */}
-                      {Array.from({ length: Math.min(5, totalPages) }, (_, i) => {
-                        let pageNumber;
-                        if (totalPages <= 5) {
-                          pageNumber = i;
-                        } else if (currentPage < 3) {
-                          pageNumber = i;
-                        } else if (currentPage >= totalPages - 3) {
-                          pageNumber = totalPages - 5 + i;
-                        } else {
-                          pageNumber = currentPage - 2 + i;
-                        }
-
-                        return (
-                          <PaginationItem key={pageNumber}>
-                            <PaginationLink
-                              href="#"
-                              size="icon"
-                              onClick={(e) => {
-                                e.preventDefault();
-                                handlePageChange(pageNumber);
-                              }}
-                              isActive={currentPage === pageNumber}
-                            >
-                              {pageNumber + 1}
-                            </PaginationLink>
-                          </PaginationItem>
-                        );
-                      })}
-
-                      {totalPages > 5 && currentPage < totalPages - 3 && (
-                        <PaginationItem>
-                          <PaginationEllipsis />
-                        </PaginationItem>
-                      )}
-
-                      <PaginationItem>
-                        <PaginationNext
-                          href="#"
-                          size="default"
-                          onClick={(e) => {
-                            e.preventDefault();
-                            if (currentPage < totalPages - 1) {
-                              handlePageChange(currentPage + 1);
-                            }
-                          }}
-                          className={currentPage >= totalPages - 1 ? 'pointer-events-none opacity-50' : ''}
-                        />
-                      </PaginationItem>
-                    </PaginationContent>
-                  </Pagination>
-                </div>
-              </div>
+              <TableFooter
+                currentPage={currentPage}
+                totalPages={totalPages}
+                pageSize={pageSize}
+                onPageChange={handlePageChange}
+                onPageSizeChange={handlePageSizeChangeWrapper}
+                showPageInfo={true}
+                adjacentPages={2}
+                pageSizeOptions={[10, 20, 30, 40, 50]}
+              />
             </div>
           </div>
         )}
