@@ -2,6 +2,8 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
+using Corp.Pagination;
+
 namespace Corp.Controllers.Identity;
 
 [Route("api/[area]/[controller]")]
@@ -42,13 +44,26 @@ public class UserController(
     /// <summary>
     /// Returns a list of users.
     /// </summary>
+    /// <param name="query">Pagination query parameters.</param>
     /// <param name="cancellationToken">A cancellation token.</param>
     /// <returns>A list of users.</returns>
     [HttpGet("list")]
     [EndpointDescription("Returns a paginated list of users.")]
     public async Task<ActionResult> List([FromQuery] PagedQuery query, CancellationToken cancellationToken)
     {
-        IdentityUser[] results = await _userManager.Users.ToArrayAsync();
-        return Ok(PagedResult.Create(results.ToModels(), results.Length, (string?)null));
+        IQueryable<IdentityUser> queryable = _userManager.Users;
+
+        query.Search((term) =>
+        {
+            queryable = queryable
+                .Where(c => c.Email!.ToLower().Contains(term));
+        });
+
+        IdentityUser[] records = await queryable
+            .OrderByPage(query, nameof(IdentityUser.Id))
+            .Paginate(query, out int count)
+            .ToArrayAsync(cancellationToken);
+
+        return Ok(PagedResult.Create(records.ToModels(), count, (string?)null));
     }
 }
