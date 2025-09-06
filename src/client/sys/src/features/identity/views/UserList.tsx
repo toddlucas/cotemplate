@@ -11,8 +11,8 @@ import {
   type SortingState,
   type Updater,
 } from '@tanstack/react-table';
-import ListSearch from '../../../components/ListSearch';
-import TableFooter from '../../../components/TableFooter';
+import ListSearch from '$/components/tables/ListSearch';
+import TableFooter from '$/components/tables/TableFooter';
 import {
   useUserStore,
   selectItems,
