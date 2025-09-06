@@ -1,4 +1,4 @@
-﻿namespace Corp;
+﻿namespace Corp.Pagination;
 
 public class PagedQuery
 {
