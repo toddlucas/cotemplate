@@ -42,9 +42,11 @@ import TwoFactorAuthentication from "$/features/auth/views/account/TwoFactorAuth
 import AuthViewsIndex from "$/features/auth/views";
 import AuthTestPage from "$/features/auth/views/AuthTestPage";
 
+// Dashboard views
+import Dashboard from "../features/dashboard/views/Dashboard";
+
 // Identity views
 import UserList from "../features/identity/views/UserList";
-import Users from "../features/identity/views/Users";
 import ThemeView from "$/features/theme/views/ThemeView";
 
 const PlatformRoutes = () => (
@@ -96,7 +98,9 @@ const PlatformRoutes = () => (
         <Route path="account/two-factor-authentication" element={<TwoFactorAuthentication />} />
 
         <Route path="identity/user/list" element={<UserList />} />
-        <Route path="identity/users" element={<Users />} />
+
+        {/* Dashboard routes */}
+        <Route path="dashboard" element={<Dashboard />} />
       </Route>
     </Route>
   </Routes>
