@@ -82,6 +82,23 @@ export class ApiError extends Error {
     return new ApiError(message, status, statusText, url, response, problemType, title, detail, instance);
   }
 
+  // Helper function to extract meaningful error message from various error types
+  static extractErrorMessage(error: unknown): string {
+    if (error instanceof ApiError) {
+      // Use problem details if available, otherwise fall back to the error message
+      if (error.isProblemDetails && error.detail) {
+        return error.detail;
+      } else if (error.isProblemDetails && error.title) {
+        return error.title;
+      } else {
+        return error.message;
+      }
+    } else if (error instanceof Error) {
+      return error.message;
+    }
+    return 'An unknown error occurred';
+  }
+
   /**
    * Check if this is a specific HTTP status error
    */

@@ -1,4 +1,5 @@
 import { get as apiGet, makePageQueryString } from '$/api';
+import { ApiError } from '$/api/ApiError';
 import type { IdentityUserModel } from '$/models/identity-user-model';
 import type { UserStore, UserTableState } from './types';
 import type { PagedQuery, PagedResult } from '$/models';
@@ -30,6 +31,12 @@ export const fetchItems = async (getState: () => ItemStore, set: (partial: Parti
   try {
     const queryString = makePageQueryString(pageQuery);
     const response = await apiGet(LIST_API_PATH + queryString);
+
+    if (!response.ok) {
+      const apiError = await ApiError.fromResponse(response, 'Failed to fetch user list');
+      throw apiError;
+    }
+
     const result = await response.json() as PagedResult<ItemModel>;
 
     set({
@@ -39,7 +46,7 @@ export const fetchItems = async (getState: () => ItemStore, set: (partial: Parti
     });
   } catch (error) {
     set({
-      listError: error instanceof Error ? error.message : 'An unknown error occurred',
+      listError: ApiError.extractErrorMessage(error),
       items: [],
       isLoadingList: false,
     });
@@ -56,9 +63,12 @@ export const fetchItemDetails = async (
 
   try {
     const response = await apiGet(DETAILS_API_PATH.replace('{id}', encodeURIComponent(id)));
+
     if (!response.ok) {
-      throw new Error('Item not found');
+      const apiError = await ApiError.fromResponse(response, 'Failed to fetch user details');
+      throw apiError;
     }
+
     const data = await response.json() as ItemModel;
 
     set({
@@ -67,7 +77,7 @@ export const fetchItemDetails = async (
     });
   } catch (error) {
     set({
-      detailsError: error instanceof Error ? error.message : 'An unknown error occurred',
+      detailsError: ApiError.extractErrorMessage(error),
       currentItem: null,
       isLoadingDetails: false,
     });
