@@ -134,7 +134,7 @@ const Users = () => {
   const columns = useMemo(
     () => [
       columnHelper.accessor('userName', {
-        id: 'name',
+        id: 'userName',
         header: 'User Name',
         cell: info => (
           <div className="font-medium">{info.getValue()}</div>
