@@ -1,4 +1,5 @@
 /* Shared styles */
+/* NOTE: THIS FILE IS INACTIVE; USING SHADCN/UI INSTEAD */
 @custom-variant dark (&:where(.dark, .dark *));
 @import "./brand/theme.css";
 @import "./brand/components.css";
