@@ -5,17 +5,17 @@ namespace Corp;
 /// </summary>
 public enum EntityType
 {
-    Llc,
-    CCorp,
-    SCorp,
-    Lp,
-    Llp,
-    Trust,
-    SoleProp,
-    Plc,
-    NonProfit,
-    Spv,
-    Other
+    llc,
+    c_corp,
+    s_corp,
+    lp,
+    llp,
+    trust,
+    sole_prop,
+    plc,
+    non_profit,
+    spv,
+    other
 }
 
 /// <summary>
@@ -23,10 +23,10 @@ public enum EntityType
 /// </summary>
 public enum OwnershipModel
 {
-    MemberManaged,
-    ManagerManaged,
-    BoardManaged,
-    TrusteeManaged
+    member_managed,
+    manager_managed,
+    board_managed,
+    trustee_managed
 }
 
 /// <summary>
@@ -34,10 +34,10 @@ public enum OwnershipModel
 /// </summary>
 public enum EntityStatus
 {
-    Draft,
-    Active,
-    Dissolved,
-    Merged
+    draft,
+    active,
+    dissolved,
+    merged
 }
 
 /// <summary>
@@ -45,11 +45,11 @@ public enum EntityStatus
 /// </summary>
 public enum TaskStatus
 {
-    Todo,
-    InProgress,
-    Blocked,
-    Done,
-    Skipped
+    todo,
+    in_progress,
+    blocked,
+    done,
+    skipped
 }
 
 /// <summary>
@@ -57,9 +57,9 @@ public enum TaskStatus
 /// </summary>
 public enum Priority
 {
-    Low,
-    Normal,
-    High
+    low,
+    normal,
+    high
 }
 
 /// <summary>
@@ -67,12 +67,12 @@ public enum Priority
 /// </summary>
 public enum DocumentCategory
 {
-    Formation,
-    Compliance,
-    Tax,
-    Contract,
-    Id,
-    Other
+    formation,
+    compliance,
+    tax,
+    contract,
+    id,
+    other
 }
 
 /// <summary>
@@ -80,12 +80,12 @@ public enum DocumentCategory
 /// </summary>
 public enum OrgMemberRole
 {
-    Owner,
-    Admin,
-    Manager,
-    Viewer,
-    Advisor,
-    External
+    owner,
+    admin,
+    manager,
+    viewer,
+    advisor,
+    external
 }
 
 /// <summary>
@@ -93,18 +93,18 @@ public enum OrgMemberRole
 /// </summary>
 public enum EntityRoleType
 {
-    Owner,
-    Member,
-    Manager,
-    Director,
-    Officer,
-    Trustee,
-    Beneficiary,
-    Advisor,
-    Attorney,
-    Accountant,
-    RegisteredAgentContact,
-    Signatory
+    owner,
+    member,
+    manager,
+    director,
+    officer,
+    trustee,
+    beneficiary,
+    advisor,
+    attorney,
+    accountant,
+    registered_agent_contact,
+    signatory
 }
 
 /// <summary>
@@ -112,16 +112,16 @@ public enum EntityRoleType
 /// </summary>
 public enum EntityRelationshipType
 {
-    Owns,
-    Controls,
-    SubsidiaryOf,
-    GpOf,
-    LpOf,
-    TrusteeOf,
-    BeneficiaryOf,
-    ManagerOf,
-    AdvisorTo,
-    SpvFor
+    owns,
+    controls,
+    subsidiary_of,
+    gp_of,
+    lp_of,
+    trustee_of,
+    beneficiary_of,
+    manager_of,
+    advisor_to,
+    spv_for
 }
 
 /// <summary>
@@ -129,9 +129,9 @@ public enum EntityRelationshipType
 /// </summary>
 public enum ChecklistScope
 {
-    Org,
-    Entity,
-    Person
+    org,
+    entity,
+    person
 }
 
 /// <summary>
@@ -139,9 +139,9 @@ public enum ChecklistScope
 /// </summary>
 public enum SourceType
 {
-    System,
-    Ai,
-    Custom
+    system,
+    ai,
+    custom
 }
 
 /// <summary>
@@ -149,9 +149,9 @@ public enum SourceType
 /// </summary>
 public enum ChecklistStatus
 {
-    Draft,
-    Active,
-    Archived
+    draft,
+    active,
+    archived
 }
 
 /// <summary>
@@ -159,9 +159,9 @@ public enum ChecklistStatus
 /// </summary>
 public enum AiChannel
 {
-    Chat,
-    InlineAction,
-    Api
+    chat,
+    inline_action,
+    api
 }
 
 /// <summary>
@@ -169,12 +169,12 @@ public enum AiChannel
 /// </summary>
 public enum AiActionType
 {
-    CreateEntity,
-    CreateTask,
-    Summarize,
-    Extract,
-    Classify,
-    Other
+    create_entity,
+    create_task,
+    summarize,
+    extract,
+    classify,
+    other
 }
 
 /// <summary>
@@ -182,9 +182,9 @@ public enum AiActionType
 /// </summary>
 public enum ReminderChannel
 {
-    Email,
-    InApp,
-    Webhook
+    email,
+    inapp,
+    webhook
 }
 
 /// <summary>
@@ -192,9 +192,9 @@ public enum ReminderChannel
 /// </summary>
 public enum ReminderStatus
 {
-    Scheduled,
-    Sent,
-    Failed
+    scheduled,
+    sent,
+    failed
 }
 
 /// <summary>
@@ -202,11 +202,11 @@ public enum ReminderStatus
 /// </summary>
 public enum FeedbackTargetType
 {
-    Task,
-    Checklist,
-    Document,
-    Extraction,
-    Summary
+    task,
+    checklist,
+    document,
+    extraction,
+    summary
 }
 
 /// <summary>
@@ -214,12 +214,12 @@ public enum FeedbackTargetType
 /// </summary>
 public enum AuditAction
 {
-    Create,
-    Read,
-    Update,
-    Delete,
-    Login,
-    Logout,
-    AiAction,
-    Other
+    create,
+    read,
+    update,
+    delete,
+    login,
+    logout,
+    ai_action,
+    other
 }
