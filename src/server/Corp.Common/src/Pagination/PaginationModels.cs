@@ -22,8 +22,6 @@ public record PagedResult<T, C>(
     int Count,
     C Next)
 {
-    public static PagedResult<T, C> Create<T, C>(IReadOnlyCollection<T> items, int count, C next)
-        => new(items, count, next);
 }
 
 public class PagedResult
