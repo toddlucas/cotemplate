@@ -235,6 +235,40 @@ public record GenderEnum(int Ordinal, string Id, string Name)
 }
 ```
 
+## EF Core configuration
+
+1. Converting a C# string type key to a typed enum in TypeScript
+
+```csharp
+public class IdentityUserModel
+{
+    ...
+    /// <summary>
+    /// The gender ID.
+    /// </summary>
+    [Display(Name = "Gender ID")]
+    public string? GenderId { get; set; }
+}
+
+public class IdentityUser : IdentityUserModel
+{
+    public GenderEnum? GenderEnum { get; set; }
+
+    public static void OnModelCreating(ModelBuilder modelBuilder)
+    {
+        ...
+        // Relations
+
+        // Required one-to-many without navigation to dependents
+        modelBuilder.Entity<TRecord>()
+            .HasOne(x => x.GenderEnum)
+            .WithMany()
+            .HasForeignKey(x => x.GenderId)
+            .IsRequired();
+    }
+}
+```
+
 ## Exporting
 
 1. Converting a C# string type key to a typed enum in TypeScript
