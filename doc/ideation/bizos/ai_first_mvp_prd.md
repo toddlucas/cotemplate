@@ -225,8 +225,8 @@ Deliver a system where AI is the default interface: customers describe needs in 
   `id`, `tenant_id FK`, `org_id FK`, `name`, `legal_name`, `entity_type` (enum: llc, c_corp, s_corp, lp, llp, trust, sole_prop, plc, non_profit, spv, other), `formation_date`, `jurisdiction_country`, `jurisdiction_region` (ISO‑3166‑2), `ein` NULL, `state_file_number` NULL, `registered_agent JSONB`, `ownership_model` (enum: member_managed, manager_managed, board_managed, trustee_managed), `status` (draft, active, dissolved, merged), `metadata`  
   *Indexes*: (`tenant_id`, `org_id`), (`tenant_id`, `status`), GIN on (`metadata`)
 - **entity_role** (who relates to an entity; time‑bounded)  
-  `id`, `tenant_id FK`, `entity_id FK`, `person_id FK`, `role` (enum: owner, member, manager, director, officer, trustee, beneficiary, advisor, attorney, accountant, registered_agent_contact, signatory), `equity_percent` NUMERIC(6,4) NULL, `units_shares` NUMERIC NULL, `start_at`, `end_at`, `metadata`  
-  *Indexes*: (`tenant_id`, `entity_id`), (`tenant_id`, `person_id`)
+  `id`, `tenant_id FK`, `org_id FK`, `entity_id FK`, `person_id FK`, `role` (enum: owner, member, manager, director, officer, trustee, beneficiary, advisor, attorney, accountant, registered_agent_contact, signatory), `equity_percent` NUMERIC(6,4) NULL, `units_shares` NUMERIC NULL, `start_at`, `end_at`, `metadata`  
+  *Indexes*: (`tenant_id`, `org_id FK`, `entity_id`), (`tenant_id`, `person_id`)
 - **entity_relationship** (entity↔entity graph)  
   `id`, `tenant_id FK`, `parent_entity_id FK`, `child_entity_id FK`, `relationship_type` (enum: owns, controls, subsidiary_of, gp_of, lp_of, trustee_of, beneficiary_of, manager_of, advisor_to, spv_for), `percent_ownership` NULL, `start_at`, `end_at`, `metadata`  
   *Unique*: (`parent_entity_id`, `child_entity_id`, `relationship_type`, active_window)
@@ -236,7 +236,7 @@ Deliver a system where AI is the default interface: customers describe needs in 
   `id`, `tenant_id FK`, `org_id FK NULL`, `entity_id FK NULL`, `person_id FK NULL`, `title`, `category` (enum: formation, compliance, tax, contract, id, other), `storage_uri`, `mime_type`, `hash`, `uploaded_by`, `uploaded_at`, `metadata`  
   *Indexes*: (`tenant_id`, `entity_id`), (`tenant_id`, `category`)
 - **extracted_field** (AI extraction results; revisionable)  
-  `id`, `tenant_id FK`, `document_id FK`, `schema_key`, `value_text`, `value_number`, `value_date`, `confidence` FLOAT, `revision` INT, `created_by` (system|user), `metadata`  
+  `id`, `tenant_id FK`, `org_id FK`, `document_id FK`, `schema_key`, `value_text`, `value_number`, `value_date`, `confidence` FLOAT, `revision` INT, `created_by` (system|user), `metadata`  
   *Indexes*: (`document_id`, `schema_key`), (`tenant_id`, `schema_key`)
 
 ### 12.5 Tasks, Checklists & Schedules
@@ -250,7 +250,7 @@ Deliver a system where AI is the default interface: customers describe needs in 
   `id`, `tenant_id FK`, `checklist_instance_id FK NULL`, `org_id FK NULL`, `entity_id FK NULL`, `name`, `status` (todo|in_progress|blocked|done|skipped), `priority`, `assignee_person_id FK NULL`, `due_at` NULL, `started_at` NULL, `completed_at` NULL, `recurrence_rule` NULL, `source_task_template_id FK NULL`, `evidence_document_id FK NULL`, `ai_summary` TEXT NULL, `metadata`  
   *Indexes*: (`tenant_id`, `status`, `due_at`), (`tenant_id`, `assignee_person_id`)
 - **reminder**  
-  `id`, `tenant_id FK`, `task_id FK`, `channel` (email|inapp|webhook), `scheduled_at`, `sent_at` NULL, `status` (scheduled|sent|failed), `metadata`
+  `id`, `tenant_id FK`, `org_id FK`, `task_id FK`, `channel` (email|inapp|webhook), `scheduled_at`, `sent_at` NULL, `status` (scheduled|sent|failed), `metadata`
 
 ### 12.6 Reporting (MVP‑friendly)
 - **materialized views** (per tenant with RLS):  
@@ -258,15 +258,15 @@ Deliver a system where AI is the default interface: customers describe needs in 
   - `mv_entity_rollup`: entity counts by type, active/inactive, ownership graph degree.  
   - `mv_activity_feed`: recent actions for dashboards.
 - **snapshot** (optional for BI)  
-  `id`, `tenant_id`, `as_of_date`, `kpis JSONB` (e.g., `{"tasks_overdue":12,"entities_active":9}`)
+  `id`, `tenant_id`, `org_id FK`, `as_of_date`, `kpis JSONB` (e.g., `{"tasks_overdue":12,"entities_active":9}`)
 
 ### 12.7 AI Layer (Data Artifacts)
 - **ai_session**  
-  `id`, `tenant_id FK`, `org_id/entity_id/person_id` NULL, `initiated_by_person_id`, `channel` (chat|inline_action|api), `model`, `prompt_preview`, `started_at`, `ended_at`, `metadata`
+  `id`, `tenant_id FK`, `org_id FK`, `entity_id FK NULL`, `person_id FK NULL`, `initiated_by_person_id`, `channel` (chat|inline_action|api), `model`, `prompt_preview`, `started_at`, `ended_at`, `metadata`
 - **ai_action_log** (tool calls & results)  
-  `id`, `tenant_id FK`, `ai_session_id FK`, `action_type` (create_entity|create_task|summarize|extract|classify|other), `request_json`, `response_json`, `latency_ms`, `success` BOOL, `error_msg` NULL
+  `id`, `tenant_id FK`, `org_id FK`, `ai_session_id FK`, `action_type` (create_entity|create_task|summarize|extract|classify|other), `request_json`, `response_json`, `latency_ms`, `success` BOOL, `error_msg` NULL
 - **feedback**  
-  `id`, `tenant_id FK`, `ai_session_id FK NULL`, `target_type` (task|checklist|document|extraction|summary), `target_id`, `rating` (1‑5), `comment`, `created_by`
+  `id`, `tenant_id FK`, `org_id FK`, `ai_session_id FK NULL`, `target_type` (task|checklist|document|extraction|summary), `target_id`, `rating` (1‑5), `comment`, `created_by`
 
 ### 12.8 Security & Access Control
 - **role**  
@@ -280,7 +280,7 @@ Deliver a system where AI is the default interface: customers describe needs in 
 
 ### 12.9 Auditing
 - **audit_log**  
-  `id`, `tenant_id FK`, `actor_person_id NULL`, `action` (crud verbs, auth events, ai events), `target_table`, `target_id`, `changes JSONB` (from/to), `ip`, `user_agent`, `occurred_at`
+  `id`, `tenant_id FK`, `org_id FK`, `actor_person_id NULL`, `action` (crud verbs, auth events, ai events), `target_table`, `target_id`, `changes JSONB` (from/to), `ip`, `user_agent`, `occurred_at`
 
 ### 12.10 Enumerations (initial)
 - `entity_type` = {llc, c_corp, s_corp, lp, llp, trust, sole_prop, plc, non_profit, spv, other}  
