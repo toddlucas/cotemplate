@@ -31,6 +31,11 @@ public class Document : DocumentModel, ITemporal
     /// </summary>
     public ExtractedField[] ExtractedFields { get; set; } = [];
 
+    /// <summary>
+    /// The document category enumeration.
+    /// </summary>
+    public DocumentCategoryEnum? DocumentCategoryEnum { get; set; }
+
     #endregion Navigation properties
 
     #region ITemporal
@@ -104,6 +109,13 @@ public class Document : DocumentModel, ITemporal
             .HasOne(x => x.UploadedByPerson)
             .WithMany()
             .HasForeignKey(x => x.UploadedBy)
+            .IsRequired();
+
+        // Enumeration relationships
+        modelBuilder.Entity<TRecord>()
+            .HasOne(x => x.DocumentCategoryEnum)
+            .WithMany()
+            .HasForeignKey(x => x.CategoryId)
             .IsRequired();
 
         // Indexes

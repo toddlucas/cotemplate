@@ -12,6 +12,21 @@ public class Entity : EntityModel, ITemporal
     public Access.Organization Organization { get; set; } = null!;
 
     /// <summary>
+    /// The entity type enumeration.
+    /// </summary>
+    public EntityTypeEnum? EntityTypeEnum { get; set; }
+
+    /// <summary>
+    /// The ownership model enumeration.
+    /// </summary>
+    public OwnershipModelEnum? OwnershipModelEnum { get; set; }
+
+    /// <summary>
+    /// The entity status enumeration.
+    /// </summary>
+    public EntityStatusEnum? EntityStatusEnum { get; set; }
+
+    /// <summary>
     /// The entity roles.
     /// </summary>
     public EntityRole[] Roles { get; set; } = [];
@@ -83,6 +98,24 @@ public class Entity : EntityModel, ITemporal
             .HasOne(x => x.Organization)
             .WithMany()
             .HasForeignKey(x => x.OrgId)
+            .IsRequired();
+
+        // Enumeration relationships
+        modelBuilder.Entity<TRecord>()
+            .HasOne(x => x.EntityTypeEnum)
+            .WithMany()
+            .HasForeignKey(x => x.EntityTypeId)
+            .IsRequired();
+
+        modelBuilder.Entity<TRecord>()
+            .HasOne(x => x.OwnershipModelEnum)
+            .WithMany()
+            .HasForeignKey(x => x.OwnershipModelId);
+
+        modelBuilder.Entity<TRecord>()
+            .HasOne(x => x.EntityStatusEnum)
+            .WithMany()
+            .HasForeignKey(x => x.StatusId)
             .IsRequired();
 
         // Indexes

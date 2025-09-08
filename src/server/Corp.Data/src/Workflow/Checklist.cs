@@ -31,6 +31,16 @@ public class Checklist : ChecklistModel, ITemporal
     /// </summary>
     public Task[] Tasks { get; set; } = [];
 
+    /// <summary>
+    /// The checklist status enumeration.
+    /// </summary>
+    public ChecklistStatusEnum? ChecklistStatusEnum { get; set; }
+
+    /// <summary>
+    /// The source type enumeration.
+    /// </summary>
+    public SourceTypeEnum? SourceTypeEnum { get; set; }
+
     #endregion Navigation properties
 
     #region ITemporal
@@ -102,6 +112,19 @@ public class Checklist : ChecklistModel, ITemporal
             .WithMany()
             .HasForeignKey(x => x.TemplateId)
             .IsRequired(false);
+
+        // Enumeration relationships
+        modelBuilder.Entity<TRecord>()
+            .HasOne(x => x.ChecklistStatusEnum)
+            .WithMany()
+            .HasForeignKey(x => x.StatusId)
+            .IsRequired();
+
+        modelBuilder.Entity<TRecord>()
+            .HasOne(x => x.SourceTypeEnum)
+            .WithMany()
+            .HasForeignKey(x => x.CreatedFromId)
+            .IsRequired();
 
         // Indexes
         modelBuilder.Entity<TRecord>()

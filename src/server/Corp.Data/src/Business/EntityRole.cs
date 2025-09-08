@@ -21,6 +21,11 @@ public class EntityRole : EntityRoleModel, ITemporal
     /// </summary>
     public Access.Organization Organization { get; set; } = null!;
 
+    /// <summary>
+    /// The entity role type enumeration.
+    /// </summary>
+    public EntityRoleTypeEnum? EntityRoleTypeEnum { get; set; }
+
     #endregion Navigation properties
 
     #region ITemporal
@@ -86,6 +91,13 @@ public class EntityRole : EntityRoleModel, ITemporal
             .HasOne(x => x.Organization)
             .WithMany()
             .HasForeignKey(x => x.OrgId)
+            .IsRequired();
+
+        // Enumeration relationships
+        modelBuilder.Entity<TRecord>()
+            .HasOne(x => x.EntityRoleTypeEnum)
+            .WithMany()
+            .HasForeignKey(x => x.RoleId)
             .IsRequired();
 
         // Indexes

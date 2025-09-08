@@ -16,6 +16,11 @@ public class EntityRelationship : EntityRelationshipModel, ITemporal
     /// </summary>
     public Entity ChildEntity { get; set; } = null!;
 
+    /// <summary>
+    /// The entity relationship type enumeration.
+    /// </summary>
+    public EntityRelationshipTypeEnum? EntityRelationshipTypeEnum { get; set; }
+
     #endregion Navigation properties
 
     #region ITemporal
@@ -73,6 +78,13 @@ public class EntityRelationship : EntityRelationshipModel, ITemporal
             .HasOne(x => x.ChildEntity)
             .WithMany(y => y.ParentRelationships)
             .HasForeignKey(x => x.ChildEntityId)
+            .IsRequired();
+
+        // Enumeration relationships
+        modelBuilder.Entity<TRecord>()
+            .HasOne(x => x.EntityRelationshipTypeEnum)
+            .WithMany()
+            .HasForeignKey(x => x.RelationshipTypeId)
             .IsRequired();
 
         // Indexes

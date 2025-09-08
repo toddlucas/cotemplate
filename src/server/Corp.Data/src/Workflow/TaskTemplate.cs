@@ -11,6 +11,11 @@ public class TaskTemplate : TaskTemplateModel, ITemporal
     /// </summary>
     public ChecklistTemplate ChecklistTemplate { get; set; } = null!;
 
+    /// <summary>
+    /// The priority enumeration.
+    /// </summary>
+    public PriorityEnum? PriorityEnum { get; set; }
+
     #endregion Navigation properties
 
     #region ITemporal
@@ -64,6 +69,12 @@ public class TaskTemplate : TaskTemplateModel, ITemporal
             .WithMany()
             .HasForeignKey(x => x.ChecklistTemplateId)
             .IsRequired();
+
+        // Enumeration relationships
+        modelBuilder.Entity<TRecord>()
+            .HasOne(x => x.PriorityEnum)
+            .WithMany()
+            .HasForeignKey(x => x.PriorityId);
 
         // Indexes
         modelBuilder.Entity<TRecord>()

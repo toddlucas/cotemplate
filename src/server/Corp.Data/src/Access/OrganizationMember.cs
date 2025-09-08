@@ -16,6 +16,11 @@ public class OrganizationMember : OrganizationMemberModel, ITemporal
     /// </summary>
     public Person Person { get; set; } = null!;
 
+    /// <summary>
+    /// The organization member role enumeration.
+    /// </summary>
+    public OrganizationMemberRoleEnum? OrganizationMemberRoleEnum { get; set; }
+
     #endregion Navigation properties
 
     #region ITemporal
@@ -73,6 +78,13 @@ public class OrganizationMember : OrganizationMemberModel, ITemporal
             .HasOne(x => x.Person)
             .WithMany(y => y.OrganizationMemberships)
             .HasForeignKey(x => x.PersonId)
+            .IsRequired();
+
+        // Enumeration relationships
+        modelBuilder.Entity<TRecord>()
+            .HasOne(x => x.OrganizationMemberRoleEnum)
+            .WithMany()
+            .HasForeignKey(x => x.RoleId)
             .IsRequired();
 
         // Indexes

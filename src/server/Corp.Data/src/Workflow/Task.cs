@@ -36,6 +36,16 @@ public class Task : TaskModel, ITemporal
     /// </summary>
     public Storage.Document? EvidenceDocument { get; set; }
 
+    /// <summary>
+    /// The task status enumeration.
+    /// </summary>
+    public TaskStatusEnum? TaskStatusEnum { get; set; }
+
+    /// <summary>
+    /// The priority enumeration.
+    /// </summary>
+    public PriorityEnum? PriorityEnum { get; set; }
+
     #endregion Navigation properties
 
     #region ITemporal
@@ -126,6 +136,18 @@ public class Task : TaskModel, ITemporal
             .WithMany()
             .HasForeignKey(x => x.EvidenceDocumentId)
             .IsRequired(false);
+
+        // Enumeration relationships
+        modelBuilder.Entity<TRecord>()
+            .HasOne(x => x.TaskStatusEnum)
+            .WithMany()
+            .HasForeignKey(x => x.StatusId)
+            .IsRequired();
+
+        modelBuilder.Entity<TRecord>()
+            .HasOne(x => x.PriorityEnum)
+            .WithMany()
+            .HasForeignKey(x => x.PriorityId);
 
         // Indexes
         modelBuilder.Entity<TRecord>()

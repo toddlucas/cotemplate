@@ -11,6 +11,16 @@ public class ChecklistTemplate : ChecklistTemplateModel, ITemporal
     /// </summary>
     public TaskTemplate[] TaskTemplates { get; set; } = [];
 
+    /// <summary>
+    /// The checklist scope enumeration.
+    /// </summary>
+    public ChecklistScopeEnum? ChecklistScopeEnum { get; set; }
+
+    /// <summary>
+    /// The source type enumeration.
+    /// </summary>
+    public SourceTypeEnum? SourceTypeEnum { get; set; }
+
     #endregion Navigation properties
 
     #region ITemporal
@@ -63,6 +73,19 @@ public class ChecklistTemplate : ChecklistTemplateModel, ITemporal
             .HasMany(x => x.TaskTemplates)
             .WithOne(y => y.ChecklistTemplate)
             .HasForeignKey(y => y.ChecklistTemplateId)
+            .IsRequired();
+
+        // Enumeration relationships
+        modelBuilder.Entity<TRecord>()
+            .HasOne(x => x.ChecklistScopeEnum)
+            .WithMany()
+            .HasForeignKey(x => x.ScopeId)
+            .IsRequired();
+
+        modelBuilder.Entity<TRecord>()
+            .HasOne(x => x.SourceTypeEnum)
+            .WithMany()
+            .HasForeignKey(x => x.SourceTypeId)
             .IsRequired();
 
         // Indexes
