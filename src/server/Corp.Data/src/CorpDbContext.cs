@@ -44,6 +44,38 @@ public class CorpDbContext : IdentityDbContext // <IdentityUser<long>, IdentityR
 
     #endregion Identity
 
+    #region Access
+
+    public DbSet<Organization> Organizations { get; set; } = null!;
+    public DbSet<OrganizationMember> OrganizationMembers { get; set; } = null!;
+    public DbSet<Person> People { get; set; } = null!;
+
+    #endregion Access
+
+    #region Business
+
+    public DbSet<Entity> Entities { get; set; } = null!;
+    public DbSet<EntityRole> EntityRoles { get; set; } = null!;
+    public DbSet<EntityRelationship> EntityRelationships { get; set; } = null!;
+
+    #endregion Business
+
+    #region Storage
+
+    public DbSet<Document> Documents { get; set; } = null!;
+    public DbSet<ExtractedField> ExtractedFields { get; set; } = null!;
+
+    #endregion Storage
+
+    #region Workflow
+
+    public DbSet<Workflow.Task> Tasks { get; set; } = null!;
+    public DbSet<TaskTemplate> TaskTemplates { get; set; } = null!;
+    public DbSet<Checklist> Checklists { get; set; } = null!;
+    public DbSet<ChecklistTemplate> ChecklistTemplates { get; set; } = null!;
+
+    #endregion Workflow
+
     protected bool IsUsingSqliteProvider => Database.ProviderName!.Contains("Sqlite", StringComparison.OrdinalIgnoreCase);
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
@@ -64,6 +96,26 @@ public class CorpDbContext : IdentityDbContext // <IdentityUser<long>, IdentityR
 
         // Identity
         //Profile.OnModelCreating(modelBuilder);
+
+        // Access entities
+        Organization.OnModelCreating(modelBuilder);
+        OrganizationMember.OnModelCreating(modelBuilder);
+        Person.OnModelCreating(modelBuilder);
+
+        // Business entities
+        Entity.OnModelCreating(modelBuilder);
+        EntityRole.OnModelCreating(modelBuilder);
+        EntityRelationship.OnModelCreating(modelBuilder);
+
+        // Storage entities
+        Document.OnModelCreating(modelBuilder);
+        ExtractedField.OnModelCreating(modelBuilder);
+
+        // Workflow entities
+        Workflow.Task.OnModelCreating(modelBuilder);
+        TaskTemplate.OnModelCreating(modelBuilder);
+        Checklist.OnModelCreating(modelBuilder);
+        ChecklistTemplate.OnModelCreating(modelBuilder);
 
         modelBuilder.Snakeify();
 
