@@ -1,4 +1,4 @@
-﻿namespace Basalt;
+﻿namespace Corp;
 
 public interface ITemporal
 {
