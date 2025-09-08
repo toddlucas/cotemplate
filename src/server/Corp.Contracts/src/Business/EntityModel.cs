@@ -1,6 +1,4 @@
-using System.ComponentModel.DataAnnotations;
-
-namespace Corp;
+﻿namespace Corp;
 
 /// <summary>
 /// Represents a business entity (LLC, Corporation, Trust, etc.) in the system.
@@ -14,11 +12,18 @@ public class EntityModel
     public long Id { get; set; }
 
     /// <summary>
+    /// The tenant ID this entity belongs to.
+    /// </summary>
+    [Display(Name = "Tenant ID")]
+    [Required]
+    public long TenantId { get; set; }
+
+    /// <summary>
     /// The organization this entity belongs to.
     /// </summary>
     [Display(Name = "Organization ID")]
     [Required]
-    public long OrganizationId { get; set; }
+    public long OrgId { get; set; }
 
     /// <summary>
     /// The entity name.
@@ -29,14 +34,6 @@ public class EntityModel
     public string Name { get; set; } = null!;
 
     /// <summary>
-    /// The entity type (LLC, Corporation, Trust, Partnership, etc.).
-    /// </summary>
-    [Display(Name = "Type")]
-    [Required]
-    [StringLength(50)]
-    public string Type { get; set; } = null!;
-
-    /// <summary>
     /// The entity's legal name (may differ from display name).
     /// </summary>
     [Display(Name = "Legal Name")]
@@ -44,24 +41,31 @@ public class EntityModel
     public string? LegalName { get; set; }
 
     /// <summary>
-    /// The entity's state of formation.
+    /// The entity type (LLC, Corporation, Trust, etc.).
     /// </summary>
-    [Display(Name = "State")]
-    [StringLength(2)]
-    public string? State { get; set; }
-
-    /// <summary>
-    /// The entity's country of formation.
-    /// </summary>
-    [Display(Name = "Country")]
-    [StringLength(2)]
-    public string? Country { get; set; } = "US";
+    [Display(Name = "Entity Type")]
+    [Required]
+    public EntityType EntityType { get; set; }
 
     /// <summary>
     /// The entity's formation date.
     /// </summary>
     [Display(Name = "Formation Date")]
     public DateTime? FormationDate { get; set; }
+
+    /// <summary>
+    /// The entity's jurisdiction country (ISO-3166-1).
+    /// </summary>
+    [Display(Name = "Jurisdiction Country")]
+    [StringLength(2)]
+    public string? JurisdictionCountry { get; set; }
+
+    /// <summary>
+    /// The entity's jurisdiction region (ISO-3166-2).
+    /// </summary>
+    [Display(Name = "Jurisdiction Region")]
+    [StringLength(10)]
+    public string? JurisdictionRegion { get; set; }
 
     /// <summary>
     /// The entity's EIN/Tax ID.
@@ -71,51 +75,36 @@ public class EntityModel
     public string? Ein { get; set; }
 
     /// <summary>
-    /// The entity's registered agent name.
+    /// The entity's state file number.
+    /// </summary>
+    [Display(Name = "State File Number")]
+    [StringLength(50)]
+    public string? StateFileNumber { get; set; }
+
+    /// <summary>
+    /// The entity's registered agent information (JSONB).
     /// </summary>
     [Display(Name = "Registered Agent")]
-    [StringLength(200)]
     public string? RegisteredAgent { get; set; }
 
     /// <summary>
-    /// The entity's registered agent address.
+    /// The entity's ownership model.
     /// </summary>
-    [Display(Name = "Registered Agent Address")]
-    [StringLength(500)]
-    public string? RegisteredAgentAddress { get; set; }
+    [Display(Name = "Ownership Model")]
+    public OwnershipModel? OwnershipModel { get; set; }
 
     /// <summary>
-    /// The entity's business address.
-    /// </summary>
-    [Display(Name = "Business Address")]
-    [StringLength(500)]
-    public string? BusinessAddress { get; set; }
-
-    /// <summary>
-    /// The entity's business purpose/description.
-    /// </summary>
-    [Display(Name = "Purpose")]
-    [StringLength(1000)]
-    public string? Purpose { get; set; }
-
-    /// <summary>
-    /// Whether this entity is active.
-    /// </summary>
-    [Display(Name = "Active")]
-    public bool IsActive { get; set; } = true;
-
-    /// <summary>
-    /// The entity's status (Active, Inactive, Dissolved, etc.).
+    /// The entity's status.
     /// </summary>
     [Display(Name = "Status")]
-    [StringLength(50)]
-    public string? Status { get; set; }
+    [Required]
+    public EntityStatus Status { get; set; }
 
     /// <summary>
-    /// The entity's dissolution date (if applicable).
+    /// Additional metadata for the entity.
     /// </summary>
-    [Display(Name = "Dissolution Date")]
-    public DateTime? DissolutionDate { get; set; }
+    [Display(Name = "Metadata")]
+    public string? Metadata { get; set; }
 }
 
 /// <summary>
@@ -129,9 +118,14 @@ public class EntityDetailModel : EntityModel, ITemporal
     public OrganizationModel Organization { get; set; } = null!;
 
     /// <summary>
-    /// The ownership relationships for this entity.
+    /// The entity roles for this entity.
     /// </summary>
-    public OwnershipModel[] Ownerships { get; set; } = [];
+    public EntityRoleModel[] EntityRoles { get; set; } = [];
+
+    /// <summary>
+    /// The entity relationships for this entity.
+    /// </summary>
+    public EntityRelationshipModel[] EntityRelationships { get; set; } = [];
 
     /// <summary>
     /// The documents associated with this entity.
@@ -139,9 +133,9 @@ public class EntityDetailModel : EntityModel, ITemporal
     public DocumentModel[] Documents { get; set; } = [];
 
     /// <summary>
-    /// The obligations/tasks for this entity.
+    /// The tasks for this entity.
     /// </summary>
-    public ObligationModel[] Obligations { get; set; } = [];
+    public TaskModel[] Tasks { get; set; } = [];
 
     #region ITemporal
 

@@ -1,9 +1,7 @@
-using System.ComponentModel.DataAnnotations;
-
-namespace Corp;
+﻿namespace Corp;
 
 /// <summary>
-/// Represents a person (advisor, owner, member, etc.) in the system.
+/// Represents a person in the system.
 /// </summary>
 public class PersonModel
 {
@@ -14,37 +12,30 @@ public class PersonModel
     public long Id { get; set; }
 
     /// <summary>
-    /// The organization this person belongs to.
+    /// The tenant ID this person belongs to.
     /// </summary>
-    [Display(Name = "Organization ID")]
+    [Display(Name = "Tenant ID")]
     [Required]
-    public long OrganizationId { get; set; }
+    public long TenantId { get; set; }
 
     /// <summary>
-    /// The person's first name.
+    /// The person's given (first) name.
     /// </summary>
-    [Display(Name = "First Name")]
-    [Required]
-    [StringLength(100)]
-    public string FirstName { get; set; } = null!;
-
-    /// <summary>
-    /// The person's last name.
-    /// </summary>
-    [Display(Name = "Last Name")]
+    [Display(Name = "Given Name")]
     [Required]
     [StringLength(100)]
-    public string LastName { get; set; } = null!;
+    public string GivenName { get; set; } = null!;
 
     /// <summary>
-    /// The person's middle name or initial.
+    /// The person's family (last) name.
     /// </summary>
-    [Display(Name = "Middle Name")]
+    [Display(Name = "Family Name")]
+    [Required]
     [StringLength(100)]
-    public string? MiddleName { get; set; }
+    public string FamilyName { get; set; } = null!;
 
     /// <summary>
-    /// The person's email address.
+    /// The person's email address (unique within tenant).
     /// </summary>
     [Display(Name = "Email")]
     [EmailAddress]
@@ -60,57 +51,29 @@ public class PersonModel
     public string? Phone { get; set; }
 
     /// <summary>
-    /// The person's title or role.
-    /// </summary>
-    [Display(Name = "Title")]
-    [StringLength(100)]
-    public string? Title { get; set; }
-
-    /// <summary>
-    /// The person's role type (Owner, Manager, Member, Advisor, etc.).
-    /// </summary>
-    [Display(Name = "Role Type")]
-    [StringLength(50)]
-    public string? RoleType { get; set; }
-
-    /// <summary>
-    /// The person's address.
-    /// </summary>
-    [Display(Name = "Address")]
-    [StringLength(500)]
-    public string? Address { get; set; }
-
-    /// <summary>
     /// The person's date of birth.
     /// </summary>
     [Display(Name = "Date of Birth")]
     public DateTime? DateOfBirth { get; set; }
 
     /// <summary>
-    /// The person's SSN (encrypted).
+    /// The person's addresses (JSONB).
     /// </summary>
-    [Display(Name = "SSN")]
-    [StringLength(50)]
-    public string? Ssn { get; set; }
+    [Display(Name = "Addresses")]
+    public string? Addresses { get; set; }
 
     /// <summary>
-    /// Whether this person is active.
+    /// The person's authentication provider ID.
     /// </summary>
-    [Display(Name = "Active")]
-    public bool IsActive { get; set; } = true;
+    [Display(Name = "Auth Provider ID")]
+    [StringLength(255)]
+    public string? AuthProviderId { get; set; }
 
     /// <summary>
-    /// Whether this person is an advisor (can work across organizations).
+    /// Additional metadata for the person.
     /// </summary>
-    [Display(Name = "Is Advisor")]
-    public bool IsAdvisor { get; set; } = false;
-
-    /// <summary>
-    /// The person's notes or additional information.
-    /// </summary>
-    [Display(Name = "Notes")]
-    [StringLength(2000)]
-    public string? Notes { get; set; }
+    [Display(Name = "Metadata")]
+    public string? Metadata { get; set; }
 }
 
 /// <summary>
@@ -119,19 +82,19 @@ public class PersonModel
 public class PersonDetailModel : PersonModel, ITemporal
 {
     /// <summary>
-    /// The organization this person belongs to.
+    /// The organization memberships for this person.
     /// </summary>
-    public OrganizationModel Organization { get; set; } = null!;
+    public OrganizationMemberModel[] OrgMemberships { get; set; } = [];
 
     /// <summary>
-    /// The ownership relationships for this person.
+    /// The entity roles for this person.
     /// </summary>
-    public OwnershipModel[] Ownerships { get; set; } = [];
+    public EntityRoleModel[] EntityRoles { get; set; } = [];
 
     /// <summary>
-    /// The obligations/tasks assigned to this person.
+    /// The tasks assigned to this person.
     /// </summary>
-    public ObligationModel[] Obligations { get; set; } = [];
+    public TaskModel[] Tasks { get; set; } = [];
 
     #region ITemporal
 

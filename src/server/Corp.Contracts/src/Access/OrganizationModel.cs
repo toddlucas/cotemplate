@@ -1,9 +1,7 @@
-using System.ComponentModel.DataAnnotations;
-
-namespace Corp;
+﻿namespace Corp;
 
 /// <summary>
-/// Represents an organization (tenant/white-label container) in the system.
+/// Represents an organization (customer-facing container) in the system.
 /// </summary>
 public class OrganizationModel
 {
@@ -14,6 +12,13 @@ public class OrganizationModel
     public long Id { get; set; }
 
     /// <summary>
+    /// The tenant ID this organization belongs to.
+    /// </summary>
+    [Display(Name = "Tenant ID")]
+    [Required]
+    public long TenantId { get; set; }
+
+    /// <summary>
     /// The organization name.
     /// </summary>
     [Display(Name = "Name")]
@@ -22,54 +27,30 @@ public class OrganizationModel
     public string Name { get; set; } = null!;
 
     /// <summary>
-    /// The organization description.
+    /// The organization code (human identifier).
     /// </summary>
-    [Display(Name = "Description")]
-    [StringLength(1000)]
-    public string? Description { get; set; }
-
-    /// <summary>
-    /// The organization's primary contact email.
-    /// </summary>
-    [Display(Name = "Contact Email")]
-    [EmailAddress]
-    [StringLength(255)]
-    public string? ContactEmail { get; set; }
-
-    /// <summary>
-    /// The organization's website URL.
-    /// </summary>
-    [Display(Name = "Website")]
-    [Url]
-    [StringLength(500)]
-    public string? Website { get; set; }
-
-    /// <summary>
-    /// The organization's timezone.
-    /// </summary>
-    [Display(Name = "Timezone")]
+    [Display(Name = "Code")]
     [StringLength(50)]
-    public string? Timezone { get; set; }
+    public string? Code { get; set; }
 
     /// <summary>
-    /// Whether this organization is active.
+    /// The parent organization ID (for sub-organizations).
     /// </summary>
-    [Display(Name = "Active")]
-    public bool IsActive { get; set; } = true;
+    [Display(Name = "Parent Organization ID")]
+    public long? ParentOrgId { get; set; }
 
     /// <summary>
-    /// The organization's branding theme (for white-label customization).
+    /// The organization status.
     /// </summary>
-    [Display(Name = "Theme")]
-    [StringLength(100)]
-    public string? Theme { get; set; }
+    [Display(Name = "Status")]
+    [StringLength(50)]
+    public string? Status { get; set; }
 
     /// <summary>
-    /// The organization's custom domain (for white-label deployments).
+    /// Additional metadata for the organization.
     /// </summary>
-    [Display(Name = "Custom Domain")]
-    [StringLength(255)]
-    public string? CustomDomain { get; set; }
+    [Display(Name = "Metadata")]
+    public string? Metadata { get; set; }
 }
 
 /// <summary>
@@ -83,14 +64,19 @@ public class OrganizationDetailModel : OrganizationModel, ITemporal
     public EntityModel[] Entities { get; set; } = [];
 
     /// <summary>
-    /// The people/advisors associated with this organization.
+    /// The organization members.
     /// </summary>
-    public PersonModel[] People { get; set; } = [];
+    public OrganizationMemberModel[] Members { get; set; } = [];
 
     /// <summary>
-    /// The obligations/tasks for this organization.
+    /// The tasks for this organization.
     /// </summary>
-    public ObligationModel[] Obligations { get; set; } = [];
+    public TaskModel[] Tasks { get; set; } = [];
+
+    /// <summary>
+    /// The checklist instances for this organization.
+    /// </summary>
+    public ChecklistModel[] ChecklistInstances { get; set; } = [];
 
     #region ITemporal
 
