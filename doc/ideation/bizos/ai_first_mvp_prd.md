@@ -309,3 +309,24 @@ Deliver a system where AI is the default interface: customers describe needs in 
 - Migration tool: Flyway or Prisma Migrate.  
 - Seed minimal roles/permissions, a demo tenant, and 2 example checklist templates (state filing + annual license renewal).
 
+## **Model Classes by Workspace**
+
+### **Access** (`Corp.Access`)
+- `OrganizationModel` - Represents an organization (customer-facing container)
+- `OrganizationMemberModel` - Represents organization membership (many-to-many person↔org with roles)
+- `PersonModel` - Represents a person in the system
+
+### **Business** (`Corp.Business`)
+- `EntityModel` - Represents a business entity (LLC, Corporation, Trust, etc.)
+- `EntityRoleModel` - Represents an entity role (who relates to an entity; time-bounded)
+- `EntityRelationshipModel` - Represents an entity relationship (entity↔entity graph)
+
+### **Storage** (`Corp.Storage`)
+- `DocumentModel` - Represents a document in the system
+- `ExtractedFieldModel` - Represents an extracted field from AI document processing
+
+### **Workflow** (`Corp.Workflow`)
+- `TaskModel` - Represents a task in the system
+- `TaskTemplateModel` - Represents a task template
+- `ChecklistModel` - Represents a checklist instance
+- `ChecklistTemplateModel` - Represents a checklist template (AI or manual source)
