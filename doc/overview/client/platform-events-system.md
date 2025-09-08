@@ -2,7 +2,7 @@
 
 ## Overview
 
-The Platform Events System provides a type-safe, event-driven foundation for real-time state management across the Basalt application. It enables components to communicate through events while maintaining clean separation of concerns.
+The Platform Events System provides a type-safe, event-driven foundation for real-time state management across the application. It enables components to communicate through events while maintaining clean separation of concerns.
 
 ## Quick Start
 
