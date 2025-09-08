@@ -1,4 +1,4 @@
-﻿namespace Corp;
+﻿namespace Corp.Storage;
 
 /// <summary>
 /// Represents an extracted field from AI document processing.

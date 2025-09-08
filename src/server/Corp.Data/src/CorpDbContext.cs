@@ -1,5 +1,11 @@
 ﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 
+using Corp.Access;
+using Corp.Business;
+using Corp.Operations;
+using Corp.Storage;
+using Corp.Workflow;
+
 namespace Corp.Data;
 
 /// <summary>
@@ -61,6 +67,32 @@ public class CorpDbContext : IdentityDbContext // <IdentityUser<long>, IdentityR
 
         modelBuilder.Snakeify();
 
-        //EnumerationBuilder.OnStringCreating(modelBuilder, LanguageCode.GetAll(), LanguageCode.KeyLength, "language_code");
+        // Access enumerations
+        EnumerationBuilder.OnStringCreating(modelBuilder, OrganizationMemberRoleEnum.GetAll(), OrganizationMemberRoleEnum.KeyLength, "organization_member_role");
+
+        // Business enumerations
+        EnumerationBuilder.OnStringCreating(modelBuilder, EntityTypeEnum.GetAll(), EntityTypeEnum.KeyLength, "entity_type");
+        EnumerationBuilder.OnStringCreating(modelBuilder, EntityRelationshipTypeEnum.GetAll(), EntityRelationshipTypeEnum.KeyLength, "entity_relationship_type");
+        EnumerationBuilder.OnStringCreating(modelBuilder, EntityRoleTypeEnum.GetAll(), EntityRoleTypeEnum.KeyLength, "entity_role_type");
+        EnumerationBuilder.OnStringCreating(modelBuilder, EntityStatusEnum.GetAll(), EntityStatusEnum.KeyLength, "entity_status");
+        EnumerationBuilder.OnStringCreating(modelBuilder, OwnershipModelEnum.GetAll(), OwnershipModelEnum.KeyLength, "ownership_model");
+
+        // Operations enumerations
+        EnumerationBuilder.OnStringCreating(modelBuilder, AiActionTypeEnum.GetAll(), AiActionTypeEnum.KeyLength, "ai_action_type");
+        EnumerationBuilder.OnStringCreating(modelBuilder, AuditActionEnum.GetAll(), AuditActionEnum.KeyLength, "audit_action");
+        EnumerationBuilder.OnStringCreating(modelBuilder, AiChannelEnum.GetAll(), AiChannelEnum.KeyLength, "ai_channel");
+        EnumerationBuilder.OnStringCreating(modelBuilder, FeedbackTargetTypeEnum.GetAll(), FeedbackTargetTypeEnum.KeyLength, "feedback_target_type");
+
+        // Storage enumerations
+        EnumerationBuilder.OnStringCreating(modelBuilder, DocumentCategoryEnum.GetAll(), DocumentCategoryEnum.KeyLength, "document_category");
+
+        // Workflow enumerations
+        EnumerationBuilder.OnStringCreating(modelBuilder, ReminderStatusEnum.GetAll(), ReminderStatusEnum.KeyLength, "reminder_status");
+        EnumerationBuilder.OnStringCreating(modelBuilder, SourceTypeEnum.GetAll(), SourceTypeEnum.KeyLength, "source_type");
+        EnumerationBuilder.OnStringCreating(modelBuilder, ReminderChannelEnum.GetAll(), ReminderChannelEnum.KeyLength, "reminder_channel");
+        EnumerationBuilder.OnStringCreating(modelBuilder, ChecklistStatusEnum.GetAll(), ChecklistStatusEnum.KeyLength, "checklist_status");
+        EnumerationBuilder.OnStringCreating(modelBuilder, ChecklistScopeEnum.GetAll(), ChecklistScopeEnum.KeyLength, "checklist_scope");
+        EnumerationBuilder.OnStringCreating(modelBuilder, PriorityEnum.GetAll(), PriorityEnum.KeyLength, "priority");
+        EnumerationBuilder.OnStringCreating(modelBuilder, TaskStatusEnum.GetAll(), TaskStatusEnum.KeyLength, "task_status");
     }
 }

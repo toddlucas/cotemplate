@@ -1,4 +1,6 @@
-﻿namespace Corp;
+﻿using Corp.Business;
+
+namespace Corp.Workflow;
 
 /// <summary>
 /// Represents a checklist instance.
@@ -51,18 +53,20 @@ public class ChecklistModel
     public string Name { get; set; } = null!;
 
     /// <summary>
-    /// The checklist instance status.
+    /// The checklist instance status. See <see cref="ChecklistStatusEnum"/>.
     /// </summary>
     [Display(Name = "Status")]
     [Required]
-    public ChecklistStatus Status { get; set; }
+    [StringLength(10)]
+    public string StatusId { get; set; } = null!;
 
     /// <summary>
-    /// How this checklist was created.
+    /// How this checklist was created. See <see cref="SourceTypeEnum"/>.
     /// </summary>
     [Display(Name = "Created From")]
     [Required]
-    public SourceType CreatedFrom { get; set; }
+    [StringLength(10)]
+    public string CreatedFromId { get; set; } = null!;
 
     /// <summary>
     /// Additional metadata for the checklist instance.

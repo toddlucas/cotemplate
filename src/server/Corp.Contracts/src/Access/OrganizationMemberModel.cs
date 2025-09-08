@@ -33,11 +33,12 @@ public class OrganizationMemberModel
     public long PersonId { get; set; }
 
     /// <summary>
-    /// The member role.
+    /// The member role. See <see cref="OrganizationMemberRoleEnum"/>.
     /// </summary>
     [Display(Name = "Role")]
     [Required]
-    public OrgMemberRole Role { get; set; }
+    [StringLength(20)]
+    public string RoleId { get; set; } = null!;
 
     /// <summary>
     /// The member status.
@@ -68,7 +69,7 @@ public class OrganizationMemberModel
 /// <summary>
 /// Detailed organization member model with related entities and temporal tracking.
 /// </summary>
-public class OrgMemberDetailModel : OrganizationMemberModel, ITemporal
+public class OrganizationMemberDetailModel : OrganizationMemberModel, ITemporal
 {
     /// <summary>
     /// The organization this member belongs to.

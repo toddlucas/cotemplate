@@ -1,4 +1,4 @@
-﻿namespace Corp;
+﻿namespace Corp.Business;
 
 /// <summary>
 /// Represents an entity relationship (entity↔entity graph).
@@ -40,11 +40,12 @@ public class EntityRelationshipModel
     public long ChildEntityId { get; set; }
 
     /// <summary>
-    /// The relationship type.
+    /// The relationship type. See <see cref="EntityRelationshipTypeEnum"/>.
     /// </summary>
     [Display(Name = "Relationship Type")]
     [Required]
-    public EntityRelationshipType RelationshipType { get; set; }
+    [StringLength(20)]
+    public string RelationshipTypeId { get; set; } = null!;
 
     /// <summary>
     /// The percentage ownership (0-100).

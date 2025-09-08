@@ -1,4 +1,6 @@
-﻿namespace Corp;
+﻿using Corp.Business;
+
+namespace Corp.Storage;
 
 /// <summary>
 /// Represents a document in the system.
@@ -45,11 +47,12 @@ public class DocumentModel
     public string Title { get; set; } = null!;
 
     /// <summary>
-    /// The document category.
+    /// The document category. See <see cref="DocumentCategoryEnum"/>.
     /// </summary>
     [Display(Name = "Category")]
     [Required]
-    public DocumentCategory Category { get; set; }
+    [StringLength(20)]
+    public string CategoryId { get; set; } = null!;
 
     /// <summary>
     /// The document storage URI.

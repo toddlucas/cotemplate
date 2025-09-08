@@ -1,4 +1,7 @@
-﻿namespace Corp;
+﻿using Corp.Business;
+using Corp.Workflow;
+
+namespace Corp;
 
 /// <summary>
 /// Represents a person in the system.

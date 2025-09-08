@@ -1,6 +1,4 @@
-﻿using Corp.Access;
-
-namespace Corp.Business;
+﻿namespace Corp.Business;
 
 /// <summary>
 /// Represents an entity role (who relates to an entity; time-bounded).
@@ -42,11 +40,12 @@ public class EntityRoleModel
     public long PersonId { get; set; }
 
     /// <summary>
-    /// The entity role type.
+    /// The entity role type. See <see cref="EntityRoleTypeEnum"/>.
     /// </summary>
     [Display(Name = "Role")]
     [Required]
-    public EntityRoleType Role { get; set; }
+    [StringLength(30)]
+    public string RoleId { get; set; } = null!;
 
     /// <summary>
     /// The equity percentage (0-100).

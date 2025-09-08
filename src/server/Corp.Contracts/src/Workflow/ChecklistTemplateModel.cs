@@ -1,4 +1,4 @@
-﻿namespace Corp;
+﻿namespace Corp.Workflow;
 
 /// <summary>
 /// Represents a checklist template (AI or manual source).
@@ -19,11 +19,12 @@ public class ChecklistTemplateModel
     public long TenantId { get; set; }
 
     /// <summary>
-    /// The checklist scope.
+    /// The checklist scope. See <see cref="ChecklistScopeEnum"/>.
     /// </summary>
     [Display(Name = "Scope")]
     [Required]
-    public ChecklistScope Scope { get; set; }
+    [StringLength(10)]
+    public string ScopeId { get; set; } = null!;
 
     /// <summary>
     /// The checklist template name.
@@ -41,11 +42,12 @@ public class ChecklistTemplateModel
     public string? Version { get; set; }
 
     /// <summary>
-    /// The source type for this template.
+    /// The source type for this template. See <see cref="SourceTypeEnum"/>.
     /// </summary>
     [Display(Name = "Source Type")]
     [Required]
-    public SourceType SourceType { get; set; }
+    [StringLength(10)]
+    public string SourceTypeId { get; set; } = null!;
 
     /// <summary>
     /// The jurisdiction country (optional).

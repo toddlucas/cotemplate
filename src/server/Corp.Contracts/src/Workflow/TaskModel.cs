@@ -1,4 +1,7 @@
-﻿namespace Corp;
+﻿using Corp.Business;
+using Corp.Storage;
+
+namespace Corp.Workflow;
 
 /// <summary>
 /// Represents a task in the system.
@@ -45,17 +48,19 @@ public class TaskModel
     public string Name { get; set; } = null!;
 
     /// <summary>
-    /// The task status.
+    /// The task status. See <see cref="TaskStatusEnum"/>.
     /// </summary>
     [Display(Name = "Status")]
     [Required]
-    public TaskStatus Status { get; set; }
+    [StringLength(20)]
+    public string StatusId { get; set; } = null!;
 
     /// <summary>
-    /// The task priority.
+    /// The task priority. See <see cref="PriorityEnum"/>.
     /// </summary>
     [Display(Name = "Priority")]
-    public Priority? Priority { get; set; }
+    [StringLength(10)]
+    public string? PriorityId { get; set; }
 
     /// <summary>
     /// The person assigned to this task.

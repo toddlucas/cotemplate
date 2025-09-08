@@ -1,4 +1,7 @@
-﻿namespace Corp;
+﻿using Corp.Business;
+using Corp.Workflow;
+
+namespace Corp;
 
 /// <summary>
 /// Represents an organization (customer-facing container) in the system.

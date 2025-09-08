@@ -1,4 +1,4 @@
-﻿namespace Corp;
+﻿namespace Corp.Workflow;
 
 /// <summary>
 /// Represents a task template.
@@ -54,10 +54,11 @@ public class TaskTemplateModel
     public string? RecurrenceRule { get; set; }
 
     /// <summary>
-    /// The task priority.
+    /// The task priority. See <see cref="PriorityEnum"/>.
     /// </summary>
     [Display(Name = "Priority")]
-    public Priority? Priority { get; set; }
+    [StringLength(10)]
+    public string? PriorityId { get; set; }
 
     /// <summary>
     /// Whether this task requires evidence.

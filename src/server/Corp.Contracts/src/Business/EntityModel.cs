@@ -1,4 +1,7 @@
-﻿namespace Corp;
+﻿using Corp.Storage;
+using Corp.Workflow;
+
+namespace Corp.Business;
 
 /// <summary>
 /// Represents a business entity (LLC, Corporation, Trust, etc.) in the system.
@@ -41,11 +44,12 @@ public class EntityModel
     public string? LegalName { get; set; }
 
     /// <summary>
-    /// The entity type (LLC, Corporation, Trust, etc.).
+    /// The entity type (LLC, Corporation, Trust, etc.). See <see cref="EntityTypeEnum"/>.
     /// </summary>
     [Display(Name = "Entity Type")]
     [Required]
-    public EntityType EntityType { get; set; }
+    [StringLength(20)]
+    public string EntityTypeId { get; set; } = null!;
 
     /// <summary>
     /// The entity's formation date.
@@ -91,14 +95,16 @@ public class EntityModel
     /// The entity's ownership model.
     /// </summary>
     [Display(Name = "Ownership Model")]
-    public OwnershipModel? OwnershipModel { get; set; }
+    [StringLength(20)]
+    public string? OwnershipModelId { get; set; }
 
     /// <summary>
     /// The entity's status.
     /// </summary>
     [Display(Name = "Status")]
     [Required]
-    public EntityStatus Status { get; set; }
+    [StringLength(20)]
+    public string StatusId { get; set; } = null!;
 
     /// <summary>
     /// Additional metadata for the entity.
