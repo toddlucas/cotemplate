@@ -1,4 +1,5 @@
 ﻿using Corp.Data;
+using Corp.Data.Identity;
 
 #pragma warning disable IDE0130 // Namespace does not match folder structure
 namespace Microsoft.Extensions.DependencyInjection;
@@ -21,7 +22,13 @@ public static class IServiceCollectionExtensions
     /// Add the app DbContext to the container.
     /// </summary>
     public static IServiceCollection AddCorpDbConfiguration(this IServiceCollection services, IConfiguration configuration)
-        => services.AddProviderDbContext<CorpDbContext>(configuration, "CorpDb", "Npgsql");
+    {
+        bool useInterceptor = configuration.UseTenantInterceptor();
+        if (useInterceptor)
+            services.AddScoped<TenantTransactionInterceptor>();
+
+        return services.AddProviderDbContext<CorpDbContext>(configuration, "CorpDb", "Npgsql", addTenantInterceptor: useInterceptor);
+    }
 
     /// <summary>
     /// Add the data DbContext to the container.
@@ -35,13 +42,14 @@ public static class IServiceCollectionExtensions
         string configurationPrefix,
         string defaultProvider,
         ServiceLifetime contextLifetime = ServiceLifetime.Scoped,
-        ServiceLifetime optionsLifetime = ServiceLifetime.Scoped)
+        ServiceLifetime optionsLifetime = ServiceLifetime.Scoped,
+        bool addTenantInterceptor = false)
         where TContext : DbContext
     {
         string provider = configuration.GetDatabaseProvider(configurationPrefix, defaultProvider);
         string connectionString = GetConnectionString(configuration, configurationPrefix, provider);
 
-        serviceCollection.AddDbContext<TContext>(options =>
+        serviceCollection.AddDbContext<TContext>((serviceProvider, options) =>
         {
             if (provider == "Sqlite")
             {
@@ -69,6 +77,13 @@ public static class IServiceCollectionExtensions
             }
 
             options.UseQueryTrackingBehavior(QueryTrackingBehavior.NoTracking);
+
+            // Add tenant interceptor for PostgreSQL if requested
+            if (addTenantInterceptor && provider == "Npgsql")
+            {
+                var interceptor = serviceProvider.GetRequiredService<TenantTransactionInterceptor>();
+                options.AddInterceptors(interceptor);
+            }
         },
         contextLifetime,
         optionsLifetime);
