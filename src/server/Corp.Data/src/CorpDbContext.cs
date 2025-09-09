@@ -19,7 +19,7 @@ public class CorpDbContext : IdentityDbContext // <IdentityUser<long>, IdentityR
     }
 
     /// <summary>
-    /// Initializes a new instance of the <see cref="SqliteAppDbContext" />
+    /// Initializes a new instance of the <see cref="CorpDbContext" />
     /// class using the specified options.
     /// </summary>
     /// <remarks>
@@ -69,7 +69,7 @@ public class CorpDbContext : IdentityDbContext // <IdentityUser<long>, IdentityR
 
     #region Workflow
 
-    public DbSet<Workflow.Task> Tasks { get; set; } = null!;
+    public DbSet<TaskRecord> Tasks { get; set; } = null!;
     public DbSet<TaskTemplate> TaskTemplates { get; set; } = null!;
     public DbSet<Checklist> Checklists { get; set; } = null!;
     public DbSet<ChecklistTemplate> ChecklistTemplates { get; set; } = null!;
@@ -112,7 +112,7 @@ public class CorpDbContext : IdentityDbContext // <IdentityUser<long>, IdentityR
         ExtractedField.OnModelCreating(modelBuilder);
 
         // Workflow entities
-        Workflow.Task.OnModelCreating(modelBuilder);
+        TaskRecord.OnModelCreating(modelBuilder);
         TaskTemplate.OnModelCreating(modelBuilder);
         Checklist.OnModelCreating(modelBuilder);
         ChecklistTemplate.OnModelCreating(modelBuilder);

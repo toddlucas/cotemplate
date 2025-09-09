@@ -1,8 +1,8 @@
 ﻿namespace Corp.Workflow;
 
-using TRecord = Task;
+using TRecord = TaskRecord;
 
-public class Task : TaskModel, ITemporal
+public class TaskRecord : TaskModel, ITemporal
 {
     #region Navigation properties
 
@@ -76,7 +76,7 @@ public class Task : TaskModel, ITemporal
     public static void OnModelCreating(ModelBuilder modelBuilder)
     {
         // Table
-        modelBuilder.Entity<TRecord>().ToTable(nameof(Task));
+        modelBuilder.Entity<TRecord>().ToTable(nameof(TaskRecord));
 
         // Column names (snake_case)
         modelBuilder.Entity<TRecord>().Property(x => x.Id).HasColumnName("id");
