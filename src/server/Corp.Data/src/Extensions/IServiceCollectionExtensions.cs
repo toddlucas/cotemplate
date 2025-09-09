@@ -24,10 +24,25 @@ public static class IServiceCollectionExtensions
     public static IServiceCollection AddCorpDbConfiguration(this IServiceCollection services, IConfiguration configuration)
     {
         bool useInterceptor = configuration.UseTenantInterceptor();
-        if (useInterceptor)
-            services.AddScoped<TenantTransactionInterceptor>();
+        string provider = configuration.GetDatabaseProvider("CorpDb", "Npgsql");
 
-        return services.AddProviderDbContext<CorpDbContext>(configuration, "CorpDb", "Npgsql", addTenantInterceptor: useInterceptor);
+        // Register the guard factory instead of the guard directly
+        services.AddScoped<IRequestDbGuardFactory, RequestDbGuardFactory>();
+
+        // Register the guard as a scoped service that uses the factory
+        services.AddScoped<IRequestDbGuard>(serviceProvider =>
+        {
+            var factory = serviceProvider.GetRequiredService<IRequestDbGuardFactory>();
+            return factory.CreateGuard();
+        });
+
+        // Register interceptors as services if tenant interceptor is enabled
+        if (useInterceptor && provider == "Npgsql")
+        {
+            services.AddScoped<WriteGuardInterceptor>();
+        }
+
+        return services.AddProviderDbContext<CorpDbContext>(configuration, "CorpDb", "Npgsql", addTenantInterceptor: useInterceptor && provider == "Npgsql");
     }
 
     /// <summary>
@@ -78,11 +93,13 @@ public static class IServiceCollectionExtensions
 
             options.UseQueryTrackingBehavior(QueryTrackingBehavior.NoTracking);
 
-            // Add tenant interceptor for PostgreSQL if requested
+            // Add tenant interceptors for PostgreSQL if requested
             if (addTenantInterceptor && provider == "Npgsql")
             {
-                var interceptor = serviceProvider.GetRequiredService<TenantTransactionInterceptor>();
-                options.AddInterceptors(interceptor);
+                // Resolve interceptors from DI to ensure proper lifecycle management
+                var writeGuardInterceptor = serviceProvider.GetRequiredService<WriteGuardInterceptor>();
+
+                options.AddInterceptors(writeGuardInterceptor);
             }
         },
         contextLifetime,

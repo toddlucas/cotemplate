@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
+using Corp.Data.Identity;
 using Corp.Pagination;
 
 namespace Corp.Controllers.Identity;
@@ -14,10 +15,12 @@ namespace Corp.Controllers.Identity;
 [ApiController]
 public class UserController(
     ILogger<UserController> logger,
-    UserManager<ApplicationUser> userManager) : ControllerBase
+    UserManager<ApplicationUser> userManager,
+    IRequestDbGuard guard) : ControllerBase
 {
     private readonly ILogger _logger = logger;
     private readonly UserManager<ApplicationUser> _userManager = userManager;
+    private readonly IRequestDbGuard _guard = guard;
 
     /// <summary>
     /// Returns a user.
@@ -32,6 +35,9 @@ public class UserController(
     {
         if (string.IsNullOrWhiteSpace(id))
             return BadRequest();
+
+        // Ensure read transaction with tenant context
+        await _guard.EnsureReadAsync(cancellationToken);
 
         // TODO: Map to IdentityUserModel.
         ApplicationUser? result = await _userManager.Users.Where(u => u.Id == id).SingleOrDefaultAsync();
@@ -51,6 +57,9 @@ public class UserController(
     [EndpointDescription("Returns a paginated list of users.")]
     public async Task<ActionResult> List([FromQuery] PagedQuery query, CancellationToken cancellationToken)
     {
+        // Ensure read transaction with tenant context
+        await _guard.EnsureReadAsync(cancellationToken);
+
         IQueryable<ApplicationUser> queryable = _userManager.Users;
 
         query.Search((term) =>
