@@ -6,12 +6,6 @@ namespace Microsoft.AspNetCore.Mvc;
 
 public static class ClaimsPrincipalExtensions
 {
-    //public static string? GetNameIdentifierOrDefault(this ClaimsPrincipal principal)
-    //    => principal.FindFirstValue(ClaimTypes.NameIdentifier);
-
-    //public static string GetNameIdentifier(this ClaimsPrincipal principal)
-    //    => principal.RequireFirstValue(ClaimTypes.NameIdentifier);
-
     //public static long? GetNameIdentifierOrDefault(this ClaimsPrincipal principal)
     //    => principal.FindFirstInt64Value(ClaimTypes.NameIdentifier);
 
@@ -23,6 +17,12 @@ public static class ClaimsPrincipalExtensions
 
     public static string GetNameIdentifier(this ClaimsPrincipal principal)
         => principal.RequireFirstValue(ClaimTypes.NameIdentifier);
+
+    public static string? GetTenantIdOrDefault(this ClaimsPrincipal principal)
+        => principal.FindFirstValue(CustomClaims.TenantId);
+
+    public static string GetTenantId(this ClaimsPrincipal principal)
+        => principal.RequireFirstValue(CustomClaims.TenantId);
 
     public static string RequireFirstValue(this ClaimsPrincipal principal, string claimType)
     {
