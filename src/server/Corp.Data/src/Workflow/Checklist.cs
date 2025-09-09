@@ -147,7 +147,7 @@ public class Checklist : ChecklistModel, ITemporal
             TemplateId = 1,
             Name = "Sample Checklist",
             StatusId = nameof(ChecklistStatus.active),
-            CreatedFromId = "template",
+            CreatedFromId = nameof(SourceType.system),
             CreatedAt = createdAt,
             UpdatedAt = createdAt
         });

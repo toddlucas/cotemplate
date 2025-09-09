@@ -139,7 +139,7 @@ public class Document : DocumentModel, ITemporal
             StorageUri = "s3://sample-bucket/sample-document.pdf",
             MimeType = "application/pdf",
             Hash = "sha256:sample-hash",
-            UploadedBy = "1",
+            UploadedBy = 1,
             UploadedAt = createdAt,
             CreatedAt = createdAt,
             UpdatedAt = createdAt

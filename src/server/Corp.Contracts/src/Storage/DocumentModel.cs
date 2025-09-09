@@ -80,7 +80,7 @@ public class DocumentModel
     /// </summary>
     [Display(Name = "Uploaded By")]
     [StringLength(255)]
-    public string? UploadedBy { get; set; }
+    public long? UploadedBy { get; set; }
 
     /// <summary>
     /// The upload timestamp.
