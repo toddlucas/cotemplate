@@ -21,6 +21,7 @@ builder.Logging.AddSeq();
 
 builder.Services.AddDatabases(builder.Configuration);
 builder.Services.AddServices();
+builder.Services.AddTenantServices();
 builder.Services.AddTaskServices();
 builder.Services.AddForegroundServices();
 
@@ -33,7 +34,7 @@ builder.Services.AddAuthorizationBuilder()
 //builder.Services.AddDefaultIdentity<IdentityUser>() // UI
 builder.Services.AddIdentityApiEndpoints<ApplicationUser>( // API
         options => options.SignIn.RequireConfirmedAccount = true)
-    //.AddSignInManager<TenantSignInManager>()
+    .AddSignInManager<TenantSignInManager<ApplicationUser>>()
     .AddRoles<IdentityRole>()
     .AddEntityFrameworkStores<CorpDbContext>();
 
@@ -134,6 +135,7 @@ app.UseCors();
 
 app.UseAuthentication();
 app.UseAuthorization();
+app.UseTenantContextMiddleware();
 
 app.UseRateLimiter();
 //app.MapStaticAssets();
