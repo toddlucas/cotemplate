@@ -17,9 +17,10 @@ internal class IdentityModel
         // builder.Entity<ApplicationTenant>().HasData(new ApplicationTenant { Id = 2 });
 
         //builder.Entity<ApplicationUser>().HasData(new ApplicationUser
-        builder.Entity<IdentityUser>().HasData(new IdentityUser
+        builder.Entity<ApplicationUser>().HasData(new ApplicationUser
         {
             Id = "479b7016-c534-47ca-8937-e048d9b7a299", // 1
+            TenantId = "4cd9b651-8df2-4b44-a55a-5abe06c7907e",
             //TenantId = 2,
             //FirstName = "Billy Bob",
             UserName = "bb@example.com",
@@ -37,5 +38,7 @@ internal class IdentityModel
         //builder.Entity<IdentityUserRole<long>>().HasData(new IdentityUserRole<long> { UserId = 1, RoleId = 9 });
         builder.Entity<IdentityUserRole<string>>().HasData(new IdentityUserRole<string> { UserId = "479b7016-c534-47ca-8937-e048d9b7a299", RoleId = "4653f390-806f-480c-882c-a871efc0790a" });
         builder.Entity<IdentityUserRole<string>>().HasData(new IdentityUserRole<string> { UserId = "479b7016-c534-47ca-8937-e048d9b7a299", RoleId = "ea3105d8-d79f-44c1-b23a-657826cc6498" });
+
+        builder.Entity<IdentityTenant>().HasData(new IdentityTenant { Id = "4cd9b651-8df2-4b44-a55a-5abe06c7907e" });
     }
 }

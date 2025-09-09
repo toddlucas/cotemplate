@@ -31,8 +31,9 @@ builder.Services.AddAuthorizationBuilder()
 
 // https://learn.microsoft.com/en-us/aspnet/core/security/authentication/identity?view=aspnetcore-9.0&tabs=visual-studio#adddefaultidentity-and-addidentity
 //builder.Services.AddDefaultIdentity<IdentityUser>() // UI
-builder.Services.AddIdentityApiEndpoints<IdentityUser>( // API
+builder.Services.AddIdentityApiEndpoints<ApplicationUser>( // API
         options => options.SignIn.RequireConfirmedAccount = true)
+    //.AddSignInManager<TenantSignInManager>()
     .AddRoles<IdentityRole>()
     .AddEntityFrameworkStores<CorpDbContext>();
 
@@ -158,7 +159,7 @@ if (app.Environment.IsDevelopment())
 
 app.MapGroup("/api/auth")
     .WithTags("Auth")
-    .MapIdentityApi<IdentityUser>();
+    .MapIdentityApi<ApplicationUser>();
 
 app.MapDefaultControllerRoute()
     //.RequireRateLimiting(fixedRatePolicy)

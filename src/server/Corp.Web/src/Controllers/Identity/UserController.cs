@@ -14,10 +14,10 @@ namespace Corp.Controllers.Identity;
 [ApiController]
 public class UserController(
     ILogger<UserController> logger,
-    UserManager<IdentityUser> userManager) : ControllerBase
+    UserManager<ApplicationUser> userManager) : ControllerBase
 {
     private readonly ILogger _logger = logger;
-    private readonly UserManager<IdentityUser> _userManager = userManager;
+    private readonly UserManager<ApplicationUser> _userManager = userManager;
 
     /// <summary>
     /// Returns a user.
@@ -34,7 +34,7 @@ public class UserController(
             return BadRequest();
 
         // TODO: Map to IdentityUserModel.
-        IdentityUser? result = await _userManager.Users.Where(u => u.Id == id).SingleOrDefaultAsync();
+        ApplicationUser? result = await _userManager.Users.Where(u => u.Id == id).SingleOrDefaultAsync();
         if (result is null)
             return NotFound();
 
@@ -51,7 +51,7 @@ public class UserController(
     [EndpointDescription("Returns a paginated list of users.")]
     public async Task<ActionResult> List([FromQuery] PagedQuery query, CancellationToken cancellationToken)
     {
-        IQueryable<IdentityUser> queryable = _userManager.Users;
+        IQueryable<ApplicationUser> queryable = _userManager.Users;
 
         query.Search((term) =>
         {
@@ -59,7 +59,7 @@ public class UserController(
                 .Where(c => c.Email!.ToLower().Contains(term));
         });
 
-        IdentityUser[] records = await queryable
+        ApplicationUser[] records = await queryable
             .OrderByPage(query, nameof(IdentityUser.Id))
             .Paginate(query, out int count)
             .ToArrayAsync(cancellationToken);

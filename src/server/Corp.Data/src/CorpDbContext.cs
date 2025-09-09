@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 
 using Corp.Access;
 using Corp.Business;
@@ -11,7 +12,7 @@ namespace Corp.Data;
 /// <summary>
 /// The app database context.
 /// </summary>
-public class CorpDbContext : IdentityDbContext // <IdentityUser<long>, IdentityRole<long>, long>
+public class CorpDbContext : IdentityDbContext<ApplicationUser, IdentityTenant>
 {
     public CorpDbContext(DbContextOptions<CorpDbContext> options)
         : base(options)

@@ -1,17 +1,19 @@
 ﻿namespace Microsoft.AspNetCore.Identity;
 
-using Record = IdentityUser;
+using Record = ApplicationUser; // IdentityUser;
 using Model = IdentityUserModel;
 
 /// <summary>
 /// Head mapper.
 /// </summary>
 [Mapper(UseDeepCloning = true, PropertyNameMappingStrategy = PropertyNameMappingStrategy.CaseInsensitive)]
-public static partial class HeadMapper
+public static partial class IdentityUserMapper
 {
     /// <summary>
     /// Maps the DTO to the model.
     /// </summary>
+    [MapperIgnoreSource(nameof(Record.TenantId))]
+    [MapperIgnoreSource(nameof(Record.IsDefaultUser))]
     [MapperIgnoreSource(nameof(Record.NormalizedUserName))]
     [MapperIgnoreSource(nameof(Record.NormalizedEmail))]
     [MapperIgnoreSource(nameof(Record.EmailConfirmed))]
@@ -60,6 +62,8 @@ public static partial class HeadMapper
     //[MapperIgnoreTarget(nameof(Record.CreatedAt))]
     //[MapperIgnoreTarget(nameof(Record.UpdatedAt))]
     //[MapperIgnoreTarget(nameof(Record.DeletedAt))]
+    [MapperIgnoreTarget(nameof(Record.TenantId))]
+    [MapperIgnoreTarget(nameof(Record.IsDefaultUser))]
     [MapperIgnoreTarget(nameof(Record.NormalizedUserName))]
     [MapperIgnoreTarget(nameof(Record.NormalizedEmail))]
     [MapperIgnoreTarget(nameof(Record.EmailConfirmed))]

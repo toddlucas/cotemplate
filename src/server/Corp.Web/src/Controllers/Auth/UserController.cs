@@ -11,10 +11,10 @@ namespace Corp.Controllers.Auth;
 [ApiController]
 public class UserController(
     ILogger<UserController> logger,
-    UserManager<IdentityUser> userManager) : ControllerBase
+    UserManager<ApplicationUser> userManager) : ControllerBase
 {
     private readonly ILogger _logger = logger;
-    private readonly UserManager<IdentityUser> _userManager = userManager;
+    private readonly UserManager<ApplicationUser> _userManager = userManager;
 
     /// <summary>
     /// Returns the current user.
@@ -28,7 +28,7 @@ public class UserController(
     {
         string id = User.GetNameIdentifier();
 
-        IdentityUser? result = await _userManager.Users.Where(u => u.Id == id).SingleOrDefaultAsync();
+        ApplicationUser? result = await _userManager.Users.Where(u => u.Id == id).SingleOrDefaultAsync();
         if (result is null)
             return NotFound();
 
@@ -47,14 +47,14 @@ public class UserController(
     {
         string id = User.GetNameIdentifier();
 
-        IdentityUser? record = await _userManager.Users.Where(u => u.Id == id).SingleOrDefaultAsync();
+        ApplicationUser? record = await _userManager.Users.Where(u => u.Id == id).SingleOrDefaultAsync();
         if (record is null)
             return BadRequest();
 
         record.UpdateFrom(model);
         await _userManager.UpdateAsync(record);
 
-        IdentityUser? result = await _userManager.Users.Where(u => u.Id == id).SingleOrDefaultAsync();
+        ApplicationUser? result = await _userManager.Users.Where(u => u.Id == id).SingleOrDefaultAsync();
         if (result is null)
             return BadRequest();
 
