@@ -50,21 +50,21 @@ public class Entity : EntityModel, ITemporal
     /// </summary>
     [Display(Name = "Created at")]
     [Description("The date and time this record was created, in the format defined by RFC 3339, section 5.6, for example, 2017-07-21T17:32:28Z.")]
-    public DateTimeOffset CreatedAt { get; set; }
+    public DateTime CreatedAt { get; set; }
 
     /// <summary>
     /// The updated timestamp.
     /// </summary>
     [Display(Name = "Updated at")]
     [Description("The date and time this record was last updated, in the format defined by RFC 3339, section 5.6, for example, 2017-07-21T17:32:28Z.")]
-    public DateTimeOffset UpdatedAt { get; set; }
+    public DateTime UpdatedAt { get; set; }
 
     /// <summary>
     /// The deleted timestamp.
     /// </summary>
     [Display(Name = "Deleted at")]
     [Description("The date and time this record was deleted, or null, in the format defined by RFC 3339, section 5.6, for example, 2017-07-21T17:32:28Z.")]
-    public DateTimeOffset? DeletedAt { get; set; }
+    public DateTime? DeletedAt { get; set; }
 
     #endregion ITemporal
 
@@ -136,7 +136,7 @@ public class Entity : EntityModel, ITemporal
             Name = "Sample LLC",
             LegalName = "Sample LLC",
             EntityTypeId = nameof(EntityType.llc),
-            FormationDate = new DateTime(2024, 1, 1),
+            FormationDate = new DateTime(2024, 1, 1, 0, 0, 0, DateTimeKind.Utc),
             JurisdictionCountry = "US",
             JurisdictionRegion = "US-CA",
             OwnershipModelId = nameof(OwnershipModel.member_managed),

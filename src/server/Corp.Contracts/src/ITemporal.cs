@@ -2,7 +2,7 @@
 
 public interface ITemporal
 {
-    DateTimeOffset CreatedAt { get; }
-    DateTimeOffset UpdatedAt { get; }
-    DateTimeOffset? DeletedAt { get; }
+    DateTime CreatedAt { get; }
+    DateTime UpdatedAt { get; }
+    DateTime? DeletedAt { get; }
 }

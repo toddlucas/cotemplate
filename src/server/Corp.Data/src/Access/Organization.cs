@@ -1,4 +1,6 @@
-﻿namespace Corp;
+﻿using Corp.Access;
+
+namespace Corp;
 
 using TRecord = Organization;
 
@@ -30,21 +32,21 @@ public class Organization : OrganizationModel, ITemporal
     /// </summary>
     [Display(Name = "Created at")]
     [Description("The date and time this record was created, in the format defined by RFC 3339, section 5.6, for example, 2017-07-21T17:32:28Z.")]
-    public DateTimeOffset CreatedAt { get; set; }
+    public DateTime CreatedAt { get; set; }
 
     /// <summary>
     /// The updated timestamp.
     /// </summary>
     [Display(Name = "Updated at")]
     [Description("The date and time this record was last updated, in the format defined by RFC 3339, section 5.6, for example, 2017-07-21T17:32:28Z.")]
-    public DateTimeOffset UpdatedAt { get; set; }
+    public DateTime UpdatedAt { get; set; }
 
     /// <summary>
     /// The deleted timestamp.
     /// </summary>
     [Display(Name = "Deleted at")]
     [Description("The date and time this record was deleted, or null, in the format defined by RFC 3339, section 5.6, for example, 2017-07-21T17:32:28Z.")]
-    public DateTimeOffset? DeletedAt { get; set; }
+    public DateTime? DeletedAt { get; set; }
 
     #endregion ITemporal
 
@@ -83,7 +85,7 @@ public class Organization : OrganizationModel, ITemporal
             .HasFilter("code IS NOT NULL");
 
         // Seed data (optional)
-        var createdAt = new DateTime(2024, 12, 1, 0, 0, 1, DateTimeKind.Utc);
+        var createdAt = new DateTime(2024, 12, 1, 0, 0, 0, DateTimeKind.Utc);
         modelBuilder.Entity<TRecord>().HasData(new TRecord
         {
             Id = 1,
