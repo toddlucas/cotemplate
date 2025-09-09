@@ -1,4 +1,4 @@
-﻿namespace Corp.Access;
+﻿namespace Corp;
 
 using TRecord = Organization;
 
@@ -83,7 +83,7 @@ public class Organization : OrganizationModel, ITemporal
             .HasFilter("code IS NOT NULL");
 
         // Seed data (optional)
-        var createdAt = new DateTime(2024, 12, 1, 0, 0, 0, DateTimeKind.Utc);
+        var createdAt = new DateTime(2024, 12, 1, 0, 0, 1, DateTimeKind.Utc);
         modelBuilder.Entity<TRecord>().HasData(new TRecord
         {
             Id = 1,

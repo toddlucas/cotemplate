@@ -1,4 +1,6 @@
-﻿namespace Corp.Business;
+﻿using Corp.Access;
+
+namespace Corp.Business;
 
 using TRecord = EntityRole;
 
@@ -14,12 +16,12 @@ public class EntityRole : EntityRoleModel, ITemporal
     /// <summary>
     /// The person.
     /// </summary>
-    public Access.Person Person { get; set; } = null!;
+    public Person Person { get; set; } = null!;
 
     /// <summary>
     /// The organization.
     /// </summary>
-    public Access.Organization Organization { get; set; } = null!;
+    public Organization Organization { get; set; } = null!;
 
     /// <summary>
     /// The entity role type enumeration.

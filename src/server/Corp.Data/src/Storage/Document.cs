@@ -1,4 +1,6 @@
-﻿namespace Corp.Storage;
+﻿using Corp.Access;
+
+namespace Corp.Storage;
 
 using TRecord = Document;
 
@@ -9,7 +11,7 @@ public class Document : DocumentModel, ITemporal
     /// <summary>
     /// The organization.
     /// </summary>
-    public Access.Organization? Organization { get; set; }
+    public Organization? Organization { get; set; }
 
     /// <summary>
     /// The entity.
@@ -19,12 +21,12 @@ public class Document : DocumentModel, ITemporal
     /// <summary>
     /// The person.
     /// </summary>
-    public Access.Person? Person { get; set; }
+    public Person? Person { get; set; }
 
     /// <summary>
     /// The person who uploaded the document.
     /// </summary>
-    public Access.Person UploadedByPerson { get; set; } = null!;
+    public Person UploadedByPerson { get; set; } = null!;
 
     /// <summary>
     /// The extracted fields from this document.

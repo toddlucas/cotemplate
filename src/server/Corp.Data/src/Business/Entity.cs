@@ -9,7 +9,7 @@ public class Entity : EntityModel, ITemporal
     /// <summary>
     /// The organization.
     /// </summary>
-    public Access.Organization Organization { get; set; } = null!;
+    public Organization Organization { get; set; } = null!;
 
     /// <summary>
     /// The entity type enumeration.

@@ -1,4 +1,8 @@
-﻿namespace Corp.Workflow;
+﻿using Corp.Access;
+using Corp.Business;
+using Corp.Storage;
+
+namespace Corp.Workflow;
 
 using TRecord = TaskRecord;
 
@@ -14,17 +18,17 @@ public class TaskRecord : TaskModel, ITemporal
     /// <summary>
     /// The organization.
     /// </summary>
-    public Access.Organization? Organization { get; set; }
+    public Organization? Organization { get; set; }
 
     /// <summary>
     /// The entity.
     /// </summary>
-    public Business.Entity? Entity { get; set; }
+    public Entity? Entity { get; set; }
 
     /// <summary>
     /// The assigned person.
     /// </summary>
-    public Access.Person? AssigneePerson { get; set; }
+    public Person? AssigneePerson { get; set; }
 
     /// <summary>
     /// The source task template.
@@ -34,7 +38,7 @@ public class TaskRecord : TaskModel, ITemporal
     /// <summary>
     /// The evidence document.
     /// </summary>
-    public Storage.Document? EvidenceDocument { get; set; }
+    public Document? EvidenceDocument { get; set; }
 
     /// <summary>
     /// The task status enumeration.

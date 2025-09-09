@@ -1,4 +1,7 @@
-﻿namespace Corp.Workflow;
+﻿using Corp.Access;
+using Corp.Business;
+
+namespace Corp.Workflow;
 
 using TRecord = Checklist;
 
@@ -9,17 +12,17 @@ public class Checklist : ChecklistModel, ITemporal
     /// <summary>
     /// The organization.
     /// </summary>
-    public Access.Organization? Organization { get; set; }
+    public Organization? Organization { get; set; }
 
     /// <summary>
     /// The entity.
     /// </summary>
-    public Business.Entity? Entity { get; set; }
+    public Entity? Entity { get; set; }
 
     /// <summary>
     /// The person.
     /// </summary>
-    public Access.Person? Person { get; set; }
+    public Person? Person { get; set; }
 
     /// <summary>
     /// The checklist template.
