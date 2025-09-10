@@ -29,6 +29,7 @@ public class UserController(
     /// <param name="cancellationToken">A cancellation token.</param>
     /// <returns>A user object.</returns>
     [HttpGet]
+    [TenantRead]
     // [EndpointSummary("/api/demographics/profile")]
     [EndpointDescription("Returns a user details object.")]
     public async Task<ActionResult> Get(string id, CancellationToken cancellationToken)
@@ -36,8 +37,7 @@ public class UserController(
         if (string.IsNullOrWhiteSpace(id))
             return BadRequest();
 
-        // Ensure read transaction with tenant context
-        await _guard.EnsureReadAsync(cancellationToken);
+        // No need to manually call _guard.EnsureReadAsync() - the aspect handles it!
 
         // TODO: Map to IdentityUserModel.
         ApplicationUser? result = await _userManager.Users.Where(u => u.Id == id).SingleOrDefaultAsync();
@@ -54,11 +54,11 @@ public class UserController(
     /// <param name="cancellationToken">A cancellation token.</param>
     /// <returns>A list of users.</returns>
     [HttpGet("list")]
+    [TenantRead]
     [EndpointDescription("Returns a paginated list of users.")]
     public async Task<ActionResult> List([FromQuery] PagedQuery query, CancellationToken cancellationToken)
     {
-        // Ensure read transaction with tenant context
-        await _guard.EnsureReadAsync(cancellationToken);
+        // No need to manually call _guard.EnsureReadAsync() - the aspect handles it!
 
         IQueryable<ApplicationUser> queryable = _userManager.Users;
 

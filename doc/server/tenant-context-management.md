@@ -258,10 +258,109 @@ Enable logging to see tenant context setting:
 _logger.LogDebug("Setting tenant context: {TenantId}", tenantId);
 ```
 
+## AOP Integration with Metalama
+
+The application now supports **Aspect-Oriented Programming (AOP)** using Metalama for declarative tenant context management. This eliminates the need for manual `EnsureReadAsync()` and `EnsureWriteAsync()` calls in controllers.
+
+### Setup
+
+1. **Install Metalama** (already done in Corp.Data project):
+   ```xml
+   <PackageReference Include="Metalama.Framework" Version="0.5.0" />
+   ```
+
+2. **Add middleware to Program.cs**:
+   ```csharp
+   // In Program.cs
+   app.UseAmbientGuard(); // Sets up ambient guard for Metalama aspects
+   ```
+
+### Usage
+
+#### Manual Attributes
+
+Apply attributes directly to methods:
+
+```csharp
+[HttpGet]
+[TenantRead] // Automatically calls EnsureReadAsync() before method execution
+public async Task<IActionResult> GetUsers(CancellationToken cancellationToken)
+{
+    // No manual guard calls needed!
+    var users = await _dbContext.Users.ToListAsync(cancellationToken);
+    return Ok(users);
+}
+
+[HttpPost]
+[TenantWrite] // Automatically calls EnsureWriteAsync() before method execution
+public async Task<IActionResult> CreateUser(CreateUserRequest request, CancellationToken cancellationToken)
+{
+    // No manual guard calls needed!
+    var user = new User { Name = request.Name };
+    _dbContext.Users.Add(user);
+    await _dbContext.SaveChangesAsync(cancellationToken);
+    return Ok(user);
+}
+```
+
+#### Convention-Based (Automatic)
+
+The `TenantFabric` automatically applies aspects based on method naming:
+
+- **Read Operations**: Methods starting with `Get`, `List`, `Find`, `Search`, `Query`, `Read`
+- **Write Operations**: Methods starting with `Create`, `Update`, `Delete`, `Save`, `Post`, `Put`, `Patch`, `Remove`
+
+```csharp
+// These methods automatically get [TenantRead] applied:
+public async Task<IActionResult> GetUsers() { ... }
+public async Task<IActionResult> ListUsers() { ... }
+public async Task<IActionResult> FindUser(int id) { ... }
+
+// These methods automatically get [TenantWrite] applied:
+public async Task<IActionResult> CreateUser() { ... }
+public async Task<IActionResult> UpdateUser(int id) { ... }
+public async Task<IActionResult> DeleteUser(int id) { ... }
+```
+
+### Benefits of AOP Approach
+
+1. **Cleaner Code**: No manual guard calls in controllers
+2. **Declarative**: Intent is clear from attributes
+3. **Consistent**: Automatic application via naming conventions
+4. **Maintainable**: Centralized tenant context logic
+5. **Testable**: Aspects can be easily mocked or disabled
+
+### Migration from Manual Approach
+
+To migrate existing controllers:
+
+1. **Remove manual guard calls**:
+   ```csharp
+   // Before
+   await _guard.EnsureReadAsync(cancellationToken);
+   
+   // After - remove this line entirely
+   ```
+
+2. **Add attributes or rely on conventions**:
+   ```csharp
+   [TenantRead] // or let TenantFabric apply automatically
+   public async Task<IActionResult> GetUsers() { ... }
+   ```
+
+3. **Remove guard dependency**:
+   ```csharp
+   // Before
+   public UserController(IRequestDbGuard guard) { ... }
+   
+   // After - remove guard parameter
+   public UserController() { ... }
+   ```
+
 ## Future Enhancements
 
-1. **AOP Integration**: Use Metalama for declarative tenant context
-2. **Batch Operations**: Optimize for bulk operations
-3. **Connection Pooling**: Improve connection management
-4. **Metrics**: Add performance monitoring
-5. **Testing**: Enhanced test utilities for multi-tenant scenarios
+1. **Batch Operations**: Optimize for bulk operations
+2. **Connection Pooling**: Improve connection management
+3. **Metrics**: Add performance monitoring
+4. **Testing**: Enhanced test utilities for multi-tenant scenarios
+5. **Custom Aspects**: Create domain-specific aspects for complex scenarios

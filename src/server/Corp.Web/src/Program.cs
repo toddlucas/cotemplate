@@ -136,6 +136,7 @@ app.UseCors();
 app.UseAuthentication();
 app.UseAuthorization();
 app.UseTenantContextMiddleware();
+app.UseAmbientGuard();
 
 app.UseRateLimiter();
 //app.MapStaticAssets();
