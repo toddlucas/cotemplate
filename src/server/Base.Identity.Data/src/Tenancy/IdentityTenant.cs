@@ -1,4 +1,6 @@
-﻿namespace Microsoft.AspNetCore.Identity;
+﻿using Microsoft.AspNetCore.Identity;
+
+namespace Microsoft.AspNetCore.Identity;
 
 /// <summary>
 /// The default implementation of <see cref="IdentityTenant{TKey}"/> which uses a string as a primary key.

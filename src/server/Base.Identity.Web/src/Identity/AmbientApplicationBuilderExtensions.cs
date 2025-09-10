@@ -1,5 +1,4 @@
-﻿using Microsoft.AspNetCore.Builder;
-using Corp.Web.Identity;
+﻿using Corp.Web.Identity;
 
 namespace Microsoft.AspNetCore.Builder;
 

@@ -1,3 +1,6 @@
+﻿using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
+
 namespace Corp.Data.Identity;
 
 /// <summary>
