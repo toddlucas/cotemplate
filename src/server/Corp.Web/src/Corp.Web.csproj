@@ -35,6 +35,8 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\Base.Identity.Data\src\Base.Identity.Data.csproj" />
+    <ProjectReference Include="..\..\Base.Identity.Web\src\Base.Identity.Web.csproj" />
     <ProjectReference Include="..\..\Corp.Background.Tasks\src\Corp.Background.Tasks.csproj" />
     <ProjectReference Include="..\..\Corp.Common\src\Corp.Common.csproj" />
     <ProjectReference Include="..\..\Corp.Contracts\src\Corp.Contracts.csproj" />

@@ -23,10 +23,11 @@ public static class IServiceCollectionExtensions
     /// </summary>
     public static IServiceCollection AddCorpDbConfiguration(this IServiceCollection services, IConfiguration configuration)
     {
-        bool useInterceptor = configuration.UseTenantInterceptor();
-        string provider = configuration.GetDatabaseProvider("CorpDb", "Npgsql");
+        // Register feature services
+        services.AddSingleton<ITenantFeatureService, TenantFeatureService>();
+        services.AddSingleton<IDatabaseProviderService, DatabaseProviderService>();
 
-        // Register the guard factory instead of the guard directly
+        // Register the guard factory
         services.AddScoped<IRequestDbGuardFactory, RequestDbGuardFactory>();
 
         // Register the guard as a scoped service that uses the factory
@@ -36,13 +37,18 @@ public static class IServiceCollectionExtensions
             return factory.CreateGuard();
         });
 
+        // Determine if tenant interceptors should be enabled
+        var featureService = new TenantFeatureService(configuration);
+        var providerService = new DatabaseProviderService(configuration);
+        bool addTenantInterceptor = featureService.IsTenantContextEnabled && providerService.SupportsTenantContext;
+
         // Register interceptors as services if tenant interceptor is enabled
-        if (useInterceptor && provider == "Npgsql")
+        if (addTenantInterceptor)
         {
             services.AddScoped<WriteGuardInterceptor>();
         }
 
-        return services.AddProviderDbContext<CorpDbContext>(configuration, "CorpDb", "Npgsql", addTenantInterceptor: useInterceptor && provider == "Npgsql");
+        return services.AddProviderDbContext<CorpDbContext>(configuration, "CorpDb", "Npgsql", addTenantInterceptor: addTenantInterceptor);
     }
 
     /// <summary>

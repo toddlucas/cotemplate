@@ -15,8 +15,4 @@ public static class ConfigurationManagerExtensions
 
         return provider;
     }
-
-    public static bool UseTenantInterceptor(
-        this IConfiguration configuration)
-        => configuration.GetValue("UseTenantInterceptor", false);
 }

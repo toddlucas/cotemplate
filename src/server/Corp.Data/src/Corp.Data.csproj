@@ -8,7 +8,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Metalama.Framework" Version="2025.1.13" />
     <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="9.0.8" />
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="9.0.8" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="9.0.8" />
@@ -22,6 +21,7 @@
   <ItemGroup>
     <ProjectReference Include="..\..\Corp.Common\src\Corp.Common.csproj" />
     <ProjectReference Include="..\..\Corp.Contracts\src\Corp.Contracts.csproj" />
+    <ProjectReference Include="..\..\Base.Identity.Data\src\Base.Identity.Data.csproj" />
   </ItemGroup>
 
 </Project>

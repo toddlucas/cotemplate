@@ -1,6 +1,4 @@
-using Microsoft.EntityFrameworkCore.Diagnostics;
-
-using Corp.Data.Identity;
+﻿using Microsoft.EntityFrameworkCore.Diagnostics;
 
 namespace Corp.Data.Identity;
 
