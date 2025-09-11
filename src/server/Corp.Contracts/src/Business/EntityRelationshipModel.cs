@@ -12,13 +12,6 @@ public class EntityRelationshipModel
     public long Id { get; set; }
 
     /// <summary>
-    /// The tenant ID this entity relationship belongs to.
-    /// </summary>
-    [Display(Name = "Tenant ID")]
-    [Required]
-    public long TenantId { get; set; }
-
-    /// <summary>
     /// The organization this entity belongs to.
     /// </summary>
     [Display(Name = "Organization ID")]

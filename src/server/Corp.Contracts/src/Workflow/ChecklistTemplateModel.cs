@@ -12,13 +12,6 @@ public class ChecklistTemplateModel
     public long Id { get; set; }
 
     /// <summary>
-    /// The tenant ID this checklist template belongs to.
-    /// </summary>
-    [Display(Name = "Tenant ID")]
-    [Required]
-    public long TenantId { get; set; }
-
-    /// <summary>
     /// The checklist scope. See <see cref="ChecklistScopeEnum"/>.
     /// </summary>
     [Display(Name = "Scope")]

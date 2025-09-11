@@ -15,13 +15,6 @@ public class EntityModel
     public long Id { get; set; }
 
     /// <summary>
-    /// The tenant ID this entity belongs to.
-    /// </summary>
-    [Display(Name = "Tenant ID")]
-    [Required]
-    public long TenantId { get; set; }
-
-    /// <summary>
     /// The organization this entity belongs to.
     /// </summary>
     [Display(Name = "Organization ID")]

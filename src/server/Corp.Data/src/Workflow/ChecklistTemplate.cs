@@ -4,6 +4,19 @@ using TRecord = ChecklistTemplate;
 
 public class ChecklistTemplate : ChecklistTemplateModel, ITemporal
 {
+    #region Internal properties
+
+#if RESELLER
+    /// <summary>
+    /// The group ID this checklist template belongs to.
+    /// </summary>
+    [Display(Name = "Group ID")]
+    [Required]
+    public string GroupId { get; set; } = null!;
+#endif
+
+    #endregion Internal properties
+
     #region Navigation properties
 
     /// <summary>
@@ -55,7 +68,9 @@ public class ChecklistTemplate : ChecklistTemplateModel, ITemporal
 
         // Column names (snake_case)
         modelBuilder.Entity<TRecord>().Property(x => x.Id).HasColumnName("id");
-        modelBuilder.Entity<TRecord>().Property(x => x.TenantId).HasColumnName("tenant_id");
+#if RESELLER
+        modelBuilder.Entity<TRecord>().Property(x => x.GroupId).HasColumnName("group_id");
+#endif
         modelBuilder.Entity<TRecord>().Property(x => x.ScopeId).HasColumnName("scope_id");
         modelBuilder.Entity<TRecord>().Property(x => x.Name).HasColumnName("name");
         modelBuilder.Entity<TRecord>().Property(x => x.Version).HasColumnName("version");
@@ -89,19 +104,23 @@ public class ChecklistTemplate : ChecklistTemplateModel, ITemporal
             .IsRequired();
 
         // Indexes
+#if RESELLER
         modelBuilder.Entity<TRecord>()
-            .HasIndex(b => b.TenantId);
+            .HasIndex(b => b.GroupId);
+#endif
         modelBuilder.Entity<TRecord>()
-            .HasIndex(b => new { b.TenantId, b.ScopeId });
+            .HasIndex(b => new { b.ScopeId });
         modelBuilder.Entity<TRecord>()
-            .HasIndex(b => new { b.TenantId, b.JurisdictionCountry, b.JurisdictionRegion });
+            .HasIndex(b => new { b.JurisdictionCountry, b.JurisdictionRegion });
 
         // Seed data (optional)
         var createdAt = new DateTime(2024, 12, 1, 0, 0, 0, DateTimeKind.Utc);
         modelBuilder.Entity<TRecord>().HasData(new TRecord
         {
             Id = 1,
-            TenantId = 1,
+#if RESELLER
+            GroupId = IdentitySeedData.GroupId,
+#endif
             ScopeId = nameof(ChecklistScope.entity),
             Name = "Sample Checklist Template",
             Version = "1.0",

@@ -4,6 +4,26 @@ using TRecord = EntityRelationship;
 
 public class EntityRelationship : EntityRelationshipModel, ITemporal
 {
+    #region Internal properties
+
+#if RESELLER
+    /// <summary>
+    /// The group ID this entity relationship belongs to.
+    /// </summary>
+    [Display(Name = "Group ID")]
+    [Required]
+    public string GroupId { get; set; } = null!;
+#endif
+
+    /// <summary>
+    /// The tenant ID this entity relationship belongs to.
+    /// </summary>
+    [Display(Name = "Tenant ID")]
+    [Required]
+    public string TenantId { get; set; } = null!;
+
+    #endregion Internal properties
+
     #region Navigation properties
 
     /// <summary>
@@ -55,6 +75,9 @@ public class EntityRelationship : EntityRelationshipModel, ITemporal
 
         // Column names (snake_case)
         modelBuilder.Entity<TRecord>().Property(x => x.Id).HasColumnName("id");
+#if RESELLER
+        modelBuilder.Entity<TRecord>().Property(x => x.GroupId).HasColumnName("group_id");
+#endif
         modelBuilder.Entity<TRecord>().Property(x => x.TenantId).HasColumnName("tenant_id");
         modelBuilder.Entity<TRecord>().Property(x => x.ParentEntityId).HasColumnName("parent_entity_id");
         modelBuilder.Entity<TRecord>().Property(x => x.ChildEntityId).HasColumnName("child_entity_id");
@@ -88,6 +111,10 @@ public class EntityRelationship : EntityRelationshipModel, ITemporal
             .IsRequired();
 
         // Indexes
+#if RESELLER
+        modelBuilder.Entity<TRecord>()
+            .HasIndex(b => b.GroupId);
+#endif
         modelBuilder.Entity<TRecord>()
             .HasIndex(b => b.TenantId);
         modelBuilder.Entity<TRecord>()
@@ -99,7 +126,10 @@ public class EntityRelationship : EntityRelationshipModel, ITemporal
         modelBuilder.Entity<TRecord>().HasData(new TRecord
         {
             Id = 1,
-            TenantId = 1,
+#if RESELLER
+            GroupId = IdentitySeedData.GroupId,
+#endif
+            TenantId = IdentitySeedData.TenantId,
             ParentEntityId = 1,
             ChildEntityId = 1,
             RelationshipTypeId = nameof(EntityRelationshipType.owns),

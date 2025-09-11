@@ -20,8 +20,8 @@ internal class IdentityModel
         builder.Entity<ApplicationUser>().HasData(new ApplicationUser
         {
             Id = "479b7016-c534-47ca-8937-e048d9b7a299", // 1
-            GroupId = "850d9d65-f198-478c-95d7-aeaaed5ffd71",
-            TenantId = "4cd9b651-8df2-4b44-a55a-5abe06c7907e",
+            GroupId = IdentitySeedData.GroupId,
+            TenantId = IdentitySeedData.TenantId,
             //TenantId = 2,
             //FirstName = "Billy Bob",
             UserName = "bb@example.com",
@@ -40,7 +40,13 @@ internal class IdentityModel
         builder.Entity<IdentityUserRole<string>>().HasData(new IdentityUserRole<string> { UserId = "479b7016-c534-47ca-8937-e048d9b7a299", RoleId = "4653f390-806f-480c-882c-a871efc0790a" });
         builder.Entity<IdentityUserRole<string>>().HasData(new IdentityUserRole<string> { UserId = "479b7016-c534-47ca-8937-e048d9b7a299", RoleId = "ea3105d8-d79f-44c1-b23a-657826cc6498" });
 
-        builder.Entity<IdentityGroup>().HasData(new IdentityGroup { Id = "850d9d65-f198-478c-95d7-aeaaed5ffd71" });
-        builder.Entity<IdentityTenant>().HasData(new IdentityTenant { Id = "4cd9b651-8df2-4b44-a55a-5abe06c7907e" });
+        builder.Entity<IdentityGroup>().HasData(new IdentityGroup { Id = IdentitySeedData.GroupId });
+        builder.Entity<IdentityTenant>().HasData(new IdentityTenant { Id = IdentitySeedData.TenantId });
     }
+}
+
+public static class IdentitySeedData
+{
+    public const string GroupId = "850d9d65-f198-478c-95d7-aeaaed5ffd71";
+    public const string TenantId = "4cd9b651-8df2-4b44-a55a-5abe06c7907e";
 }

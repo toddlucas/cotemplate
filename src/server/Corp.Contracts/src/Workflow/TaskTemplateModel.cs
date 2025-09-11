@@ -12,13 +12,6 @@ public class TaskTemplateModel
     public long Id { get; set; }
 
     /// <summary>
-    /// The tenant ID this task template belongs to.
-    /// </summary>
-    [Display(Name = "Tenant ID")]
-    [Required]
-    public long TenantId { get; set; }
-
-    /// <summary>
     /// The checklist template ID this task template belongs to.
     /// </summary>
     [Display(Name = "Checklist Template ID")]

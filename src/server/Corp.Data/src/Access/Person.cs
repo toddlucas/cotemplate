@@ -4,6 +4,17 @@ using TRecord = Person;
 
 public class Person : PersonModel, ITemporal
 {
+    #region Internal properties
+
+    /// <summary>
+    /// The tenant ID this person belongs to.
+    /// </summary>
+    [Display(Name = "Tenant ID")]
+    [Required]
+    public string TenantId { get; set; } = null!;
+
+    #endregion Internal properties
+
     #region Navigation properties
 
     /// <summary>
@@ -70,7 +81,7 @@ public class Person : PersonModel, ITemporal
         modelBuilder.Entity<TRecord>().HasData(new TRecord
         {
             Id = 1,
-            TenantId = 1,
+            TenantId = IdentitySeedData.TenantId,
             GivenName = "John",
             FamilyName = "Doe",
             Email = "john.doe@example.com",

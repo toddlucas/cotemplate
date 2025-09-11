@@ -1,5 +1,6 @@
 ﻿using Corp.Access;
 using Corp.Data.Mock;
+using Corp.Identity;
 
 namespace Corp.Data.Test;
 
@@ -15,7 +16,7 @@ public class UnitTest1
 
         var corpDb = scope.ServiceProvider.GetRequiredService<CorpDbContext>();
 
-        var profile = new Person() { TenantId = 1, GivenName = "Jack", FamilyName = "Squat" };
+        var profile = new Person() { TenantId = IdentitySeedData.TenantId, GivenName = "Jack", FamilyName = "Squat" };
         corpDb.People.Add(profile);
         await corpDb.SaveChangesAsync();
 

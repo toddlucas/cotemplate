@@ -15,13 +15,6 @@ public class PersonModel
     public long Id { get; set; }
 
     /// <summary>
-    /// The tenant ID this person belongs to.
-    /// </summary>
-    [Display(Name = "Tenant ID")]
-    [Required]
-    public long TenantId { get; set; }
-
-    /// <summary>
     /// The person's given (first) name.
     /// </summary>
     [Display(Name = "Given Name")]

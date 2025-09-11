@@ -4,6 +4,18 @@ using TRecord = TaskTemplate;
 
 public class TaskTemplate : TaskTemplateModel, ITemporal
 {
+    #region Internal properties
+
+#if RESELLER
+    /// <summary>
+    /// The group ID this checklist template belongs to.
+    /// </summary>
+    [Display(Name = "Group ID")]
+    [Required]
+    public string GroupId { get; set; } = null!;
+#endif
+
+    #endregion Internal properties
     #region Navigation properties
 
     /// <summary>
@@ -50,7 +62,9 @@ public class TaskTemplate : TaskTemplateModel, ITemporal
 
         // Column names (snake_case)
         modelBuilder.Entity<TRecord>().Property(x => x.Id).HasColumnName("id");
-        modelBuilder.Entity<TRecord>().Property(x => x.TenantId).HasColumnName("tenant_id");
+#if RESELLER
+        modelBuilder.Entity<TRecord>().Property(x => x.GroupId).HasColumnName("group_id");
+#endif
         modelBuilder.Entity<TRecord>().Property(x => x.ChecklistTemplateId).HasColumnName("checklist_template_id");
         modelBuilder.Entity<TRecord>().Property(x => x.Name).HasColumnName("name");
         modelBuilder.Entity<TRecord>().Property(x => x.DescriptionMd).HasColumnName("description_md");
@@ -77,8 +91,10 @@ public class TaskTemplate : TaskTemplateModel, ITemporal
             .HasForeignKey(x => x.PriorityId);
 
         // Indexes
+#if RESELLER
         modelBuilder.Entity<TRecord>()
-            .HasIndex(b => b.TenantId);
+            .HasIndex(b => b.GroupId);
+#endif
         modelBuilder.Entity<TRecord>()
             .HasIndex(b => b.ChecklistTemplateId);
 
@@ -87,7 +103,9 @@ public class TaskTemplate : TaskTemplateModel, ITemporal
         modelBuilder.Entity<TRecord>().HasData(new TRecord
         {
             Id = 1,
-            TenantId = 1,
+#if RESELLER
+            GroupId = IdentitySeedData.GroupId,
+#endif
             ChecklistTemplateId = 1,
             Name = "Sample Task Template",
             DescriptionMd = "This is a sample task template",

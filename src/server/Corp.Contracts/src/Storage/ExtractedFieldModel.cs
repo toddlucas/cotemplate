@@ -12,13 +12,6 @@ public class ExtractedFieldModel
     public long Id { get; set; }
 
     /// <summary>
-    /// The tenant ID this extracted field belongs to.
-    /// </summary>
-    [Display(Name = "Tenant ID")]
-    [Required]
-    public long TenantId { get; set; }
-
-    /// <summary>
     /// The organization ID.
     /// </summary>
     [Display(Name = "Organization ID")]

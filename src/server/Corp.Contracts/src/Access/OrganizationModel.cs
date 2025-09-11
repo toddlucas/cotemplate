@@ -15,13 +15,6 @@ public class OrganizationModel
     public long Id { get; set; }
 
     /// <summary>
-    /// The tenant ID this organization belongs to.
-    /// </summary>
-    [Display(Name = "Tenant ID")]
-    [Required]
-    public long TenantId { get; set; }
-
-    /// <summary>
     /// The organization name.
     /// </summary>
     [Display(Name = "Name")]
