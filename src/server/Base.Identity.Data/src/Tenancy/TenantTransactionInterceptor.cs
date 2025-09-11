@@ -1,4 +1,4 @@
-using System.Data;
+﻿using System.Data;
 using System.Data.Common;
 using Microsoft.EntityFrameworkCore.Diagnostics;
 using Npgsql;
@@ -45,19 +45,38 @@ public sealed class TenantTransactionInterceptor : IDbTransactionInterceptor
 
     private async Task SetTenantAsync(DbTransaction transaction, CancellationToken cancellationToken)
     {
+#if RESELLER
+        var groupId = _tenantContext.CurrentId;
+        if (string.IsNullOrWhiteSpace(groupId))
+            throw new InvalidOperationException("No group ID available for this request.");
+
+#endif
         var tenantId = _tenantContext.CurrentId;
         if (string.IsNullOrWhiteSpace(tenantId))
-            throw new InvalidOperationException("No tenant id available for this request.");
+            throw new InvalidOperationException("No tenant ID available for this request.");
 
         // Use set_config(..., is_local := true) → transaction-scoped (auto-reset).
         // Parameterized to avoid injection; works across all Npgsql versions.
         var cmd = transaction.Connection!.CreateCommand();
         cmd.Transaction = transaction;
+
+#if RESELLER
+        // Set group context first
+        cmd.CommandText = "select set_config('app.current_group', @group, true);";
+        var groupParam = cmd.CreateParameter();
+        groupParam.ParameterName = "@group";
+        groupParam.Value = groupId; // canonical UUID string
+        cmd.Parameters.Add(groupParam);
+        await cmd.ExecuteScalarAsync(cancellationToken);
+
+        // Clear parameters and set tenant context
+        cmd.Parameters.Clear();
+#endif
         cmd.CommandText = "select set_config('app.current_tenant', @tenant, true);";
-        var p = cmd.CreateParameter();
-        p.ParameterName = "@tenant";
-        p.Value = tenantId; // canonical UUID string
-        cmd.Parameters.Add(p);
+        var tenantParam = cmd.CreateParameter();
+        tenantParam.ParameterName = "@tenant";
+        tenantParam.Value = tenantId; // canonical UUID string
+        cmd.Parameters.Add(tenantParam);
         await cmd.ExecuteScalarAsync(cancellationToken);
     }
 
@@ -81,19 +100,38 @@ public sealed class TenantTransactionInterceptor : IDbTransactionInterceptor
 
     private void SetTenant(DbTransaction transaction)
     {
+#if RESELLER
+        var groupId = _tenantContext.CurrentId;
+        if (string.IsNullOrWhiteSpace(groupId))
+            throw new InvalidOperationException("No group ID available for this request.");
+
+#endif
         var tenantId = _tenantContext.CurrentId;
         if (string.IsNullOrWhiteSpace(tenantId))
-            throw new InvalidOperationException("No tenant id available for this request.");
+            throw new InvalidOperationException("No tenant ID available for this request.");
 
         // Use set_config(..., is_local := true) → transaction-scoped (auto-reset).
         // Parameterized to avoid injection; works across all Npgsql versions.
         var cmd = transaction.Connection!.CreateCommand();
         cmd.Transaction = transaction;
+
+#if RESELLER
+        // Set group context first
+        cmd.CommandText = "select set_config('app.current_group', @group, true);";
+        var groupParam = cmd.CreateParameter();
+        groupParam.ParameterName = "@group";
+        groupParam.Value = groupId; // canonical UUID string
+        cmd.Parameters.Add(groupParam);
+        cmd.ExecuteScalar();
+
+        // Clear parameters and set tenant context
+        cmd.Parameters.Clear();
+#endif
         cmd.CommandText = "select set_config('app.current_tenant', @tenant, true);";
-        var p = cmd.CreateParameter();
-        p.ParameterName = "@tenant";
-        p.Value = tenantId; // canonical UUID string
-        cmd.Parameters.Add(p);
+        var tenantParam = cmd.CreateParameter();
+        tenantParam.ParameterName = "@tenant";
+        tenantParam.Value = tenantId; // canonical UUID string
+        cmd.Parameters.Add(tenantParam);
         cmd.ExecuteScalar();
     }
 }

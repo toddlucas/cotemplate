@@ -56,6 +56,14 @@ public class TenantIdentityUser<TKey> : IdentityUser<TKey> where TKey : IEquatab
         UserName = userName;
     }
 
+#if RESELLER
+    /// <summary>
+    /// Gets or sets the group key for this user.
+    /// </summary>
+    [PersonalData]
+    public virtual TKey GroupId { get; set; } = default!;
+#endif
+
     /// <summary>
     /// Gets or sets the tenant key for this user.
     /// </summary>
@@ -67,5 +75,5 @@ public class TenantIdentityUser<TKey> : IdentityUser<TKey> where TKey : IEquatab
     /// </summary>
     /// <value>True if the email address and username are routable outside of a
     /// tenant.</value>
-    public virtual bool IsDefaultUser { get; set; }
+    //public virtual bool IsDefaultUser { get; set; }
 }

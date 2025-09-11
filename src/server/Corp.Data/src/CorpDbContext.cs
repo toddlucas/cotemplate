@@ -12,7 +12,7 @@ namespace Corp.Data;
 /// <summary>
 /// The app database context.
 /// </summary>
-public class CorpDbContext : IdentityDbContext<ApplicationUser, IdentityTenant>
+public class CorpDbContext : TenantIdentityDbContext<ApplicationUser>
 {
     public CorpDbContext(DbContextOptions<CorpDbContext> options)
         : base(options)

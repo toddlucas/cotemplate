@@ -27,6 +27,11 @@ public class TenantContextMiddleware(RequestDelegate next, IOptions<TenantContex
 
     public async Task InvokeAsync(HttpContext httpContext, ILogger<TenantContextMiddleware> logger, ITenantResolver tenantResolver, TenantContext<string> tenantContext)
     {
+#if RESELLER
+        string? groupId = httpContext.User.FindFirstValue(CustomClaims.GroupId);
+
+        tenantContext.CurrentGroupId = groupId;
+#endif
         string? tenantId = httpContext.User.FindFirstValue(CustomClaims.TenantId);
 
         tenantContext.CurrentId = tenantId;

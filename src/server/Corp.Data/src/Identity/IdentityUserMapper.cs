@@ -12,8 +12,9 @@ public static partial class IdentityUserMapper
     /// <summary>
     /// Maps the DTO to the model.
     /// </summary>
+    [MapperIgnoreSource(nameof(Record.GroupId))]
     [MapperIgnoreSource(nameof(Record.TenantId))]
-    [MapperIgnoreSource(nameof(Record.IsDefaultUser))]
+    //[MapperIgnoreSource(nameof(Record.IsDefaultUser))]
     [MapperIgnoreSource(nameof(Record.NormalizedUserName))]
     [MapperIgnoreSource(nameof(Record.NormalizedEmail))]
     [MapperIgnoreSource(nameof(Record.EmailConfirmed))]
@@ -62,8 +63,9 @@ public static partial class IdentityUserMapper
     //[MapperIgnoreTarget(nameof(Record.CreatedAt))]
     //[MapperIgnoreTarget(nameof(Record.UpdatedAt))]
     //[MapperIgnoreTarget(nameof(Record.DeletedAt))]
+    [MapperIgnoreTarget(nameof(Record.GroupId))]
     [MapperIgnoreTarget(nameof(Record.TenantId))]
-    [MapperIgnoreTarget(nameof(Record.IsDefaultUser))]
+    //[MapperIgnoreTarget(nameof(Record.IsDefaultUser))]
     [MapperIgnoreTarget(nameof(Record.NormalizedUserName))]
     [MapperIgnoreTarget(nameof(Record.NormalizedEmail))]
     [MapperIgnoreTarget(nameof(Record.EmailConfirmed))]

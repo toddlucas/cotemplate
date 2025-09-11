@@ -72,8 +72,13 @@ public class TenantSignInManager<TUser> : SignInManager<TUser>
     public override async Task<ClaimsPrincipal> CreateUserPrincipalAsync(TUser user)
     {
         var userPrincipal = await base.CreateUserPrincipalAsync(user);
+        var identity = userPrincipal.Identities.First();
+#if RESELLER
+        var groupClaim = new Claim(CustomClaims.GroupId, user.GroupId.ToString());
+        identity.AddClaim(groupClaim);
+#endif
         var tenantClaim = new Claim(CustomClaims.TenantId, user.TenantId.ToString());
-        userPrincipal.Identities.First().AddClaim(tenantClaim);
+        identity.AddClaim(tenantClaim);
         return userPrincipal;
     }
 }

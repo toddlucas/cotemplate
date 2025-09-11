@@ -18,6 +18,14 @@ public static class ClaimsPrincipalExtensions
     public static string GetNameIdentifier(this ClaimsPrincipal principal)
         => principal.RequireFirstValue(ClaimTypes.NameIdentifier);
 
+#if RESELLER
+    public static string? GetGroupIdOrDefault(this ClaimsPrincipal principal)
+        => principal.FindFirstValue(CustomClaims.GroupId);
+
+    public static string GetGroupId(this ClaimsPrincipal principal)
+        => principal.RequireFirstValue(CustomClaims.GroupId);
+#endif
+
     public static string? GetTenantIdOrDefault(this ClaimsPrincipal principal)
         => principal.FindFirstValue(CustomClaims.TenantId);
 
