@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore.Diagnostics;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace Corp.Data.Identity;
 
@@ -9,11 +10,11 @@ namespace Corp.Data.Identity;
 /// </summary>
 public sealed class WriteGuardInterceptor : SaveChangesInterceptor
 {
-    private readonly IRequestDbGuardFactory _guardFactory;
+    private readonly IServiceProvider _serviceProvider;
 
-    public WriteGuardInterceptor(IRequestDbGuardFactory guardFactory)
+    public WriteGuardInterceptor(IServiceProvider serviceProvider)
     {
-        _guardFactory = guardFactory ?? throw new ArgumentNullException(nameof(guardFactory));
+        _serviceProvider = serviceProvider ?? throw new ArgumentNullException(nameof(serviceProvider));
     }
 
     /// <summary>
@@ -24,7 +25,7 @@ public sealed class WriteGuardInterceptor : SaveChangesInterceptor
         InterceptionResult<int> result,
         CancellationToken cancellationToken = default)
     {
-        var guard = _guardFactory.CreateGuard();
+        var guard = _serviceProvider.GetRequiredService<IRequestDbGuard>();
         await guard.EnsureWriteAsync(cancellationToken);
         return result;
     }
@@ -36,7 +37,7 @@ public sealed class WriteGuardInterceptor : SaveChangesInterceptor
         DbContextEventData eventData,
         InterceptionResult<int> result)
     {
-        var guard = _guardFactory.CreateGuard();
+        var guard = _serviceProvider.GetRequiredService<IRequestDbGuard>();
         guard.EnsureWriteAsync().GetAwaiter().GetResult();
         return result;
     }

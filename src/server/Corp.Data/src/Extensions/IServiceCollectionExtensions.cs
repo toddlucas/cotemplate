@@ -23,24 +23,26 @@ public static class IServiceCollectionExtensions
     /// </summary>
     public static IServiceCollection AddCorpDbConfiguration(this IServiceCollection services, IConfiguration configuration)
     {
-        // Register feature services
-        services.AddSingleton<ITenantFeatureService, TenantFeatureService>();
-        services.AddSingleton<IDatabaseProviderService, DatabaseProviderService>();
-
-        // Register the guard factory
-        services.AddScoped<IRequestDbGuardFactory, RequestDbGuardFactory>();
-
-        // Register the guard as a scoped service that uses the factory
-        services.AddScoped<IRequestDbGuard>(serviceProvider =>
-        {
-            var factory = serviceProvider.GetRequiredService<IRequestDbGuardFactory>();
-            return factory.CreateGuard();
-        });
-
         // Determine if tenant interceptors should be enabled
-        var featureService = new TenantFeatureService(configuration);
-        var providerService = new DatabaseProviderService(configuration);
-        bool addTenantInterceptor = featureService.IsTenantContextEnabled && providerService.SupportsTenantContext;
+        string provider = configuration.GetDatabaseProvider("CorpDb", "Npgsql");
+        bool addTenantInterceptor = configuration.UseTenantInterceptor();
+
+        // Register the guard directly based on feature flags
+        if (addTenantInterceptor && provider == "Npgsql")
+        {
+            // PostgreSQL with tenant context: Full tenant context with RLS support
+            services.AddScoped<IRequestDbGuard>(serviceProvider =>
+            {
+                var dbContext = serviceProvider.GetRequiredService<CorpDbContext>();
+                var tenantContext = serviceProvider.GetRequiredService<TenantContext<string>>();
+                return new RequestDbGuard<CorpDbContext>(dbContext, tenantContext);
+            });
+        }
+        else
+        {
+            // SQLite or other providers: Passthrough implementation
+            services.AddScoped<IRequestDbGuard, PassthroughRequestDbGuard>();
+        }
 
         // Register interceptors as services if tenant interceptor is enabled
         if (addTenantInterceptor)
