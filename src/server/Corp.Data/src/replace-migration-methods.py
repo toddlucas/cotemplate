@@ -4,6 +4,7 @@ from pathlib import Path
 import argparse
 import sys
 import shutil
+import glob
 
 UP_BEGIN  = "// >>> BEGIN MIGRATION UP (AUTO)"
 UP_END    = "// <<< END MIGRATION UP (AUTO)"
@@ -12,13 +13,26 @@ DOWN_END  = "// <<< END MIGRATION DOWN (AUTO)"
 
 def load_text(p: Path) -> str:
     try:
-        return p.read_text(encoding="utf-8")
-    except UnicodeDecodeError:
-        # fallback if the file contains BOM or other encoding
+        # Try with BOM handling first (utf-8-sig) to handle BOM properly
         return p.read_text(encoding="utf-8-sig")
+    except UnicodeDecodeError:
+        # fallback to regular utf-8
+        return p.read_text(encoding="utf-8")
 
 def save_text(p: Path, s: str):
     p.write_text(s, encoding="utf-8")
+
+def find_files_by_pattern(pattern: str) -> list[Path]:
+    """
+    Find files matching the given pattern.
+    Supports both wildcards (* and ?) and glob patterns.
+    """
+    matches = glob.glob(pattern, recursive=True)
+    if not matches:
+        # Try with current directory if no matches found
+        matches = glob.glob(f"./{pattern}")
+    
+    return [Path(match) for match in matches if Path(match).is_file()]
 
 def with_markers(content: str, begin: str, end: str) -> str:
     # ensure there’s a trailing newline inside markers for neat diffs
@@ -44,20 +58,17 @@ def replace_method_body(src: str, method_name: str, body_with_markers: str) -> s
     #  - [\s\S] to allow multiline
     #  - We allow any whitespace between tokens to be robust
     pat = re.compile(
-        rf"""
-        (^[ \t]*protected[ \t]+override[ \t]+void[ \t]+{method_name}
-           [ \t]*\([^\)]*\)[ \t]*\{{[ \t]*\n)   # group 1: signature + opening brace + newline
-        ([\s\S]*?)                               # group 2: current body (non-greedy)
-        (^([ \t]*)\}})                           # group 3: closing brace line; group 4: its indent
-        """,
-        re.MULTILINE | re.VERBOSE,
+        rf"(protected\s+override\s+void\s+{method_name}\s*\([^)]*\)\s*\n\s*\{{)(.*?)(\n\s*\}})",
+        re.MULTILINE | re.DOTALL,
     )
 
     def _repl(m: re.Match) -> str:
         sig_and_open = m.group(1)
         closing_brace_line = m.group(3)
-        closing_indent = m.group(4)
-
+        
+        # Extract indent from closing brace line
+        closing_indent = re.match(r'^([ \t]*)', closing_brace_line).group(1)
+        
         # Choose a reasonable inner indent: if closing brace has N spaces, body gets same indent
         inner_indent = closing_indent
         # If the opening line shows a different indent, either works; using closing brace indent is common.
@@ -95,7 +106,8 @@ def replace_method_body(src: str, method_name: str, body_with_markers: str) -> s
 
 def main():
     ap = argparse.ArgumentParser(description="Insert/replace EF Core Migration Up/Down bodies.")
-    ap.add_argument("file", help="Path to the .cs migration file")
+    ap.add_argument("file", nargs="?", help="Path to the .cs migration file")
+    ap.add_argument("--file-pattern", help="Pattern to find migration files (e.g., '*_Test.cs', '**/Migrations/*.cs'). Mutually exclusive with 'file'.")
     ap.add_argument("--up", help="Path to a file containing the Up() body (C# lines).", default=None)
     ap.add_argument("--down", help="Path to a file containing the Down() body (C# lines).", default=None)
     ap.add_argument("--up-text", help="Literal text for Up() body (ignored if --up is provided).", default=None)
@@ -103,10 +115,28 @@ def main():
     ap.add_argument("--no-backup", action="store_true", help="Do not write a .bak backup of the original.")
     args = ap.parse_args()
 
-    path = Path(args.file)
-    if not path.exists():
-        print(f"File not found: {path}", file=sys.stderr)
+    # Validate arguments
+    if args.file and args.file_pattern:
+        print("Error: Cannot specify both 'file' and '--file-pattern'. Choose one.", file=sys.stderr)
         sys.exit(1)
+    
+    if not args.file and not args.file_pattern:
+        print("Error: Must specify either 'file' or '--file-pattern'.", file=sys.stderr)
+        sys.exit(1)
+
+    # Determine files to process
+    if args.file_pattern:
+        files = find_files_by_pattern(args.file_pattern)
+        if not files:
+            print(f"No files found matching pattern: {args.file_pattern}", file=sys.stderr)
+            sys.exit(1)
+        print(f"Found {len(files)} file(s) matching pattern: {args.file_pattern}")
+    else:
+        path = Path(args.file)
+        if not path.exists():
+            print(f"File not found: {path}", file=sys.stderr)
+            sys.exit(1)
+        files = [path]
 
     # Load bodies
     if args.up:
@@ -125,22 +155,25 @@ migrationBuilder.Sql("SELECT 0;");"""
     up_block = with_markers(up_body, UP_BEGIN, UP_END)
     down_block = with_markers(down_body, DOWN_BEGIN, DOWN_END)
 
-    original = load_text(path)
+    # Process each file
+    for path in files:
+        print(f"Processing: {path}")
+        original = load_text(path)
 
-    try:
-        updated = replace_method_body(original, "Up", up_block)
-        updated = replace_method_body(updated, "Down", down_block)
-    except RuntimeError as e:
-        print(str(e), file=sys.stderr)
-        sys.exit(2)
+        try:
+            updated = replace_method_body(original, "Up", up_block)
+            updated = replace_method_body(updated, "Down", down_block)
+        except RuntimeError as e:
+            print(f"Error processing {path}: {str(e)}", file=sys.stderr)
+            continue
 
-    if not args.no_backup:
-        shutil.copyfile(path, f"{path}.bak")
+        if not args.no_backup:
+            shutil.copyfile(path, f"{path}.bak")
 
-    save_text(path, updated)
-    print(f"Updated: {path}")
-    if not args.no_backup:
-        print(f"Backup:  {path}.bak")
+        save_text(path, updated)
+        print(f"Updated: {path}")
+        if not args.no_backup:
+            print(f"Backup:  {path}.bak")
 
 if __name__ == "__main__":
     main()
