@@ -7,7 +7,6 @@ import { EntityRoleType } from "./entity-role-type";
 
 export interface EntityRoleModel {
     id: number;
-    tenantId: number;
     orgId: number;
     entityId: number;
     personId: number;

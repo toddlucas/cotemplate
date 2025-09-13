@@ -8,7 +8,6 @@ import { SourceType } from "./source-type";
 
 export interface ChecklistTemplateModel {
     id: number;
-    tenantId: number;
     scopeId: ChecklistScope;
     name: string;
     version?: string;

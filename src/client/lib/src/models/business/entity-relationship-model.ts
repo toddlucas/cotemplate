@@ -7,7 +7,6 @@ import { EntityRelationshipType } from "./entity-relationship-type";
 
 export interface EntityRelationshipModel {
     id: number;
-    tenantId: number;
     orgId: number;
     parentEntityId: number;
     childEntityId: number;

@@ -8,7 +8,6 @@ import { Priority } from "./priority";
 
 export interface TaskModel {
     id: number;
-    tenantId: number;
     orgId: number;
     checklistId?: number;
     entityId?: number;

@@ -7,7 +7,6 @@ import { OrganizationMemberRole } from "./organization-member-role";
 
 export interface OrganizationMemberModel {
     id: number;
-    tenantId: number;
     orgId: number;
     personId: number;
     roleId: OrganizationMemberRole;

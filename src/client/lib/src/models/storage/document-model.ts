@@ -7,7 +7,6 @@ import { DocumentCategory } from "./document-category";
 
 export interface DocumentModel {
     id: number;
-    tenantId: number;
     orgId: number;
     entityId?: number;
     personId?: number;
@@ -16,7 +15,7 @@ export interface DocumentModel {
     storageUri?: string;
     mimeType?: string;
     hash?: string;
-    uploadedBy?: string;
+    uploadedBy?: number;
     uploadedAt?: Date;
     metadata?: string;
 }

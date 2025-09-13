@@ -3,7 +3,6 @@
  * Any changes made to this file can be lost when this file is regenerated.
  */
 
-export * from './checklist-model';
 export * from './identity-user-model';
 export * from './paged-query';
 export * from './paged-result';

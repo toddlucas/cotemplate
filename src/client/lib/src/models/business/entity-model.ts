@@ -9,7 +9,6 @@ import { EntityStatus } from "./entity-status";
 
 export interface EntityModel {
     id: number;
-    tenantId: number;
     orgId: number;
     name: string;
     legalName?: string;
