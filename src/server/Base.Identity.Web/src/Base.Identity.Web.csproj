@@ -12,7 +12,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\Base.Identity.Data\src\Base.Identity.Data.csproj" />
-    <ProjectReference Include="..\..\Corp.Data\src\Corp.Data.csproj" />
   </ItemGroup>
 
 </Project>

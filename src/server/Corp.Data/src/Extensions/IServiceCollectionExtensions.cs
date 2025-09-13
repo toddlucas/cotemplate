@@ -15,6 +15,8 @@ public static class IServiceCollectionExtensions
         serviceCollection.AddCorpDbConfiguration(configuration);
         serviceCollection.AddMyOtherDbConfiguration(configuration);
 
+        serviceCollection.AddTransient<ITenantResolver, TenantResolver>();
+
         return serviceCollection;
     }
 

@@ -1,6 +1,4 @@
-﻿using Corp.Data.Identity;
-using Corp.Identity;
-using Corp.Identity.EntityFrameworkCore;
+﻿using Corp.Identity;
 
 namespace Microsoft.Extensions.DependencyInjection;
 
@@ -13,7 +11,7 @@ public static class ITenantServiceCollectionExtensions
 
         // Identity
         //serviceCollection.AddTransient<TenantManager>();
-        serviceCollection.AddTransient<ITenantResolver, TenantResolver>();
+        //serviceCollection.AddTransient<ITenantResolver, TenantResolver>();
         serviceCollection.AddScoped<TenantContext<Guid>>();
 
         return serviceCollection;
