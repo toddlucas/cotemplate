@@ -110,23 +110,23 @@ export function useSidebarHandle({
   const getActiveBreadcrumbs = useCallback(() => {
     const breadcrumbs: Array<{ title: string; url: string }> = []
 
-    // Find active nav item
-    const activeNavItem = initialData.navMain.find(item => item.title === selection.activeNavItemId)
+    // Find active nav item by ID
+    const activeNavItem = initialData.navMain.find(item => item.id === selection.activeNavItemId)
     if (activeNavItem) {
       breadcrumbs.push({ title: activeNavItem.title, url: activeNavItem.url })
 
-      // Find active sub-item
+      // Find active sub-item by ID
       if (selection.activeSubItemId) {
-        const activeSubItem = activeNavItem.items.find(item => item.title === selection.activeSubItemId)
+        const activeSubItem = activeNavItem.items.find(item => item.id === selection.activeSubItemId)
         if (activeSubItem) {
           breadcrumbs.push({ title: activeSubItem.title, url: activeSubItem.url })
         }
       }
     }
 
-    // Find active project
+    // Find active project by ID
     if (selection.activeProjectId) {
-      const activeProject = initialData.projects.find(project => project.name === selection.activeProjectId)
+      const activeProject = initialData.projects.find(project => project.id === selection.activeProjectId)
       if (activeProject) {
         breadcrumbs.push({ title: activeProject.name, url: activeProject.url })
       }

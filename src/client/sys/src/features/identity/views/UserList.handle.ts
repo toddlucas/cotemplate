@@ -10,19 +10,19 @@ export const userListHandle = {
   sidebar: {
     // When this route is active, set these sidebar states
     selection: {
-      activeNavItemId: 'identity',
+      activeNavItemId: 'models',
       activeSubItemId: 'users',
-      expandedItems: ['identity']
+      expandedItems: ['models']
     },
 
     // Actions to perform when entering this route
     onEnter: (sidebarHandle: SidebarHandle) => {
-      sidebarHandle.actions.onNavItemSelect('identity')
-      sidebarHandle.actions.onSubItemSelect('users', 'identity')
+      sidebarHandle.actions.onNavItemSelect('models')
+      sidebarHandle.actions.onSubItemSelect('users', 'models')
     },
 
     // Actions to perform when leaving this route
-    onExit: (sidebarHandle: SidebarHandle) => {
+    onExit: (_sidebarHandle: SidebarHandle) => {
       // Optional: clear selection or perform cleanup
     }
   }

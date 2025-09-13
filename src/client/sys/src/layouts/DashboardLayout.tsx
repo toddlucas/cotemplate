@@ -1,4 +1,4 @@
-import { Outlet, useMatches } from "react-router-dom"
+import { Outlet } from "react-router-dom"
 import { AppSidebar, type SidebarHandle } from "../features/dashboard/components/app-sidebar"
 import {
   Breadcrumb,
@@ -37,14 +37,14 @@ export default function DashboardLayout() {
     initialData: data,
     initialSelection: {
       activeTeamId: "acme-inc",
-      activeNavItemId: "identity", // This would be set based on current route
-      expandedItems: ["identity"]
+      activeNavItemId: "models", // This would be set based on current route
+      expandedItems: ["models"]
     }
   })
 
   return (
     <SidebarProvider>
-      <AppSidebar />
+      <AppSidebar sidebarHandle={sidebarHandle} />
       <SidebarInset>
         <header className="flex h-16 shrink-0 items-center gap-2 transition-[width,height] ease-linear group-has-data-[collapsible=icon]/sidebar-wrapper:h-12">
           <div className="flex items-center gap-2 px-4">

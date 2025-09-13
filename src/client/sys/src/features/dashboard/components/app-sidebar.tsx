@@ -1,6 +1,6 @@
 "use client"
 
-import * as React from "react"
+import type { ComponentProps } from "react"
 import {
   AudioWaveform,
   BookOpen,
@@ -38,17 +38,20 @@ export interface SidebarUser {
 }
 
 export interface SidebarTeam {
+  id: string
   name: string
   logo: LucideIcon
   plan: string
 }
 
 export interface SidebarNavItem {
+  id: string
   title: string
   url: string
 }
 
 export interface SidebarNavMainItem {
+  id: string
   title: string
   url: string
   icon: LucideIcon
@@ -57,6 +60,7 @@ export interface SidebarNavMainItem {
 }
 
 export interface SidebarProject {
+  id: string
   name: string
   url: string
   icon: LucideIcon
@@ -129,16 +133,19 @@ const data: SidebarData = {
   },
   teams: [
     {
+      id: "acme-inc",
       name: "Acme Inc",
       logo: GalleryVerticalEnd,
       plan: "Enterprise",
     },
     {
+      id: "acme-corp",
       name: "Acme Corp.",
       logo: AudioWaveform,
       plan: "Startup",
     },
     {
+      id: "evil-corp",
       name: "Evil Corp.",
       logo: Command,
       plan: "Free",
@@ -146,85 +153,108 @@ const data: SidebarData = {
   ],
   navMain: [
     {
+      id: "playground",
       title: "Playground",
       url: "#",
       icon: SquareTerminal,
-      isActive: true,
+      //isActive: true,
       items: [
         {
+          id: "history",
           title: "History",
           url: "#",
         },
         {
+          id: "starred",
           title: "Starred",
           url: "#",
         },
         {
+          id: "playground-settings",
           title: "Settings",
           url: "#",
         },
       ],
     },
     {
+      id: "models",
       title: "Models",
       url: "#",
       icon: Bot,
       items: [
         {
+          id: "genesis",
           title: "Genesis",
           url: "#",
         },
         {
+          id: "users",
+          title: "Users",
+          url: "#",
+        },
+        {
+          id: "explorer",
           title: "Explorer",
           url: "#",
         },
         {
+          id: "quantum",
           title: "Quantum",
           url: "#",
         },
       ],
     },
     {
+      id: "documentation",
       title: "Documentation",
       url: "#",
       icon: BookOpen,
       items: [
         {
+          id: "introduction",
           title: "Introduction",
           url: "#",
         },
         {
+          id: "get-started",
           title: "Get Started",
           url: "#",
         },
         {
+          id: "tutorials",
           title: "Tutorials",
           url: "#",
         },
         {
+          id: "changelog",
           title: "Changelog",
           url: "#",
         },
       ],
     },
     {
+      id: "settings",
       title: "Settings",
       url: "#",
       icon: Settings2,
       items: [
         {
+          id: "general",
           title: "General",
           url: "#",
         },
         {
+          id: "team",
           title: "Team",
           url: "#",
         },
         {
+          id: "billing",
           title: "Billing",
           url: "#",
         },
         {
+          id: "limits",
           title: "Limits",
           url: "#",
         },
@@ -233,16 +263,19 @@ const data: SidebarData = {
   ],
   projects: [
     {
+      id: "design-engineering",
       name: "Design Engineering",
       url: "#",
       icon: Frame,
     },
     {
+      id: "sales-marketing",
       name: "Sales & Marketing",
       url: "#",
       icon: PieChart,
     },
     {
+      id: "travel",
       name: "Travel",
       url: "#",
       icon: Map,
@@ -250,18 +283,26 @@ const data: SidebarData = {
   ],
 }
 
-export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
+interface AppSidebarProps {
+  sidebarHandle: SidebarHandle
+}
+
+export function AppSidebar({ sidebarHandle, ...props }: AppSidebarProps & ComponentProps<typeof Sidebar>) {
+  if (!sidebarHandle) {
+    return;
+  }
+
   return (
     <Sidebar collapsible="icon" {...props}>
       <SidebarHeader>
-        <TeamSwitcher teams={data.teams} />
+        <TeamSwitcher teams={sidebarHandle.data.teams} />
       </SidebarHeader>
       <SidebarContent>
-        <NavMain items={data.navMain} />
-        <NavProjects projects={data.projects} />
+        <NavMain items={sidebarHandle.data.navMain} />
+        <NavProjects projects={sidebarHandle.data.projects} />
       </SidebarContent>
       <SidebarFooter>
-        <NavUser user={data.user} />
+        <NavUser user={sidebarHandle.data.user} />
       </SidebarFooter>
       <SidebarRail />
     </Sidebar>
