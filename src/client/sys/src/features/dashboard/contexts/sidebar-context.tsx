@@ -1,16 +1,16 @@
-import React, { createContext, useContext, ReactNode } from 'react'
+import { createContext, useContext, type ReactNode } from 'react'
 import type { SidebarHandle } from '../components/app-sidebar'
 
 // Create the context
 const SidebarContext = createContext<SidebarHandle | null>(null)
 
 // Provider component
-interface SidebarProviderProps {
+interface AppSidebarProviderProps {
   children: ReactNode
   sidebarHandle: SidebarHandle
 }
 
-export function SidebarProvider({ children, sidebarHandle }: SidebarProviderProps) {
+export function AppSidebarProvider({ children, sidebarHandle }: AppSidebarProviderProps) {
   return (
     <SidebarContext.Provider value={sidebarHandle}>
       {children}
@@ -19,15 +19,15 @@ export function SidebarProvider({ children, sidebarHandle }: SidebarProviderProp
 }
 
 // Hook to use the sidebar context
-export function useSidebar(): SidebarHandle {
+export function useAppSidebar(): SidebarHandle {
   const context = useContext(SidebarContext)
   if (!context) {
-    throw new Error('useSidebar must be used within a SidebarProvider')
+    throw new Error('useAppSidebar must be used within an AppSidebarProvider')
   }
   return context
 }
 
 // Optional: Hook that returns null if no context (for optional usage)
-export function useSidebarOptional(): SidebarHandle | null {
+export function useAppSidebarOptional(): SidebarHandle | null {
   return useContext(SidebarContext)
 }

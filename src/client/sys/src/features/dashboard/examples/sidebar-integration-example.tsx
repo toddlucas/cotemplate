@@ -1,5 +1,5 @@
 import React from 'react'
-import { useSidebarHandle } from '../hooks/use-sidebar-handle'
+import { useAppSidebarHandle } from '../hooks/use-sidebar-handle'
 import { data } from '../components/app-sidebar'
 import type { SidebarHandle } from '../components/app-sidebar'
 
@@ -10,7 +10,7 @@ import type { SidebarHandle } from '../components/app-sidebar'
 
 export function DashboardLayoutExample() {
   // The layout creates the sidebar handle instance
-  const sidebarHandle = useSidebarHandle({
+  const sidebarHandle = useAppSidebarHandle({
     initialData: data,
     initialSelection: {
       activeTeamId: "acme-inc",

@@ -1,9 +1,9 @@
-import { useSidebarHandle } from "../hooks/use-sidebar-handle"
+import { useAppSidebarHandle } from "../hooks/use-sidebar-handle"
 import { data } from "../components/app-sidebar"
 
 // Example of how to use the sidebar handle in a route component
 export function ExampleRouteWithSidebar() {
-  const sidebarHandle = useSidebarHandle({
+  const sidebarHandle = useAppSidebarHandle({
     initialData: data,
     initialSelection: {
       activeTeamId: "acme-inc",

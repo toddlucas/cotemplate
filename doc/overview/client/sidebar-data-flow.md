@@ -9,18 +9,18 @@ The sidebar handle system provides a unified interface for managing sidebar stat
 ## Architecture
 
 ```
-┌─────────────────┐    ┌──────────────────┐    ┌─────────────────┐
-│   Layout        │    │   Sidebar        │    │   Page          │
-│   (Provider)    │───▶│   Component      │    │   Component     │
-│                 │    │                  │    │   (UserList)    │
-└─────────────────┘    └──────────────────┘    └─────────────────┘
-         │                       │                      │
-         ▼                       ▼                      ▼
-┌─────────────────┐    ┌──────────────────┐    ┌─────────────────┐
-│ useSidebarHandle│    │ Receives handle  │    │ useSidebar()    │
-│ Creates state   │    │ as props         │    │ Gets handle     │
-│ & actions       │    │ Uses for UI      │    │ from context    │
-└─────────────────┘    └──────────────────┘    └─────────────────┘
+┌─────────────────┐       ┌──────────────────┐    ┌─────────────────┐
+│   Layout        │       │   Sidebar        │    │   Page          │
+│   (Provider)    │──────▶│   Component      │    │   Component     │
+│                 │       │                  │    │   (UserList)    │
+└─────────────────┘       └──────────────────┘    └─────────────────┘
+         │                         │                      │
+         ▼                         ▼                      ▼
+┌────────────────────┐    ┌──────────────────┐    ┌─────────────────┐
+│ useAppSidebarHandle│    │ Receives handle  │    │ useSidebar()    │
+│ Creates state      │    │ as props         │    │ Gets handle     │
+│ & actions          │    │ Uses for UI      │    │ from context    │
+└────────────────────┘    └──────────────────┘    └─────────────────┘
 ```
 
 ## Core Types
@@ -94,11 +94,11 @@ This is the recommended approach for most applications as it provides clean sepa
 
 ```typescript
 // DashboardLayout.tsx
-import { useSidebarHandle } from '../features/dashboard/hooks/use-sidebar-handle'
+import { useAppSidebarHandle } from '../features/dashboard/hooks/use-sidebar-handle'
 import { SidebarProvider } from '../features/dashboard/contexts/sidebar-context'
 
 export default function DashboardLayout() {
-  const sidebarHandle = useSidebarHandle({
+  const sidebarHandle = useAppSidebarHandle({
     initialData: data,
     initialSelection: {
       activeTeamId: "acme-inc",
@@ -120,10 +120,10 @@ export default function DashboardLayout() {
 
 ```typescript
 // AppSidebar.tsx
-import { useSidebar } from '../contexts/sidebar-context'
+import { useAppSidebar } from '../contexts/sidebar-context'
 
 export function AppSidebar() {
-  const sidebarHandle = useSidebar()
+  const sidebarHandle = useAppSidebar()
   
   return (
     <aside>
@@ -145,10 +145,10 @@ export function AppSidebar() {
 
 ```typescript
 // UserList.tsx
-import { useSidebar } from '../../dashboard/contexts/sidebar-context'
+import { useAppSidebar } from '../../dashboard/contexts/sidebar-context'
 
 export default function UserList() {
-  const sidebarHandle = useSidebar()
+  const sidebarHandle = useAppSidebar()
   
   // Update sidebar when component mounts
   useEffect(() => {
@@ -176,7 +176,7 @@ Use this pattern when you need explicit control over data flow or when context i
 
 ```typescript
 // Layout creates handle and passes to components
-const sidebarHandle = useSidebarHandle({...})
+const sidebarHandle = useAppSidebarHandle({...})
 
 return (
   <div>
@@ -218,7 +218,7 @@ const route = {
 2. `sidebarHandle.actions.onNavItemSelect('identity')` is called
 3. Selection state updates: `activeNavItemId: 'identity'`
 4. Sidebar re-renders with active styling
-5. Page components can read new state via `useSidebar()`
+5. Page components can read new state via `useAppSidebar()`
 
 ### Example 2: Page Updates Sidebar
 

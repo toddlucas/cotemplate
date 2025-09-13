@@ -7,17 +7,17 @@ import type {
   SidebarData
 } from "../components/app-sidebar"
 
-interface UseSidebarHandleProps {
+interface useAppSidebarHandleProps {
   initialData: SidebarData
   initialSelection?: Partial<SidebarSelection>
   initialState?: Partial<SidebarState>
 }
 
-export function useSidebarHandle({
+export function useAppSidebarHandle({
   initialData,
   initialSelection = {},
   initialState = {}
-}: UseSidebarHandleProps): SidebarHandle {
+}: useAppSidebarHandleProps): SidebarHandle {
   // Selection state
   const [selection, setSelection] = useState<SidebarSelection>({
     activeTeamId: initialSelection.activeTeamId,

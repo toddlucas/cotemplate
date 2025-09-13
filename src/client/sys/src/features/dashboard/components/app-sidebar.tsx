@@ -289,7 +289,7 @@ interface AppSidebarProps {
 
 export function AppSidebar({ sidebarHandle, ...props }: AppSidebarProps & ComponentProps<typeof Sidebar>) {
   if (!sidebarHandle) {
-    return;
+    return null;
   }
 
   return (

@@ -5,7 +5,6 @@ import {
   Forward,
   MoreHorizontal,
   Trash2,
-  type LucideIcon,
 } from "lucide-react"
 
 import {
@@ -24,30 +23,36 @@ import {
   SidebarMenuItem,
   useSidebar,
 } from "$/components/ui/sidebar"
+import { useAppSidebar } from "../contexts/sidebar-context"
+import type { SidebarProject } from "./app-sidebar"
 
 export function NavProjects({
   projects,
 }: {
-  projects: {
-    name: string
-    url: string
-    icon: LucideIcon
-  }[]
+  projects: SidebarProject[]
 }) {
-  const { isMobile } = useSidebar()
+  const sidebarHandle = useAppSidebar()  // For selection state and actions
+  const { isMobile } = useSidebar()     // For UI state (mobile detection)
 
   return (
     <SidebarGroup className="group-data-[collapsible=icon]:hidden">
       <SidebarGroupLabel>Projects</SidebarGroupLabel>
       <SidebarMenu>
-        {projects.map((item) => (
-          <SidebarMenuItem key={item.name}>
-            <SidebarMenuButton asChild>
-              <a href={item.url}>
-                <item.icon />
-                <span>{item.name}</span>
-              </a>
-            </SidebarMenuButton>
+        {projects.map((item) => {
+          const isActive = sidebarHandle.selection.activeProjectId === item.id
+
+          return (
+            <SidebarMenuItem key={item.id}>
+              <SidebarMenuButton
+                asChild
+                isActive={isActive}
+                onClick={() => sidebarHandle.actions.onProjectSelect(item.id)}
+              >
+                <a href={item.url}>
+                  <item.icon />
+                  <span>{item.name}</span>
+                </a>
+              </SidebarMenuButton>
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
                 <SidebarMenuAction showOnHover>
@@ -76,7 +81,8 @@ export function NavProjects({
               </DropdownMenuContent>
             </DropdownMenu>
           </SidebarMenuItem>
-        ))}
+          )
+        })}
         <SidebarMenuItem>
           <SidebarMenuButton className="text-sidebar-foreground/70">
             <MoreHorizontal className="text-sidebar-foreground/70" />

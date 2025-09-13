@@ -1,8 +1,8 @@
 import { useEffect } from 'react'
-import { useSidebar } from '../../dashboard/contexts/sidebar-context'
+import { useAppSidebar } from '../../dashboard/contexts/sidebar-context'
 
 export default function UserListWithSidebarExample() {
-  const sidebarHandle = useSidebar()
+  const sidebarHandle = useAppSidebar()
 
   // When this component mounts, select "Users" under "Models"
   useEffect(() => {
