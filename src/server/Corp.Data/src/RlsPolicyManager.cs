@@ -1,4 +1,11 @@
+﻿using System.Collections.Generic;
+using System.Diagnostics.Metrics;
+using System.Text.RegularExpressions;
+
+using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using Microsoft.EntityFrameworkCore.Migrations;
+using Microsoft.Extensions.Options;
 
 namespace Corp.Data;
 
@@ -9,6 +16,9 @@ namespace Corp.Data;
 /// </summary>
 public static class RlsPolicyManager
 {
+    private const string DbName = "corp";
+    private const string AppUser = "corp_user";
+
     /// <summary>
     /// Tables that have both group_id and tenant_id columns.
     /// These tables are scoped by both reseller (group) and customer (tenant).
@@ -54,6 +64,23 @@ public static class RlsPolicyManager
     /// <param name="migrationBuilder">The migration builder instance</param>
     public static void EnableRls(MigrationBuilder migrationBuilder)
     {
+        // NOTE: Set password via ops: ALTER ROLE my_app WITH PASSWORD '...';
+        migrationBuilder.Sql($"CREATE ROLE {AppUser} LOGIN");
+
+        // Add them to groups
+        //   GRANT app_rw TO my_app;
+
+        // Optional: set the search_path for convenience
+        //   ALTER ROLE my_app       IN DATABASE yourdb SET search_path = app, public;
+
+        migrationBuilder.Sql($"GRANT CONNECT ON DATABASE {DbName} TO {AppUser};");
+        migrationBuilder.Sql($"GRANT USAGE ON SCHEMA public TO {AppUser};");
+
+        // Admin user would be different:
+        //   GRANT ALL PRIVILEGES ON ALL TABLES IN SCHEMA public TO admin_user;
+        //   ALTER USER admin_user BYPASSRLS; -- Can see all data
+        migrationBuilder.Sql($"GRANT SELECT, INSERT, UPDATE, DELETE ON ALL TABLES IN SCHEMA public TO {AppUser};");
+
         // Create the policy functions first
         CreatePolicyFunctions(migrationBuilder);
 
@@ -113,13 +140,21 @@ public static class RlsPolicyManager
                 table_group_id uuid,
                 table_tenant_id uuid
             ) RETURNS boolean AS $$
+            DECLARE
+                group_id_setting text;
+                tenant_ids_setting text;
             BEGIN
+                group_id_setting := current_setting('app.group_id', true);
+                tenant_ids_setting := current_setting('app.tenant_ids', true);
+
                 RETURN (
-                    current_setting('app.group_id', true) IS NOT NULL
-                    AND table_group_id = uuid(current_setting('app.group_id'))
+                    group_id_setting IS NOT NULL
+                    AND group_id_setting != ''
+                    AND table_group_id = uuid(group_id_setting)
                     AND (
-                        current_setting('app.tenant_ids', true) IS NULL
-                        OR table_tenant_id = ANY (string_to_array(current_setting('app.tenant_ids'), ',')::uuid[])
+                        tenant_ids_setting IS NULL
+                        OR tenant_ids_setting = ''
+                        OR table_tenant_id = ANY (string_to_array(tenant_ids_setting, ',')::uuid[])
                     )
                 );
             END;
@@ -130,10 +165,15 @@ public static class RlsPolicyManager
             CREATE OR REPLACE FUNCTION rls_tenant_policy(
                 table_tenant_id uuid
             ) RETURNS boolean AS $$
+            DECLARE
+                tenant_id_setting text;
             BEGIN
+                tenant_id_setting := current_setting('app.tenant_id', true);
+
                 RETURN (
-                    current_setting('app.tenant_id', true) IS NOT NULL
-                    AND table_tenant_id = uuid(current_setting('app.tenant_id'))
+                    tenant_id_setting IS NOT NULL
+                    AND tenant_id_setting != ''
+                    AND table_tenant_id = uuid(tenant_id_setting)
                 );
             END;
             $$ LANGUAGE plpgsql SECURITY DEFINER;");
@@ -143,10 +183,15 @@ public static class RlsPolicyManager
             CREATE OR REPLACE FUNCTION rls_group_policy(
                 table_group_id uuid
             ) RETURNS boolean AS $$
+            DECLARE
+                group_id_setting text;
             BEGIN
+                group_id_setting := current_setting('app.group_id', true);
+
                 RETURN (
-                    current_setting('app.group_id', true) IS NOT NULL
-                    AND table_group_id = uuid(current_setting('app.group_id'))
+                    group_id_setting IS NOT NULL
+                    AND group_id_setting != ''
+                    AND table_group_id = uuid(group_id_setting)
                 );
             END;
             $$ LANGUAGE plpgsql SECURITY DEFINER;");
