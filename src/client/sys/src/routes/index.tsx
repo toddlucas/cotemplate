@@ -1,6 +1,7 @@
 import { Routes, Route } from 'react-router-dom';
 
 import Layout from '../layouts/Layout';
+import DashboardLayout from '../layouts/DashboardLayout';
 import AuthProtected from "./AuthProtected";
 
 import App from '../App';
@@ -101,6 +102,9 @@ const PlatformRoutes = () => (
 
         {/* Dashboard routes */}
         <Route path="dashboard" element={<Dashboard />} />
+      </Route>
+      <Route element={<DashboardLayout />}>
+      <Route path="identity/users" element={<UserList />} />
       </Route>
     </Route>
   </Routes>

@@ -35,6 +35,7 @@ function App() {
       <div>
         <ul>
           <li><Link to="/identity/user/list">Users</Link></li>
+          <li><Link to="/identity/users">Users Dashboard</Link></li>
           <li><Link to="/dashboard">Dashboard</Link></li>
         </ul>
       </div>
