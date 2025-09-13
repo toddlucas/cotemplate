@@ -6,10 +6,10 @@ import sys
 import shutil
 import glob
 
-UP_BEGIN  = "// >>> BEGIN MIGRATION UP (AUTO)"
-UP_END    = "// <<< END MIGRATION UP (AUTO)"
-DOWN_BEGIN= "// >>> BEGIN MIGRATION DOWN (AUTO)"
-DOWN_END  = "// <<< END MIGRATION DOWN (AUTO)"
+UP_BEGIN  = "\n            // >>> BEGIN MIGRATION UP (AUTO)"
+UP_END    = "            // <<< END MIGRATION UP (AUTO)"
+DOWN_BEGIN= "\n            // >>> BEGIN MIGRATION DOWN (AUTO)"
+DOWN_END  = "            // <<< END MIGRATION DOWN (AUTO)"
 
 def load_text(p: Path) -> str:
     try:
