@@ -63,24 +63,7 @@ public sealed class TenantTransactionInterceptor : IDbTransactionInterceptor
         var cmd = transaction.Connection!.CreateCommand();
         cmd.Transaction = transaction;
 
-#if RESELLER
-        // Set group context first
-        cmd.CommandText = "select set_config('app.group_id', @group, true);";
-        var groupParam = cmd.CreateParameter();
-        groupParam.ParameterName = "@group";
-        groupParam.Value = groupId.ToString(); // Convert GUID to string
-        cmd.Parameters.Add(groupParam);
-        await cmd.ExecuteScalarAsync(cancellationToken);
-
-        // Clear parameters and set tenant context
-        cmd.Parameters.Clear();
-#endif
-        cmd.CommandText = "select set_config('app.tenant_id', @tenant, true);";
-        var tenantParam = cmd.CreateParameter();
-        tenantParam.ParameterName = "@tenant";
-        tenantParam.Value = tenantId.ToString(); // Convert GUID to string
-        cmd.Parameters.Add(tenantParam);
-        await cmd.ExecuteScalarAsync(cancellationToken);
+        await RlsConfig.SetTenantConfigAsync(cmd, groupId, tenantId, cancellationToken);
     }
 
     // Synchronous versions for completeness (though async is preferred)
@@ -118,23 +101,6 @@ public sealed class TenantTransactionInterceptor : IDbTransactionInterceptor
         var cmd = transaction.Connection!.CreateCommand();
         cmd.Transaction = transaction;
 
-#if RESELLER
-        // Set group context first
-        cmd.CommandText = "select set_config('app.group_id', @group, true);";
-        var groupParam = cmd.CreateParameter();
-        groupParam.ParameterName = "@group";
-        groupParam.Value = groupId.ToString(); // Convert GUID to string
-        cmd.Parameters.Add(groupParam);
-        cmd.ExecuteScalar();
-
-        // Clear parameters and set tenant context
-        cmd.Parameters.Clear();
-#endif
-        cmd.CommandText = "select set_config('app.tenant_id', @tenant, true);";
-        var tenantParam = cmd.CreateParameter();
-        tenantParam.ParameterName = "@tenant";
-        tenantParam.Value = tenantId.ToString(); // Convert GUID to string
-        cmd.Parameters.Add(tenantParam);
-        cmd.ExecuteScalar();
+        RlsConfig.SetTenantConfig(cmd, groupId, tenantId);
     }
 }
