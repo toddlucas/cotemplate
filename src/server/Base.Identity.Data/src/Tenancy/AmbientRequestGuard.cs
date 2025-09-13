@@ -1,6 +1,4 @@
-using Corp.Data.Identity;
-
-namespace Corp.Data.Identity;
+﻿namespace Base.Data.Identity;
 
 /// <summary>
 /// Provides ambient access to the current request's database guard.

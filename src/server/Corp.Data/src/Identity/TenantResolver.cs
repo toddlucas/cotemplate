@@ -1,5 +1,7 @@
 ﻿using Microsoft.AspNetCore.Identity;
 
+using Base.Data.Identity;
+
 namespace Corp.Data.Identity;
 
 public class TenantResolver(CorpDbContext dbContext) : ITenantResolver

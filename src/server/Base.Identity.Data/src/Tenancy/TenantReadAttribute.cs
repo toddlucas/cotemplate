@@ -1,7 +1,7 @@
 ﻿using System.Threading.Tasks;
 using Metalama.Framework.Aspects;
 
-namespace Corp.Data.Identity;
+namespace Base.Data.Identity;
 
 /// <summary>
 /// Metalama aspect that automatically ensures a read transaction is active before executing a method.

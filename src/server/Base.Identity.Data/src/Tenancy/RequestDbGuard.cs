@@ -1,9 +1,9 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Storage;
 
-using Corp.Identity;
+using Base.Identity;
 
-namespace Corp.Data.Identity;
+namespace Base.Data.Identity;
 
 /// <summary>
 /// Implements automatic transaction management for database operations within a request scope.

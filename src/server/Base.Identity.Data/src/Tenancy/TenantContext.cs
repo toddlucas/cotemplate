@@ -1,4 +1,4 @@
-﻿namespace Corp.Identity;
+﻿namespace Base.Identity;
 
 public class TenantContext<TKey> where TKey : IEquatable<TKey>
 {

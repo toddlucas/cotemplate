@@ -1,4 +1,4 @@
-namespace Corp.Data.Identity;
+﻿namespace Base.Data.Identity;
 
 /// <summary>
 /// A passthrough implementation of IRequestDbGuard that performs no operations.

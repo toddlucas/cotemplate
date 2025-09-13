@@ -1,4 +1,4 @@
-﻿using Corp.Identity;
+﻿using Base.Identity;
 
 namespace Microsoft.Extensions.DependencyInjection;
 

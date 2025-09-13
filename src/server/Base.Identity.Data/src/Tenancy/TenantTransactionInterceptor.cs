@@ -2,13 +2,13 @@
 using System.Data.Common;
 using System.Threading;
 
-using Corp.Identity;
+using Base.Identity;
 
 using Microsoft.EntityFrameworkCore.Diagnostics;
 
 using Npgsql;
 
-namespace Corp.Data.Identity;
+namespace Base.Data.Identity;
 
 /// <summary>
 /// EF Core interceptor that sets the tenant ID for each database transaction.

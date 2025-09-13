@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Identity;
 
-namespace Corp.Data.Identity;
+namespace Base.Data.Identity;
 
 public interface ITenantResolver
 {

@@ -1,6 +1,6 @@
 ﻿using Metalama.Framework.Fabrics;
 
-namespace Corp.Data.Identity;
+namespace Base.Data.Identity;
 
 #if false
 /// <summary>

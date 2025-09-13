@@ -1,8 +1,8 @@
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 
-using Corp.Data.Identity;
+using Base.Data.Identity;
 
-namespace Corp.Data.Identity;
+namespace Base.Data.Identity;
 
 /// <summary>
 /// Extension methods for easy usage of the RequestDbGuard pattern.

@@ -1,4 +1,6 @@
-﻿using Corp.Data;
+﻿using Base.Identity;
+using Base.Data.Identity;
+using Corp.Data;
 using Corp.Data.Identity;
 
 #pragma warning disable IDE0130 // Namespace does not match folder structure

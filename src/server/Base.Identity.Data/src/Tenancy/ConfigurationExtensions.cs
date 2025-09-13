@@ -1,6 +1,6 @@
 ﻿using Microsoft.Extensions.Configuration;
 
-namespace Corp.Data.Identity;
+namespace Base.Data.Identity;
 
 /// <summary>
 /// Extension methods for IConfiguration to support database provider detection.

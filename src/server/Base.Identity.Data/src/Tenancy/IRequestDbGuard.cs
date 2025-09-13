@@ -1,4 +1,4 @@
-namespace Corp.Data.Identity;
+﻿namespace Base.Data.Identity;
 
 /// <summary>
 /// Provides automatic transaction management for database operations within a request scope.

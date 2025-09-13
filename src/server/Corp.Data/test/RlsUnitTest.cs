@@ -1,7 +1,8 @@
 ﻿using Microsoft.EntityFrameworkCore.Storage;
 
+using Base.Data.Identity;
+using Base.Identity;
 using Corp.Access;
-using Corp.Data.Identity;
 using Corp.Identity;
 
 namespace Corp.Data.Test;
@@ -115,7 +116,7 @@ public class UnitTest2
             IRequestDbGuard requestGuard = GetRequestGuard(scope.ServiceProvider);
             await requestGuard.EnsureReadAsync();
 
-            var person = await corpDb.People.Where(p => p.Id == personId).FirstOrDefaultAsync();
+            var person = await corpDb.People.Where(p => p.Id == personId).FirstAsync();
 
             // Cleanup
             corpDb.People.Remove(person);
@@ -178,7 +179,7 @@ public class UnitTest2
             IRequestDbGuard requestGuard = GetRequestGuard(scope.ServiceProvider);
             await requestGuard.EnsureReadAsync();
 
-            var person = await corpDb.People.Where(p => p.Id == personId).FirstOrDefaultAsync();
+            var person = await corpDb.People.Where(p => p.Id == personId).FirstAsync();
 
             // Cleanup
             corpDb.People.Remove(person);

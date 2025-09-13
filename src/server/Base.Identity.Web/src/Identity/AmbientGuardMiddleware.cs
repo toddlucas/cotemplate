@@ -1,9 +1,9 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.DependencyInjection;
 
-using Corp.Data.Identity;
+using Base.Data.Identity;
 
-namespace Corp.Web.Identity;
+namespace Base.Web.Identity;
 
 /// <summary>
 /// ASP.NET Core middleware that sets up the ambient database guard for each request.

@@ -1,6 +1,6 @@
 ﻿using System.Data.Common;
 
-namespace Corp.Data.Identity;
+namespace Base.Data.Identity;
 
 public class RlsConfig
 {
