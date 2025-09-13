@@ -25,7 +25,7 @@ public static class IServiceCollectionExtensions
     {
         // Determine if tenant interceptors should be enabled
         string provider = configuration.GetDatabaseProvider("CorpDb", "Npgsql");
-        bool addTenantInterceptor = configuration.UseTenantInterceptor();
+        bool addTenantInterceptor = configuration.IsTenantInterceptorEnabled();
 
         // Register the guard directly based on feature flags
         if (addTenantInterceptor && provider == "Npgsql")

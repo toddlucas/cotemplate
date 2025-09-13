@@ -4,7 +4,7 @@ using Microsoft.Extensions.Configuration;
 
 public static class ConfigurationManagerExtensions
 {
-    public static bool UseTenantInterceptor(
+    public static bool IsTenantInterceptorEnabled(
         this IConfiguration configuration)
-        => configuration.GetValue("UseTenantInterceptor", false);
+        => configuration.GetValue("IsTenantInterceptorEnabled", false);
 }
