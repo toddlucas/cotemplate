@@ -22,11 +22,12 @@ namespace Corp.Data.Test;
 public class UnitTest2
 {
     [Fact]
+    [Trait("Category","Npgsql")]
     public async Task Read_WithGuard_ShouldSucceed()
     {
         // Arrange
         IConfigurationRoot configuration = new ConfigurationBuilder()
-            .AddJsonFile("appsettings.json")
+            .AddJsonFile("appsettings.Npgsql.json")
             .Build();
 
         var services = new ServiceCollection();
@@ -67,11 +68,12 @@ public class UnitTest2
     }
 
     [Fact]
+    [Trait("Category", "Npgsql")]
     public async Task ReadOtherTenant_WithGuard_ShouldFail()
     {
         // Arrange
         IConfigurationRoot configuration = new ConfigurationBuilder()
-            .AddJsonFile("appsettings.json")
+            .AddJsonFile("appsettings.Npgsql.json")
             .Build();
 
         var services = new ServiceCollection();
@@ -122,11 +124,12 @@ public class UnitTest2
     }
 
     [Fact]
+    [Trait("Category", "Npgsql")]
     public async Task ReadRls_WithMissingTenant_ShouldFail()
     {
         // Arrange
         IConfigurationRoot configuration = new ConfigurationBuilder()
-            .AddJsonFile("appsettings.json")
+            .AddJsonFile("appsettings.Npgsql.json")
             .Build();
 
         var services = new ServiceCollection();
@@ -190,11 +193,12 @@ public class UnitTest2
     /// NOTE: This is a MAJOR antipattern.
     /// </remarks>
     [Fact]
+    [Trait("Category", "Npgsql")]
     public async Task ReadAntipattern_WithNoGuard_ShouldSucceed()
     {
         // Arrange
         IConfigurationRoot configuration = new ConfigurationBuilder()
-            .AddJsonFile("appsettings.json")
+            .AddJsonFile("appsettings.Npgsql.json")
             .Build();
 
         var services = new ServiceCollection();
@@ -210,11 +214,12 @@ public class UnitTest2
     }
 
     [Fact]
+    [Trait("Category", "Npgsql")]
     public async Task TenantContext_WithoutGroup_ShouldFail()
     {
         // Arrange
         IConfigurationRoot configuration = new ConfigurationBuilder()
-            .AddJsonFile("appsettings.json")
+            .AddJsonFile("appsettings.Npgsql.json")
             .Build();
 
         var services = new ServiceCollection();
@@ -236,11 +241,12 @@ public class UnitTest2
     }
 
     [Fact]
+    [Trait("Category", "Npgsql")]
     public async Task TenantContext_WithoutTenant_ShouldFail()
     {
         // Arrange
         IConfigurationRoot configuration = new ConfigurationBuilder()
-            .AddJsonFile("appsettings.json")
+            .AddJsonFile("appsettings.Npgsql.json")
             .Build();
 
         var services = new ServiceCollection();
