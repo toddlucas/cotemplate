@@ -1,5 +1,5 @@
-import { Outlet } from "react-router-dom"
-import { AppSidebar } from "../features/dashboard/components/app-sidebar"
+import { Outlet, useMatches } from "react-router-dom"
+import { AppSidebar, type SidebarHandle } from "../features/dashboard/components/app-sidebar"
 import {
   Breadcrumb,
   BreadcrumbItem,
@@ -14,8 +14,34 @@ import {
   SidebarProvider,
   SidebarTrigger,
 } from "$/components/ui/sidebar"
+import { useSidebarHandle } from '../features/dashboard/hooks/use-sidebar-handle'
+import { data } from '../features/dashboard/components/app-sidebar' // REVIEW: Why is this needed?
 
-export default function Page() {
+export type DashboardLayoutHandle = {
+  sidebar: SidebarHandle;
+}
+
+export default function DashboardLayout() {
+  // const matches = useMatches();
+  // // Get the active sidebar handle from the current route
+  // // This can be used to customize sidebar behavior per route
+  // const activeSidebar = [...matches].reverse().find(m =>
+  //   m.handle && typeof m.handle === 'object' && 'sidebar' in m.handle
+  // )?.handle as DashboardLayoutHandle | undefined;
+
+  // TODO: Use activeSidebar to customize sidebar behavior
+  // For example: activeSidebar?.sidebar.actions.onNavItemSelect(...)
+
+  // The layout creates the sidebar handle instance
+  const sidebarHandle = useSidebarHandle({
+    initialData: data,
+    initialSelection: {
+      activeTeamId: "acme-inc",
+      activeNavItemId: "identity", // This would be set based on current route
+      expandedItems: ["identity"]
+    }
+  })
+
   return (
     <SidebarProvider>
       <AppSidebar />

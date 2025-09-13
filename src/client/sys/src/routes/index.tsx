@@ -47,6 +47,7 @@ import AuthTestPage from "$/features/auth/views/AuthTestPage";
 import Dashboard from "../features/dashboard/views/Dashboard";
 
 // Identity views
+import { userListHandle } from "../features/identity/views";
 import UserList from "../features/identity/views/UserList";
 import ThemeView from "$/features/theme/views/ThemeView";
 
@@ -104,7 +105,7 @@ const PlatformRoutes = () => (
         <Route path="dashboard" element={<Dashboard />} />
       </Route>
       <Route element={<DashboardLayout />}>
-      <Route path="identity/users" element={<UserList />} />
+      <Route path="identity/users" element={<UserList />} handle={userListHandle} />
       </Route>
     </Route>
   </Routes>

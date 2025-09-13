@@ -101,7 +101,7 @@ const Users = () => {
 
     // Fetch users (will use cached state if available)
     fetchUsers();
-  }, []); // Only run on mount
+  }, [shouldClearTableState, softResetTableState, fetchUsers, location.state?.from]); // Only run on mount
 
   const setPagination: OnChangeFn<PaginationState> = (updaterOrValue: Updater<PaginationState>) => {
     if (typeof updaterOrValue === 'function') {
