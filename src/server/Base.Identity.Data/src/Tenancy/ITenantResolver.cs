@@ -4,6 +4,6 @@ namespace Corp.Identity.EntityFrameworkCore;
 
 public interface ITenantResolver
 {
-    Task<IdentityTenant?> GetTenantByDomainAsync(string domain);
-    Task<IdentityTenant?> GetTenantBySubdomainAsync(string subdomain);
+    Task<IdentityTenant<Guid>?> GetTenantByDomainAsync(string domain);
+    Task<IdentityTenant<Guid>?> GetTenantBySubdomainAsync(string subdomain);
 }

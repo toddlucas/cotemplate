@@ -30,7 +30,7 @@ public class UserController(
     [EndpointDescription("Returns the user object for the logged-in user.")]
     public async Task<ActionResult> Get(CancellationToken cancellationToken)
     {
-        string id = User.GetNameIdentifier();
+        Guid id = User.GetNameIdentifier();
 
         // Ensure read transaction with tenant context
         await _guard.EnsureReadAsync(cancellationToken);
@@ -52,7 +52,7 @@ public class UserController(
     [Produces(typeof(IdentityUserModel))]
     public async Task<ActionResult> Put(IdentityUserModel model, CancellationToken cancellationToken)
     {
-        string id = User.GetNameIdentifier();
+        Guid id = User.GetNameIdentifier();
 
         // Start with read transaction to check if user exists
         await _guard.EnsureReadAsync(cancellationToken);

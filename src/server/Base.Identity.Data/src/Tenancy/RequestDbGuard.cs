@@ -14,12 +14,12 @@ namespace Corp.Data.Identity;
 public sealed class RequestDbGuard<TDb> : IRequestDbGuard where TDb : DbContext
 {
     private readonly TDb _db;
-    private readonly TenantContext<string> _tenantContext;
+    private readonly TenantContext<Guid> _tenantContext;
     private IDbContextTransaction? _transaction;
     private bool _isReadOnly; // tracks current transaction mode
     private bool _disposed;
 
-    public RequestDbGuard(TDb db, TenantContext<string> tenantContext)
+    public RequestDbGuard(TDb db, TenantContext<Guid> tenantContext)
     {
         _db = db ?? throw new ArgumentNullException(nameof(db));
         _tenantContext = tenantContext ?? throw new ArgumentNullException(nameof(tenantContext));
@@ -158,13 +158,13 @@ public sealed class RequestDbGuard<TDb> : IRequestDbGuard where TDb : DbContext
     private async Task SetTenantContextAsync(CancellationToken cancellationToken)
     {
 #if RESELLER
-        var groupId = _tenantContext.CurrentId;
-        if (string.IsNullOrWhiteSpace(groupId))
+        var groupId = _tenantContext.CurrentGroupId;
+        if (groupId == Guid.Empty)
             throw new InvalidOperationException("No group ID available for this request.");
 
 #endif
         var tenantId = _tenantContext.CurrentId;
-        if (string.IsNullOrWhiteSpace(tenantId))
+        if (tenantId == Guid.Empty)
             throw new InvalidOperationException("No tenant ID available for this request.");
 
         // Use set_config(..., is_local := true) → transaction-scoped (auto-reset).
@@ -175,20 +175,20 @@ public sealed class RequestDbGuard<TDb> : IRequestDbGuard where TDb : DbContext
 
 #if RESELLER
         // Set group context first
-        cmd.CommandText = "select set_config('app.current_group', @group, true);";
+        cmd.CommandText = "select set_config('app.group_id', @group, true);";
         var groupParam = cmd.CreateParameter();
         groupParam.ParameterName = "@group";
-        groupParam.Value = groupId; // canonical UUID string
+        groupParam.Value = groupId.ToString(); // Convert GUID to string
         cmd.Parameters.Add(groupParam);
         await cmd.ExecuteScalarAsync(cancellationToken);
 
         // Clear parameters and set tenant context
         cmd.Parameters.Clear();
 #endif
-        cmd.CommandText = "select set_config('app.current_tenant', @tenant, true);";
+        cmd.CommandText = "select set_config('app.tenant_id', @tenant, true);";
         var tenantParam = cmd.CreateParameter();
         tenantParam.ParameterName = "@tenant";
-        tenantParam.Value = tenantId; // canonical UUID string
+        tenantParam.Value = tenantId.ToString(); // Convert GUID to string
         cmd.Parameters.Add(tenantParam);
         await cmd.ExecuteScalarAsync(cancellationToken);
     }

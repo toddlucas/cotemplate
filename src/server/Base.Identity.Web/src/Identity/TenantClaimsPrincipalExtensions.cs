@@ -1,20 +1,24 @@
 ﻿using System.Security.Claims;
 
+using Microsoft.AspNetCore.Identity;
+
 namespace Microsoft.AspNetCore.Mvc;
 
-public static class ClaimsPrincipalExtensions
+public static class TenantClaimsPrincipalExtensions
 {
-    //public static long? GetNameIdentifierOrDefault(this ClaimsPrincipal principal)
-    //    => principal.FindFirstInt64Value(ClaimTypes.NameIdentifier);
+#if RESELLER
+    public static Guid? GetGroupIdOrDefault(this ClaimsPrincipal principal)
+        => principal.FindFirstGuidValue(CustomClaims.GroupId);
 
-    //public static long GetNameIdentifier(this ClaimsPrincipal principal)
-    //    => principal.RequireFirstInt64Value(ClaimTypes.NameIdentifier);
+    public static Guid GetGroupId(this ClaimsPrincipal principal)
+        => principal.RequireFirstGuidValue(CustomClaims.GroupId);
+#endif
 
-    public static Guid? GetNameIdentifierOrDefault(this ClaimsPrincipal principal)
-        => principal.FindFirstGuidValue(ClaimTypes.NameIdentifier);
+    public static Guid? GetTenantIdOrDefault(this ClaimsPrincipal principal)
+        => principal.FindFirstGuidValue(CustomClaims.TenantId);
 
-    public static Guid GetNameIdentifier(this ClaimsPrincipal principal)
-        => principal.RequireFirstGuidValue(ClaimTypes.NameIdentifier);
+    public static Guid GetTenantId(this ClaimsPrincipal principal)
+        => principal.RequireFirstGuidValue(CustomClaims.TenantId);
 
     public static string RequireFirstValue(this ClaimsPrincipal principal, string claimType)
     {

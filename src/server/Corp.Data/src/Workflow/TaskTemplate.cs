@@ -12,7 +12,7 @@ public class TaskTemplate : TaskTemplateModel, ITemporal
     /// </summary>
     [Display(Name = "Group ID")]
     [Required]
-    public string GroupId { get; set; } = null!;
+    public Guid GroupId { get; set; }
 #endif
 
     #endregion Internal properties

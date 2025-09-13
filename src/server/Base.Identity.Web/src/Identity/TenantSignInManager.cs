@@ -12,8 +12,9 @@ namespace Microsoft.AspNetCore.Identity;
 /// Provides the APIs for user sign in.
 /// </summary>
 /// <typeparam name="TUser">The type encapsulating a user.</typeparam>
-public class TenantSignInManager<TUser> : SignInManager<TUser>
-    where TUser : TenantIdentityUser
+public class TenantSignInManager<TUser, TKey> : SignInManager<TUser>
+    where TUser : TenantIdentityUser<TKey>
+    where TKey : IEquatable<TKey>
 {
     /// <summary>
     /// Creates a new instance of <see cref="SignInManager{TUser}"/>.
@@ -74,10 +75,11 @@ public class TenantSignInManager<TUser> : SignInManager<TUser>
         var userPrincipal = await base.CreateUserPrincipalAsync(user);
         var identity = userPrincipal.Identities.First();
 #if RESELLER
-        var groupClaim = new Claim(CustomClaims.GroupId, user.GroupId.ToString());
+        // REVIEW: What's the best empty value here?
+        var groupClaim = new Claim(CustomClaims.GroupId, user.GroupId.ToString() ?? "");
         identity.AddClaim(groupClaim);
 #endif
-        var tenantClaim = new Claim(CustomClaims.TenantId, user.TenantId.ToString());
+        var tenantClaim = new Claim(CustomClaims.TenantId, user.TenantId.ToString() ?? "");
         identity.AddClaim(tenantClaim);
         return userPrincipal;
     }

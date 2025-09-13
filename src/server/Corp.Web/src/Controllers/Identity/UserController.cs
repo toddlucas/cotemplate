@@ -32,9 +32,9 @@ public class UserController(
     [TenantRead]
     // [EndpointSummary("/api/demographics/profile")]
     [EndpointDescription("Returns a user details object.")]
-    public async Task<ActionResult> Get(string id, CancellationToken cancellationToken)
+    public async Task<ActionResult> Get(Guid id, CancellationToken cancellationToken)
     {
-        if (string.IsNullOrWhiteSpace(id))
+        if (id == Guid.Empty)
             return BadRequest();
 
         // No need to manually call _guard.EnsureReadAsync() - the aspect handles it!

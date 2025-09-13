@@ -25,17 +25,17 @@ public class TenantContextMiddleware(RequestDelegate next, IOptions<TenantContex
     private readonly RequestDelegate _next = next;
     private readonly bool _useDatabaseLookup = options.Value.UseDatabaseLookup;
 
-    public async Task InvokeAsync(HttpContext httpContext, ILogger<TenantContextMiddleware> logger, ITenantResolver tenantResolver, TenantContext<string> tenantContext)
+    public async Task InvokeAsync(HttpContext httpContext, ILogger<TenantContextMiddleware> logger, ITenantResolver tenantResolver, TenantContext<Guid> tenantContext)
     {
 #if RESELLER
-        string? groupId = httpContext.User.FindFirstValue(CustomClaims.GroupId);
+        Guid? groupId = httpContext.User.GetGroupIdOrDefault();
 
-        tenantContext.CurrentGroupId = groupId;
+        tenantContext.CurrentGroupId = groupId ?? Guid.Empty; // REVIEW: This is nullable.
 #endif
-        string? tenantId = httpContext.User.FindFirstValue(CustomClaims.TenantId);
+        Guid? tenantId = httpContext.User.GetTenantIdOrDefault();
 
-        tenantContext.CurrentId = tenantId;
-        tenantContext.UserTenantId = tenantId;
+        tenantContext.CurrentId = tenantId ?? Guid.Empty;
+        tenantContext.UserTenantId = tenantId ?? Guid.Empty;
 
         if (_useDatabaseLookup)
         {
@@ -45,7 +45,7 @@ public class TenantContextMiddleware(RequestDelegate next, IOptions<TenantContex
             if (!string.IsNullOrWhiteSpace(subdomain))
             {
                 // TODO: Implement read-through cache in memory or Redis.
-                IdentityTenant? tenant = await tenantResolver.GetTenantBySubdomainAsync(subdomain);
+                IdentityTenant<Guid>? tenant = await tenantResolver.GetTenantBySubdomainAsync(subdomain);
                 if (tenant is not null)
                 {
                     if (tenantId is not null &&
@@ -63,7 +63,7 @@ public class TenantContextMiddleware(RequestDelegate next, IOptions<TenantContex
             var hostname = routeData.Values[RouteValueKey.Hostname] as string;
             if (!string.IsNullOrWhiteSpace(hostname))
             {
-                IdentityTenant? tenant = await tenantResolver.GetTenantByDomainAsync(hostname);
+                IdentityTenant<Guid>? tenant = await tenantResolver.GetTenantByDomainAsync(hostname);
                 if (tenant is not null)
                 {
                     if (tenantId is not null &&

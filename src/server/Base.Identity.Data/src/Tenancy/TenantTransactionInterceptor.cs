@@ -1,9 +1,12 @@
 ﻿using System.Data;
 using System.Data.Common;
-using Microsoft.EntityFrameworkCore.Diagnostics;
-using Npgsql;
+using System.Threading;
 
 using Corp.Identity;
+
+using Microsoft.EntityFrameworkCore.Diagnostics;
+
+using Npgsql;
 
 namespace Corp.Data.Identity;
 
@@ -13,9 +16,9 @@ namespace Corp.Data.Identity;
 /// </summary>
 public sealed class TenantTransactionInterceptor : IDbTransactionInterceptor
 {
-    private readonly TenantContext<string> _tenantContext;
+    private readonly TenantContext<Guid> _tenantContext;
 
-    public TenantTransactionInterceptor(TenantContext<string> tenantContext)
+    public TenantTransactionInterceptor(TenantContext<Guid> tenantContext)
     {
         _tenantContext = tenantContext;
     }
@@ -46,13 +49,13 @@ public sealed class TenantTransactionInterceptor : IDbTransactionInterceptor
     private async Task SetTenantAsync(DbTransaction transaction, CancellationToken cancellationToken)
     {
 #if RESELLER
-        var groupId = _tenantContext.CurrentId;
-        if (string.IsNullOrWhiteSpace(groupId))
+        var groupId = _tenantContext.CurrentGroupId;
+        if (groupId == Guid.Empty)
             throw new InvalidOperationException("No group ID available for this request.");
 
 #endif
         var tenantId = _tenantContext.CurrentId;
-        if (string.IsNullOrWhiteSpace(tenantId))
+        if (tenantId == Guid.Empty)
             throw new InvalidOperationException("No tenant ID available for this request.");
 
         // Use set_config(..., is_local := true) → transaction-scoped (auto-reset).
@@ -62,20 +65,20 @@ public sealed class TenantTransactionInterceptor : IDbTransactionInterceptor
 
 #if RESELLER
         // Set group context first
-        cmd.CommandText = "select set_config('app.current_group', @group, true);";
+        cmd.CommandText = "select set_config('app.group_id', @group, true);";
         var groupParam = cmd.CreateParameter();
         groupParam.ParameterName = "@group";
-        groupParam.Value = groupId; // canonical UUID string
+        groupParam.Value = groupId.ToString(); // Convert GUID to string
         cmd.Parameters.Add(groupParam);
         await cmd.ExecuteScalarAsync(cancellationToken);
 
         // Clear parameters and set tenant context
         cmd.Parameters.Clear();
 #endif
-        cmd.CommandText = "select set_config('app.current_tenant', @tenant, true);";
+        cmd.CommandText = "select set_config('app.tenant_id', @tenant, true);";
         var tenantParam = cmd.CreateParameter();
         tenantParam.ParameterName = "@tenant";
-        tenantParam.Value = tenantId; // canonical UUID string
+        tenantParam.Value = tenantId.ToString(); // Convert GUID to string
         cmd.Parameters.Add(tenantParam);
         await cmd.ExecuteScalarAsync(cancellationToken);
     }
@@ -101,13 +104,13 @@ public sealed class TenantTransactionInterceptor : IDbTransactionInterceptor
     private void SetTenant(DbTransaction transaction)
     {
 #if RESELLER
-        var groupId = _tenantContext.CurrentId;
-        if (string.IsNullOrWhiteSpace(groupId))
+        var groupId = _tenantContext.CurrentGroupId;
+        if (groupId == Guid.Empty)
             throw new InvalidOperationException("No group ID available for this request.");
 
 #endif
         var tenantId = _tenantContext.CurrentId;
-        if (string.IsNullOrWhiteSpace(tenantId))
+        if (tenantId == Guid.Empty)
             throw new InvalidOperationException("No tenant ID available for this request.");
 
         // Use set_config(..., is_local := true) → transaction-scoped (auto-reset).
@@ -117,20 +120,20 @@ public sealed class TenantTransactionInterceptor : IDbTransactionInterceptor
 
 #if RESELLER
         // Set group context first
-        cmd.CommandText = "select set_config('app.current_group', @group, true);";
+        cmd.CommandText = "select set_config('app.group_id', @group, true);";
         var groupParam = cmd.CreateParameter();
         groupParam.ParameterName = "@group";
-        groupParam.Value = groupId; // canonical UUID string
+        groupParam.Value = groupId.ToString(); // Convert GUID to string
         cmd.Parameters.Add(groupParam);
         cmd.ExecuteScalar();
 
         // Clear parameters and set tenant context
         cmd.Parameters.Clear();
 #endif
-        cmd.CommandText = "select set_config('app.current_tenant', @tenant, true);";
+        cmd.CommandText = "select set_config('app.tenant_id', @tenant, true);";
         var tenantParam = cmd.CreateParameter();
         tenantParam.ParameterName = "@tenant";
-        tenantParam.Value = tenantId; // canonical UUID string
+        tenantParam.Value = tenantId.ToString(); // Convert GUID to string
         cmd.Parameters.Add(tenantParam);
         cmd.ExecuteScalar();
     }

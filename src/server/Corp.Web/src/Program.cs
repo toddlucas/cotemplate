@@ -34,8 +34,8 @@ builder.Services.AddAuthorizationBuilder()
 //builder.Services.AddDefaultIdentity<IdentityUser>() // UI
 builder.Services.AddIdentityApiEndpoints<ApplicationUser>( // API
         options => options.SignIn.RequireConfirmedAccount = true)
-    .AddSignInManager<TenantSignInManager<ApplicationUser>>()
-    .AddRoles<IdentityRole>()
+    .AddSignInManager<TenantSignInManager<ApplicationUser, Guid>>()
+    .AddRoles<IdentityRole<Guid>>()
     .AddEntityFrameworkStores<CorpDbContext>();
 
 builder.Services.AddOptions<BearerTokenOptions>(IdentityConstants.BearerScheme).Configure(options =>
@@ -74,12 +74,12 @@ builder.Services.AddRateLimiter(options =>
 {
     options.RejectionStatusCode = StatusCodes.Status429TooManyRequests;
 
-    options.AddPolicy(policyName: fixedRatePolicy, partitioner: httpContext =>
+    options.AddPolicy<Guid>(policyName: fixedRatePolicy, partitioner: httpContext =>
     {
-        string? userId = httpContext.User.GetNameIdentifierOrDefault();
+        Guid? userId = httpContext.User.GetNameIdentifierOrDefault();
 
-        return string.IsNullOrEmpty(userId)
-            ? RateLimitPartition.GetFixedWindowLimiter("anonymous", _ =>
+        return userId == null || userId == Guid.Empty
+            ? RateLimitPartition.GetFixedWindowLimiter(Guid.Empty, _ =>
                 new FixedWindowRateLimiterOptions
                 {
                     PermitLimit = rateOptions.PermitLimit,
@@ -87,7 +87,7 @@ builder.Services.AddRateLimiter(options =>
                     QueueProcessingOrder = QueueProcessingOrder.OldestFirst,
                     QueueLimit = rateOptions.QueueLimit,
                 })
-            : RateLimitPartition.GetFixedWindowLimiter(userId, _ =>
+            : RateLimitPartition.GetFixedWindowLimiter(userId.Value, _ =>
                 new FixedWindowRateLimiterOptions
                 {
                     PermitLimit = rateOptions.PermitLimit,

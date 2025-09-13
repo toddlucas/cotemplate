@@ -11,7 +11,7 @@ public class Person : PersonModel, ITemporal
     /// </summary>
     [Display(Name = "Tenant ID")]
     [Required]
-    public string TenantId { get; set; } = null!;
+    public Guid TenantId { get; set; }
 
     #endregion Internal properties
 

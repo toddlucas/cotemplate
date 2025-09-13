@@ -34,7 +34,7 @@ public static class IServiceCollectionExtensions
             services.AddScoped<IRequestDbGuard>(serviceProvider =>
             {
                 var dbContext = serviceProvider.GetRequiredService<CorpDbContext>();
-                var tenantContext = serviceProvider.GetRequiredService<TenantContext<string>>();
+                var tenantContext = serviceProvider.GetRequiredService<TenantContext<Guid>>();
                 return new RequestDbGuard<CorpDbContext>(dbContext, tenantContext);
             });
         }

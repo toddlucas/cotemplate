@@ -16,7 +16,7 @@ public class TaskRecord : TaskModel, ITemporal
     /// </summary>
     [Display(Name = "Group ID")]
     [Required]
-    public string GroupId { get; set; } = null!;
+    public Guid GroupId { get; set; }
 #endif
 
     /// <summary>
@@ -24,7 +24,7 @@ public class TaskRecord : TaskModel, ITemporal
     /// </summary>
     [Display(Name = "Tenant ID")]
     [Required]
-    public string TenantId { get; set; } = null!;
+    public Guid TenantId { get; set; }
 
     #endregion Internal properties
 

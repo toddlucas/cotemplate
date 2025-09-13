@@ -14,7 +14,7 @@ public static class ITenantServiceCollectionExtensions
         // Identity
         //serviceCollection.AddTransient<TenantManager>();
         serviceCollection.AddTransient<ITenantResolver, TenantResolver>();
-        serviceCollection.AddScoped<TenantContext<string>>();
+        serviceCollection.AddScoped<TenantContext<Guid>>();
 
         return serviceCollection;
     }
