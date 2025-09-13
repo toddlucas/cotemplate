@@ -23,8 +23,7 @@ public static class RlsPolicyManager
         "document",
         "extracted_field",
         "checklist",
-        "task_record",
-        "task_template"
+        "task_record"
     };
 
     /// <summary>
@@ -33,8 +32,19 @@ public static class RlsPolicyManager
     /// </summary>
     private static readonly string[] TablesWithTenantOnly = new[]
     {
-        "person",
-        "checklist_template"
+        "person"
+    };
+
+    /// <summary>
+    /// Tables that have only group_id column.
+    /// These tables are scoped only by reseller/partner (group).
+    /// </summary>
+    private static readonly string[] TablesWithGroupOnly = new[]
+    {
+        // Add tables here that have only group_id, no tenant_id
+        // Example: "reseller_settings", "partner_configurations", etc.
+        "checklist_template",
+        "task_template"
     };
 
     /// <summary>
@@ -60,6 +70,13 @@ public static class RlsPolicyManager
             migrationBuilder.Sql($"ALTER TABLE {table} ENABLE ROW LEVEL SECURITY;");
             migrationBuilder.Sql($"CREATE POLICY rls_policy ON {table} FOR ALL USING (rls_tenant_policy(tenant_id));");
         }
+
+        // Enable RLS and create policies for tables with group_id only
+        foreach (var table in TablesWithGroupOnly)
+        {
+            migrationBuilder.Sql($"ALTER TABLE {table} ENABLE ROW LEVEL SECURITY;");
+            migrationBuilder.Sql($"CREATE POLICY rls_policy ON {table} FOR ALL USING (rls_group_policy(group_id));");
+        }
     }
 
     /// <summary>
@@ -70,13 +87,13 @@ public static class RlsPolicyManager
     public static void DisableRls(MigrationBuilder migrationBuilder)
     {
         // Drop all policies
-        foreach (var table in TablesWithGroupAndTenant.Concat(TablesWithTenantOnly))
+        foreach (var table in TablesWithGroupAndTenant.Concat(TablesWithTenantOnly).Concat(TablesWithGroupOnly))
         {
             migrationBuilder.Sql($"DROP POLICY IF EXISTS rls_policy ON {table};");
         }
 
         // Disable RLS on all tables
-        foreach (var table in TablesWithGroupAndTenant.Concat(TablesWithTenantOnly))
+        foreach (var table in TablesWithGroupAndTenant.Concat(TablesWithTenantOnly).Concat(TablesWithGroupOnly))
         {
             migrationBuilder.Sql($"ALTER TABLE {table} DISABLE ROW LEVEL SECURITY;");
         }
@@ -120,6 +137,19 @@ public static class RlsPolicyManager
                 );
             END;
             $$ LANGUAGE plpgsql SECURITY DEFINER;");
+
+        // Function for tables with group_id only
+        migrationBuilder.Sql(@"
+            CREATE OR REPLACE FUNCTION rls_group_policy(
+                table_group_id uuid
+            ) RETURNS boolean AS $$
+            BEGIN
+                RETURN (
+                    current_setting('app.group_id', true) IS NOT NULL
+                    AND table_group_id = uuid(current_setting('app.group_id'))
+                );
+            END;
+            $$ LANGUAGE plpgsql SECURITY DEFINER;");
     }
 
     /// <summary>
@@ -129,6 +159,7 @@ public static class RlsPolicyManager
     {
         migrationBuilder.Sql("DROP FUNCTION IF EXISTS rls_group_tenant_policy(uuid, uuid);");
         migrationBuilder.Sql("DROP FUNCTION IF EXISTS rls_tenant_policy(uuid);");
+        migrationBuilder.Sql("DROP FUNCTION IF EXISTS rls_group_policy(uuid);");
     }
 
     /// <summary>
@@ -148,13 +179,17 @@ public static class RlsPolicyManager
         {
             // Add to TablesWithGroupAndTenant array
         }
+        else if (hasGroupId && !hasTenantId)
+        {
+            // Add to TablesWithGroupOnly array
+        }
         else if (hasTenantId)
         {
             // Add to TablesWithTenantOnly array
         }
         else
         {
-            throw new ArgumentException("Table must have at least tenant_id column for RLS");
+            throw new ArgumentException("Table must have at least group_id or tenant_id column for RLS");
         }
     }
 }
