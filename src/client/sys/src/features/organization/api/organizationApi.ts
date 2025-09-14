@@ -3,9 +3,12 @@ import { ApiError } from '$/api/ApiError';
 import type { OrganizationModel, OrganizationDetailModel } from '$/models/access';
 import type { PagedQuery, PagedResult } from '$/models';
 
-// API paths - these will be updated when the server implements the endpoints
-const LIST_API_PATH = '/api/organization/list';
-const DETAILS_API_PATH = '/api/organization/{id}';
+// API paths - updated to match server controller endpoints
+const LIST_API_PATH = '/api/access/organization';
+const DETAILS_API_PATH = '/api/access/organization/{id}/detail';
+const CREATE_API_PATH = '/api/access/organization';
+const UPDATE_API_PATH = '/api/access/organization';
+const DELETE_API_PATH = '/api/access/organization/{id}';
 
 /**
  * Fetch a paginated list of organizations
@@ -66,7 +69,7 @@ export const fetchOrganizationDetails = async (id: number): Promise<Organization
  */
 export const createOrganization = async (organization: Omit<OrganizationModel, 'id'>): Promise<OrganizationModel> => {
   try {
-    const response = await post('/api/organization', organization);
+    const response = await post(CREATE_API_PATH, organization);
 
     if (!response.ok) {
       const apiError = await ApiError.fromResponse(response, 'Failed to create organization');
@@ -84,7 +87,7 @@ export const createOrganization = async (organization: Omit<OrganizationModel, '
  */
 export const updateOrganization = async (organization: OrganizationModel): Promise<OrganizationModel> => {
   try {
-    const response = await put('/api/organization', organization);
+    const response = await put(UPDATE_API_PATH, organization);
 
     if (!response.ok) {
       const apiError = await ApiError.fromResponse(response, 'Failed to update organization');
@@ -102,7 +105,7 @@ export const updateOrganization = async (organization: OrganizationModel): Promi
  */
 export const deleteOrganization = async (id: number): Promise<void> => {
   try {
-    const response = await del(`/api/organization/${id}`);
+    const response = await del(DELETE_API_PATH.replace('{id}', encodeURIComponent(id.toString())));
 
     if (!response.ok) {
       const apiError = await ApiError.fromResponse(response, 'Failed to delete organization');

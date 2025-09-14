@@ -8,28 +8,29 @@ This directory contains the API layer for the organization feature.
 
 ## Usage
 
-The organization store uses these API functions through a mock layer that can be easily switched to real API calls.
+The organization store now uses real API calls with comprehensive server seed data.
 
-### Switching from Mock to Real API
+### Real API Integration
 
-To switch from mock data to real API calls:
+The organization store is now configured to use the real API:
 
-1. Open `src/client/sys/src/features/organization/store/organizationStore.ts`
-2. Change `const useMockData = true;` to `const useMockData = false;`
+- **Server Seed Data**: Organizations, People, Members, Entities, Tasks, and Checklists
+- **Real API Calls**: All CRUD operations go through the server
+- **Type Safety**: Full TypeScript integration with generated models
 
 ### API Endpoints
 
-The following endpoints are expected to be implemented on the server:
+The following endpoints are implemented on the server:
 
-- `GET /api/organization/list` - List organizations with pagination, search, and sorting
-- `GET /api/organization/{id}` - Get organization details
-- `POST /api/organization` - Create a new organization
-- `PUT /api/organization` - Update an existing organization
-- `DELETE /api/organization/{id}` - Delete an organization
+- `GET /api/access/organization` - List organizations with pagination, search, and sorting
+- `GET /api/access/organization/{id}` - Get organization details
+- `POST /api/access/organization` - Create a new organization
+- `PUT /api/access/organization` - Update an existing organization
+- `DELETE /api/access/organization/{id}` - Delete an organization
 
 ### Pagination Support
 
-The client-side pagination is already implemented and ready. When the server endpoints are ready, they should support:
+The API supports server-side pagination and sorting:
 
 - `take` - Number of items per page
 - `skip` - Number of items to skip (for pagination)
@@ -40,3 +41,7 @@ The client-side pagination is already implemented and ready. When the server end
 ### Error Handling
 
 All API functions include proper error handling and will throw meaningful error messages that are displayed to the user.
+
+### Migration from Mock Data
+
+The mock data has been successfully migrated to server seed data. The client now uses real API calls with realistic test data that matches the previous mock structure.

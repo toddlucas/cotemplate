@@ -2,202 +2,31 @@ import { create } from 'zustand';
 import { devtools } from 'zustand/middleware';
 import type { OrganizationStore } from './types';
 import type { OrganizationModel, OrganizationDetailModel } from '$/models/access';
-import { OrganizationMemberRole } from '$/models/access';
-import { EntityType, EntityStatus } from '$/models/business';
-import { TaskStatus } from '$/models/workflow/task-status';
-import { ChecklistStatus } from '$/models/workflow/checklist-status';
+// Enum imports removed - no longer needed for mock data
 import * as organizationApi from '../api/organizationApi';
 
-// Mock API functions - replace with actual API calls
-const mockOrganizations: OrganizationModel[] = [
-  {
-    id: 1,
-    name: 'Acme Corporation',
-    code: 'ACME',
-    parentOrgId: undefined,
-    status: 'active',
-    metadata: 'Primary organization'
-  },
-  {
-    id: 2,
-    name: 'Acme Subsidiary',
-    code: 'ACME-SUB',
-    parentOrgId: 1,
-    status: 'active',
-    metadata: 'Subsidiary organization'
-  },
-  {
-    id: 3,
-    name: 'Beta Industries',
-    code: 'BETA',
-    parentOrgId: undefined,
-    status: 'inactive',
-    metadata: 'Secondary organization'
-  }
-];
+// Mock data removed - now using real API with server seed data
 
-// Mock detailed organization data for demonstration
-const mockOrganizationDetails: Record<number, OrganizationDetailModel> = {
-  1: {
-    id: 1,
-    name: 'Acme Corporation',
-    code: 'ACME',
-    parentOrgId: undefined,
-    status: 'active',
-    metadata: 'Primary organization',
-    createdAt: new Date('2024-01-15'),
-    updatedAt: new Date('2024-12-19'),
-    deletedAt: undefined,
-    entities: [
-      { id: 1, name: 'Acme Corp LLC', orgId: 1, entityTypeId: EntityType.llc, statusId: EntityStatus.active },
-      { id: 2, name: 'Acme Holdings Inc', orgId: 1, entityTypeId: EntityType.c_corp, statusId: EntityStatus.active }
-    ],
-    members: [
-      { id: 1, orgId: 1, personId: 1, roleId: OrganizationMemberRole.admin },
-      { id: 2, orgId: 1, personId: 2, roleId: OrganizationMemberRole.viewer }
-    ],
-    tasks: [
-      { id: 1, orgId: 1, name: 'Annual Review', statusId: TaskStatus.todo },
-      { id: 2, orgId: 1, name: 'Budget Planning', statusId: TaskStatus.done }
-    ],
-    checklistInstances: [
-      { id: 1, orgId: 1, name: 'Compliance Checklist', statusId: ChecklistStatus.active, createdFromId: 'manual' as any }
-    ]
-  },
-  2: {
-    id: 2,
-    name: 'Acme Subsidiary',
-    code: 'ACME-SUB',
-    parentOrgId: 1,
-    status: 'active',
-    metadata: 'Subsidiary organization',
-    createdAt: new Date('2024-03-20'),
-    updatedAt: new Date('2024-12-15'),
-    deletedAt: undefined,
-    entities: [
-      { id: 3, name: 'Acme Sub LLC', orgId: 2, entityTypeId: EntityType.llc, statusId: EntityStatus.active }
-    ],
-    members: [
-      { id: 3, orgId: 2, personId: 3, roleId: OrganizationMemberRole.manager }
-    ],
-    tasks: [
-      { id: 3, orgId: 2, name: 'Q4 Report', statusId: TaskStatus.todo }
-    ],
-    checklistInstances: []
-  },
-  3: {
-    id: 3,
-    name: 'Beta Industries',
-    code: 'BETA',
-    parentOrgId: undefined,
-    status: 'inactive',
-    metadata: 'Secondary organization',
-    createdAt: new Date('2024-02-10'),
-    updatedAt: new Date('2024-11-30'),
-    deletedAt: undefined,
-    entities: [],
-    members: [],
-    tasks: [],
-    checklistInstances: []
-  }
-};
-
-// For now, we'll use mock data but with real API structure
-// This will be replaced when the server endpoints are ready
-const useMockData = true;
-
-const mockApi = {
+// API wrapper - now always uses real API
+const api = {
   async getOrganizations(page: number = 0, pageSize: number = 10, search?: string, sorting?: Array<{ id: string; desc: boolean }>): Promise<{ items: OrganizationModel[], totalCount: number }> {
-    if (useMockData) {
-      // Simulate API delay
-      await new Promise(resolve => setTimeout(resolve, 500));
-
-      let filtered = mockOrganizations;
-
-      if (search) {
-        const searchLower = search.toLowerCase();
-        filtered = mockOrganizations.filter(org =>
-          org.name.toLowerCase().includes(searchLower) ||
-          org.code?.toLowerCase().includes(searchLower) ||
-          org.status?.toLowerCase().includes(searchLower)
-        );
-      }
-
-      // Apply sorting if provided
-      if (sorting && sorting.length > 0) {
-        const sort = sorting[0];
-        filtered.sort((a, b) => {
-          const aValue = a[sort.id as keyof OrganizationModel];
-          const bValue = b[sort.id as keyof OrganizationModel];
-
-          if (aValue === bValue) return 0;
-          if (aValue == null) return 1;
-          if (bValue == null) return -1;
-
-          const comparison = aValue < bValue ? -1 : 1;
-          return sort.desc ? -comparison : comparison;
-        });
-      }
-
-      const start = page * pageSize;
-      const end = start + pageSize;
-      const items = filtered.slice(start, end);
-
-      return {
-        items,
-        totalCount: filtered.length
-      };
-    } else {
-      return await organizationApi.fetchOrganizations(page, pageSize, search, sorting);
-    }
+    return await organizationApi.fetchOrganizations(page, pageSize, search, sorting);
   },
 
   async getOrganization(id: number): Promise<OrganizationDetailModel | null> {
-    if (useMockData) {
-      await new Promise(resolve => setTimeout(resolve, 300));
-      return mockOrganizationDetails[id] || null;
-    } else {
-      return await organizationApi.fetchOrganizationDetails(id);
-    }
+    return await organizationApi.fetchOrganizationDetails(id);
   },
 
   async createOrganization(organization: Omit<OrganizationModel, 'id'>): Promise<OrganizationModel> {
-    if (useMockData) {
-      await new Promise(resolve => setTimeout(resolve, 500));
-      const newOrg: OrganizationModel = {
-        ...organization,
-        id: Math.max(...mockOrganizations.map(o => o.id)) + 1
-      };
-      mockOrganizations.push(newOrg);
-      return newOrg;
-    } else {
-      return await organizationApi.createOrganization(organization);
-    }
+    return await organizationApi.createOrganization(organization);
   },
 
   async updateOrganization(organization: OrganizationModel): Promise<OrganizationModel> {
-    if (useMockData) {
-      await new Promise(resolve => setTimeout(resolve, 500));
-      const index = mockOrganizations.findIndex(org => org.id === organization.id);
-      if (index !== -1) {
-        mockOrganizations[index] = organization;
-      }
-      return organization;
-    } else {
-      return await organizationApi.updateOrganization(organization);
-    }
+    return await organizationApi.updateOrganization(organization);
   },
 
   async deleteOrganization(id: number): Promise<void> {
-    if (useMockData) {
-      await new Promise(resolve => setTimeout(resolve, 500));
-      const index = mockOrganizations.findIndex(org => org.id === id);
-      if (index !== -1) {
-        mockOrganizations.splice(index, 1);
-      }
-    } else {
-      await organizationApi.deleteOrganization(id);
-    }
+    return await organizationApi.deleteOrganization(id);
   }
 };
 
@@ -364,7 +193,7 @@ export const useOrganizationStore = create<OrganizationStore>()(
         set({ isLoadingList: true, listError: null });
 
         try {
-          const { items, totalCount } = await mockApi.getOrganizations(
+          const { items, totalCount } = await api.getOrganizations(
             state.tableState.currentPage,
             state.tableState.pageSize,
             state.tableState.searchTerm || undefined,
@@ -383,7 +212,7 @@ export const useOrganizationStore = create<OrganizationStore>()(
         set({ isLoadingDetails: true, detailsError: null });
 
         try {
-          const item = await mockApi.getOrganization(id);
+          const item = await api.getOrganization(id);
           set({ currentItem: item });
         } catch (error) {
           set({ detailsError: error instanceof Error ? error.message : 'Failed to fetch organization details' });
@@ -436,7 +265,7 @@ export const useOrganizationStore = create<OrganizationStore>()(
       // Organization-specific actions
       createOrganization: async (organization) => {
         try {
-          await mockApi.createOrganization(organization);
+          await api.createOrganization(organization);
           // Refresh the list to include the new organization
           await get().fetchItems();
         } catch (error) {
@@ -446,7 +275,7 @@ export const useOrganizationStore = create<OrganizationStore>()(
 
       updateOrganization: async (organization) => {
         try {
-          await mockApi.updateOrganization(organization);
+          await api.updateOrganization(organization);
           // Refresh the list to reflect changes
           await get().fetchItems();
         } catch (error) {
@@ -456,7 +285,7 @@ export const useOrganizationStore = create<OrganizationStore>()(
 
       deleteOrganization: async (id) => {
         try {
-          await mockApi.deleteOrganization(id);
+          await api.deleteOrganization(id);
           // Refresh the list to reflect changes
           await get().fetchItems();
         } catch (error) {
