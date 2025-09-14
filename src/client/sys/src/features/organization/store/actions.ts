@@ -1,5 +1,5 @@
 import type { OrganizationStore } from './types';
-import type { OrganizationModel } from '$/models/organization-model';
+import type { OrganizationModel, OrganizationDetailModel } from '$/models/access';
 
 // Data actions
 export const setItems = (state: OrganizationStore, items: OrganizationModel[]) => {
@@ -10,7 +10,7 @@ export const setTotalCount = (state: OrganizationStore, count: number) => {
   state.totalCount = count;
 };
 
-export const setCurrentItem = (state: OrganizationStore, item: OrganizationModel | null) => {
+export const setCurrentItem = (state: OrganizationStore, item: OrganizationDetailModel | null) => {
   state.currentItem = item;
 };
 

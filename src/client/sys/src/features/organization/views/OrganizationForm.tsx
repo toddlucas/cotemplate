@@ -11,12 +11,8 @@ import {
   useOrganizationStore,
   selectCurrentItem,
   selectIsLoadingDetails,
-  selectDetailsError,
-  fetchItemDetails,
-  createOrganization,
-  updateOrganization
+  selectDetailsError
 } from '../store';
-import type { OrganizationModel } from '$/models/organization-model';
 
 interface OrganizationFormData {
   name: string;
@@ -34,9 +30,9 @@ const OrganizationForm = () => {
   const organization = useOrganizationStore(selectCurrentItem);
   const isLoading = useOrganizationStore(selectIsLoadingDetails);
   const error = useOrganizationStore(selectDetailsError);
-  const fetchDetails = useOrganizationStore(fetchItemDetails);
-  const createOrg = useOrganizationStore(createOrganization);
-  const updateOrg = useOrganizationStore(updateOrganization);
+  const fetchDetails = useOrganizationStore(state => state.fetchItemDetails);
+  const createOrg = useOrganizationStore(state => state.createOrganization);
+  const updateOrg = useOrganizationStore(state => state.updateOrganization);
 
   const { register, handleSubmit, formState: { errors, isSubmitting }, setValue, watch } = useForm<OrganizationFormData>({
     defaultValues: {

@@ -1,4 +1,4 @@
-import type { OrganizationModel, OrganizationDetailModel } from '$/models/organization-model';
+import type { OrganizationModel, OrganizationDetailModel } from '$/models/access';
 import type { SortingState } from '@tanstack/react-table';
 
 export interface ItemTableState<TKey> {
@@ -37,6 +37,7 @@ export interface ItemState<TItem, TKey> {
 }
 
 export interface OrganizationState extends ItemState<OrganizationModel, number> {
+  currentItem: OrganizationDetailModel | null;
 }
 
 export interface ItemActions<TItem, TKey> {

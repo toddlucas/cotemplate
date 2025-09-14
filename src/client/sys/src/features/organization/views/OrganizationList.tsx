@@ -32,7 +32,7 @@ import {
   selectSorting,
   selectSearchTerm
 } from '../store';
-import type { OrganizationModel } from '$/models/organization-model';
+import type { OrganizationModel } from '$/models/access';
 
 const ActionColumn = ({ id }: { id: number }) => {
   return (

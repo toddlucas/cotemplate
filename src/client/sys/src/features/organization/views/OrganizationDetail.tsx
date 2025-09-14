@@ -1,5 +1,5 @@
 import { useEffect } from 'react';
-import { Link, useParams, useNavigate } from 'react-router-dom';
+import { Link, useParams } from 'react-router-dom';
 import { Button } from '$/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '$/components/ui/card';
 import { Badge } from '$/components/ui/badge';
@@ -7,8 +7,7 @@ import {
   useOrganizationStore,
   selectCurrentItem,
   selectIsLoadingDetails,
-  selectDetailsError,
-  fetchItemDetails
+  selectDetailsError
 } from '../store';
 
 const StatusBadge = ({ status }: { status?: string }) => {
@@ -34,12 +33,11 @@ const StatusBadge = ({ status }: { status?: string }) => {
 
 const OrganizationDetail = () => {
   const { id } = useParams<{ id: string }>();
-  const navigate = useNavigate();
 
   const organization = useOrganizationStore(selectCurrentItem);
   const isLoading = useOrganizationStore(selectIsLoadingDetails);
   const error = useOrganizationStore(selectDetailsError);
-  const fetchDetails = useOrganizationStore(fetchItemDetails);
+  const fetchDetails = useOrganizationStore(state => state.fetchItemDetails);
 
   useEffect(() => {
     if (id) {
@@ -212,6 +210,28 @@ const OrganizationDetail = () => {
                     <p className="text-sm mt-1">{organization.metadata}</p>
                   </div>
                 )}
+
+                {/* Temporal Information */}
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-4 pt-4 border-t">
+                  <div>
+                    <label className="text-sm font-medium text-muted-foreground">Created</label>
+                    <p className="text-sm mt-1">
+                      {organization.createdAt ? new Date(organization.createdAt).toLocaleDateString() : 'N/A'}
+                    </p>
+                  </div>
+                  <div>
+                    <label className="text-sm font-medium text-muted-foreground">Last Updated</label>
+                    <p className="text-sm mt-1">
+                      {organization.updatedAt ? new Date(organization.updatedAt).toLocaleDateString() : 'N/A'}
+                    </p>
+                  </div>
+                  <div>
+                    <label className="text-sm font-medium text-muted-foreground">Deleted</label>
+                    <p className="text-sm mt-1">
+                      {organization.deletedAt ? new Date(organization.deletedAt).toLocaleDateString() : 'N/A'}
+                    </p>
+                  </div>
+                </div>
               </CardContent>
             </Card>
           </div>
@@ -264,15 +284,27 @@ const OrganizationDetail = () => {
               <CardContent className="space-y-4">
                 <div className="flex justify-between items-center">
                   <span className="text-sm text-muted-foreground">Members</span>
-                  <span className="text-sm font-medium">-</span>
+                  <span className="text-sm font-medium">
+                    {organization.members?.length || 0}
+                  </span>
                 </div>
                 <div className="flex justify-between items-center">
-                  <span className="text-sm text-muted-foreground">Child Organizations</span>
-                  <span className="text-sm font-medium">-</span>
+                  <span className="text-sm text-muted-foreground">Entities</span>
+                  <span className="text-sm font-medium">
+                    {organization.entities?.length || 0}
+                  </span>
                 </div>
                 <div className="flex justify-between items-center">
-                  <span className="text-sm text-muted-foreground">Total Entities</span>
-                  <span className="text-sm font-medium">-</span>
+                  <span className="text-sm text-muted-foreground">Tasks</span>
+                  <span className="text-sm font-medium">
+                    {organization.tasks?.length || 0}
+                  </span>
+                </div>
+                <div className="flex justify-between items-center">
+                  <span className="text-sm text-muted-foreground">Checklists</span>
+                  <span className="text-sm font-medium">
+                    {organization.checklistInstances?.length || 0}
+                  </span>
                 </div>
               </CardContent>
             </Card>
