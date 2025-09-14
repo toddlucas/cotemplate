@@ -126,13 +126,13 @@ const OrganizationList = () => {
     // Clear location.state, which gets set by the Link component, but gets cached.
     window.history.replaceState({}, '')
 
-    if (shouldClearTableState(fromPath)) {
+    if (shouldClearTableState(fromPath || location.pathname)) {
       softResetTableState();
     }
 
     // Fetch organizations (will use cached state if available)
     fetchOrganizations();
-  }, [shouldClearTableState, softResetTableState, fetchOrganizations, location.state?.from]); // Only run on mount
+  }, [shouldClearTableState, softResetTableState, fetchOrganizations, location.state?.from, location.pathname]); // Only run on mount
 
   const setPagination: OnChangeFn<PaginationState> = (updaterOrValue: Updater<PaginationState>) => {
     if (typeof updaterOrValue === 'function') {

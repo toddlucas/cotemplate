@@ -331,7 +331,10 @@ export const useOrganizationStore = create<OrganizationStore>()(
           console.warn('Failed to load organization table state:', error);
         }
       },
-      shouldClearTableState: (currentPath) => !currentPath.startsWith('/organization'),
+      shouldClearTableState: (currentPath) => {
+        if (!currentPath) return true; // Clear state if no path provided
+        return !currentPath.startsWith('/organization');
+      },
       clearTableState: () => {
         localStorage.removeItem('organizationTableState');
         set((state) => ({
@@ -348,7 +351,7 @@ export const useOrganizationStore = create<OrganizationStore>()(
       },
       loadTableStateForPath: (currentPath) => {
         const state = get();
-        if (!currentPath.startsWith('/organization')) {
+        if (!currentPath || !currentPath.startsWith('/organization')) {
           state.clearTableState();
         } else {
           state.loadTableState(currentPath);
