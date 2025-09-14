@@ -1,8 +1,11 @@
 import { create } from 'zustand';
 import { devtools } from 'zustand/middleware';
 import type { OrganizationStore } from './types';
-import type { OrganizationModel } from '$/models/organization-model';
-import * as actions from './actions';
+import type { OrganizationModel, OrganizationDetailModel } from '$/models/access';
+import { OrganizationMemberRole } from '$/models/access';
+import { EntityType, EntityStatus } from '$/models/business';
+import { TaskStatus } from '$/models/workflow/task-status';
+import { ChecklistStatus } from '$/models/workflow/checklist-status';
 
 // Mock API functions - replace with actual API calls
 const mockOrganizations: OrganizationModel[] = [
@@ -10,7 +13,7 @@ const mockOrganizations: OrganizationModel[] = [
     id: 1,
     name: 'Acme Corporation',
     code: 'ACME',
-    parentOrgId: null,
+    parentOrgId: undefined,
     status: 'active',
     metadata: 'Primary organization'
   },
@@ -26,11 +29,77 @@ const mockOrganizations: OrganizationModel[] = [
     id: 3,
     name: 'Beta Industries',
     code: 'BETA',
-    parentOrgId: null,
+    parentOrgId: undefined,
     status: 'inactive',
     metadata: 'Secondary organization'
   }
 ];
+
+// Mock detailed organization data for demonstration
+const mockOrganizationDetails: Record<number, OrganizationDetailModel> = {
+  1: {
+    id: 1,
+    name: 'Acme Corporation',
+    code: 'ACME',
+    parentOrgId: undefined,
+    status: 'active',
+    metadata: 'Primary organization',
+    createdAt: new Date('2024-01-15'),
+    updatedAt: new Date('2024-12-19'),
+    deletedAt: undefined,
+    entities: [
+      { id: 1, name: 'Acme Corp LLC', orgId: 1, entityTypeId: EntityType.llc, statusId: EntityStatus.active },
+      { id: 2, name: 'Acme Holdings Inc', orgId: 1, entityTypeId: EntityType.c_corp, statusId: EntityStatus.active }
+    ],
+    members: [
+      { id: 1, orgId: 1, personId: 1, roleId: OrganizationMemberRole.admin },
+      { id: 2, orgId: 1, personId: 2, roleId: OrganizationMemberRole.viewer }
+    ],
+    tasks: [
+      { id: 1, orgId: 1, name: 'Annual Review', statusId: TaskStatus.todo },
+      { id: 2, orgId: 1, name: 'Budget Planning', statusId: TaskStatus.done }
+    ],
+    checklistInstances: [
+      { id: 1, orgId: 1, name: 'Compliance Checklist', statusId: ChecklistStatus.active, createdFromId: 'manual' as any }
+    ]
+  },
+  2: {
+    id: 2,
+    name: 'Acme Subsidiary',
+    code: 'ACME-SUB',
+    parentOrgId: 1,
+    status: 'active',
+    metadata: 'Subsidiary organization',
+    createdAt: new Date('2024-03-20'),
+    updatedAt: new Date('2024-12-15'),
+    deletedAt: undefined,
+    entities: [
+      { id: 3, name: 'Acme Sub LLC', orgId: 2, entityTypeId: EntityType.llc, statusId: EntityStatus.active }
+    ],
+    members: [
+      { id: 3, orgId: 2, personId: 3, roleId: OrganizationMemberRole.manager }
+    ],
+    tasks: [
+      { id: 3, orgId: 2, name: 'Q4 Report', statusId: TaskStatus.todo }
+    ],
+    checklistInstances: []
+  },
+  3: {
+    id: 3,
+    name: 'Beta Industries',
+    code: 'BETA',
+    parentOrgId: undefined,
+    status: 'inactive',
+    metadata: 'Secondary organization',
+    createdAt: new Date('2024-02-10'),
+    updatedAt: new Date('2024-11-30'),
+    deletedAt: undefined,
+    entities: [],
+    members: [],
+    tasks: [],
+    checklistInstances: []
+  }
+};
 
 const mockApi = {
   async getOrganizations(page: number = 0, pageSize: number = 10, search?: string): Promise<{ items: OrganizationModel[], totalCount: number }> {
@@ -58,9 +127,9 @@ const mockApi = {
     };
   },
 
-  async getOrganization(id: number): Promise<OrganizationModel | null> {
+  async getOrganization(id: number): Promise<OrganizationDetailModel | null> {
     await new Promise(resolve => setTimeout(resolve, 300));
-    return mockOrganizations.find(org => org.id === id) || null;
+    return mockOrganizationDetails[id] || null;
   },
 
   async createOrganization(organization: Omit<OrganizationModel, 'id'>): Promise<OrganizationModel> {
@@ -97,7 +166,7 @@ export const useOrganizationStore = create<OrganizationStore>()(
       // Initial state
       items: [],
       totalCount: 0,
-      currentItem: null,
+      currentItem: null as OrganizationDetailModel | null,
       tableState: {
         currentPage: 0,
         pageSize: 10,
@@ -112,52 +181,143 @@ export const useOrganizationStore = create<OrganizationStore>()(
       detailsError: null,
 
       // Data actions
-      setItems: (items) => set((state) => actions.setItems(state, items)),
-      setTotalCount: (count) => set((state) => actions.setTotalCount(state, count)),
-      setCurrentItem: (item) => set((state) => actions.setCurrentItem(state, item)),
+      setItems: (items) => set({ items }),
+      setTotalCount: (count) => set({ totalCount: count }),
+      setCurrentItem: (item: OrganizationDetailModel | null) => set({ currentItem: item }),
 
       // Table state actions
-      setCurrentPage: (page) => set((state) => actions.setCurrentPage(state, page)),
-      setPageSize: (size) => set((state) => actions.setPageSize(state, size)),
-      setSearchTerm: (term) => set((state) => actions.setSearchTerm(state, term)),
-      setSorting: (sorting) => set((state) => actions.setSorting(state, sorting)),
-      setSelectedItemId: (id) => set((state) => actions.setSelectedItemId(state, id)),
-      setExpandedRows: (rows) => set((state) => actions.setExpandedRows(state, rows)),
+      setCurrentPage: (page) => set((state) => ({ ...state, tableState: { ...state.tableState, currentPage: page } })),
+      setPageSize: (size) => set((state) => ({ ...state, tableState: { ...state.tableState, pageSize: size } })),
+      setSearchTerm: (term) => set((state) => ({ ...state, tableState: { ...state.tableState, searchTerm: term } })),
+      setSorting: (sorting) => set((state) => ({ ...state, tableState: { ...state.tableState, sorting } })),
+      setSelectedItemId: (id) => set((state) => ({ ...state, tableState: { ...state.tableState, selectedId: id } })),
+      setExpandedRows: (rows) => set((state) => ({ ...state, tableState: { ...state.tableState, expandedRows: rows } })),
 
       // Loading actions
-      setLoadingList: (loading) => set((state) => actions.setLoadingList(state, loading)),
-      setLoadingDetails: (loading) => set((state) => actions.setLoadingDetails(state, loading)),
+      setLoadingList: (loading) => set({ isLoadingList: loading }),
+      setLoadingDetails: (loading) => set({ isLoadingDetails: loading }),
 
       // Error actions
-      setListError: (error) => set((state) => actions.setListError(state, error)),
-      setDetailsError: (error) => set((state) => actions.setDetailsError(state, error)),
+      setListError: (error) => set({ listError: error }),
+      setDetailsError: (error) => set({ detailsError: error }),
 
       // Reset actions
-      resetList: () => set((state) => actions.resetList(state)),
-      resetDetails: () => set((state) => actions.resetDetails(state)),
-      resetTableState: () => set((state) => actions.resetTableState(state)),
-      softResetTableState: () => set((state) => actions.softResetTableState(state)),
-      resetSearch: () => set((state) => actions.resetSearch(state)),
-      resetPagination: () => set((state) => actions.resetPagination(state)),
-      resetSelection: () => set((state) => actions.resetSelection(state)),
-      resetAll: () => set((state) => actions.resetAll(state)),
+      resetList: () => set({ items: [], totalCount: 0, listError: null }),
+      resetDetails: () => set({ currentItem: null as OrganizationDetailModel | null, detailsError: null }),
+      resetTableState: () => set({
+        tableState: {
+          currentPage: 0,
+          pageSize: 10,
+          searchTerm: '',
+          sorting: [],
+          selectedId: undefined,
+          expandedRows: []
+        }
+      }),
+      softResetTableState: () => set((state) => ({
+        ...state,
+        tableState: {
+          ...state.tableState,
+          currentPage: 0,
+          searchTerm: '',
+          sorting: []
+        }
+      })),
+      resetSearch: () => set((state) => ({
+        ...state,
+        tableState: { ...state.tableState, searchTerm: '' }
+      })),
+      resetPagination: () => set((state) => ({
+        ...state,
+        tableState: { ...state.tableState, currentPage: 0 }
+      })),
+      resetSelection: () => set((state) => ({
+        ...state,
+        tableState: { ...state.tableState, selectedId: undefined, expandedRows: [] }
+      })),
+      resetAll: () => set({
+        items: [],
+        totalCount: 0,
+        currentItem: null as OrganizationDetailModel | null,
+        tableState: {
+          currentPage: 0,
+          pageSize: 10,
+          searchTerm: '',
+          sorting: [],
+          selectedId: undefined,
+          expandedRows: []
+        },
+        isLoadingList: false,
+        isLoadingDetails: false,
+        listError: null,
+        detailsError: null
+      }),
 
       // Table state update actions that don't trigger API calls
-      handleSelectedItemChange: (id) => set((state) => actions.handleSelectedItemChange(state, id)),
-      handleExpandedRowsChange: (rows) => set((state) => actions.handleExpandedRowsChange(state, rows)),
+      handleSelectedItemChange: (id) => set((state) => ({
+        ...state,
+        tableState: { ...state.tableState, selectedId: id }
+      })),
+      handleExpandedRowsChange: (rows) => set((state) => ({
+        ...state,
+        tableState: { ...state.tableState, expandedRows: rows }
+      })),
 
       // Table state persistence
-      saveTableState: () => set((state) => actions.saveTableState(state)),
-      loadTableState: (currentPath) => set((state) => actions.loadTableState(state, currentPath)),
-      shouldClearTableState: (currentPath) => actions.shouldClearTableState(get(), currentPath),
-      clearTableState: () => set((state) => actions.clearTableState(state)),
-      loadTableStateForPath: (currentPath) => set((state) => actions.loadTableStateForPath(state, currentPath)),
+      saveTableState: () => {
+        const state = get();
+        const stateToSave = {
+          currentPage: state.tableState.currentPage,
+          pageSize: state.tableState.pageSize,
+          searchTerm: state.tableState.searchTerm,
+          sorting: state.tableState.sorting,
+          selectedId: state.tableState.selectedId,
+          expandedRows: state.tableState.expandedRows
+        };
+        localStorage.setItem('organizationTableState', JSON.stringify(stateToSave));
+      },
+      loadTableState: () => {
+        try {
+          const savedState = localStorage.getItem('organizationTableState');
+          if (savedState) {
+            const parsedState = JSON.parse(savedState);
+            set((state) => ({
+              ...state,
+              tableState: { ...state.tableState, ...parsedState }
+            }));
+          }
+        } catch (error) {
+          console.warn('Failed to load organization table state:', error);
+        }
+      },
+      shouldClearTableState: (currentPath) => !currentPath.startsWith('/organization'),
+      clearTableState: () => {
+        localStorage.removeItem('organizationTableState');
+        set((state) => ({
+          ...state,
+          tableState: {
+            currentPage: 0,
+            pageSize: 10,
+            searchTerm: '',
+            sorting: [],
+            selectedId: undefined,
+            expandedRows: []
+          }
+        }));
+      },
+      loadTableStateForPath: (currentPath) => {
+        const state = get();
+        if (!currentPath.startsWith('/organization')) {
+          state.clearTableState();
+        } else {
+          state.loadTableState(currentPath);
+        }
+      },
 
       // Async actions
       fetchItems: async () => {
         const state = get();
-        set((state) => actions.setLoadingList(state, true));
-        set((state) => actions.setListError(state, null));
+        set({ isLoadingList: true, listError: null });
 
         try {
           const { items, totalCount } = await mockApi.getOrganizations(
@@ -166,66 +326,76 @@ export const useOrganizationStore = create<OrganizationStore>()(
             state.tableState.searchTerm || undefined
           );
 
-          set((state) => actions.setItems(state, items));
-          set((state) => actions.setTotalCount(state, totalCount));
+          set({ items, totalCount });
         } catch (error) {
-          set((state) => actions.setListError(state, error instanceof Error ? error.message : 'Failed to fetch organizations'));
+          set({ listError: error instanceof Error ? error.message : 'Failed to fetch organizations' });
         } finally {
-          set((state) => actions.setLoadingList(state, false));
+          set({ isLoadingList: false });
         }
       },
 
       fetchItemDetails: async (id) => {
-        set((state) => actions.setLoadingDetails(state, true));
-        set((state) => actions.setDetailsError(state, null));
+        set({ isLoadingDetails: true, detailsError: null });
 
         try {
           const item = await mockApi.getOrganization(id);
-          set((state) => actions.setCurrentItem(state, item));
+          set({ currentItem: item });
         } catch (error) {
-          set((state) => actions.setDetailsError(state, error instanceof Error ? error.message : 'Failed to fetch organization details'));
+          set({ detailsError: error instanceof Error ? error.message : 'Failed to fetch organization details' });
         } finally {
-          set((state) => actions.setLoadingDetails(state, false));
+          set({ isLoadingDetails: false });
         }
       },
 
       // Table state update actions that trigger API calls
       handleSearch: async (searchTerm) => {
-        set((state) => actions.setSearchTerm(state, searchTerm));
-        set((state) => actions.setCurrentPage(state, 0));
+        set((state) => ({
+          ...state,
+          tableState: { ...state.tableState, searchTerm, currentPage: 0 }
+        }));
         await get().fetchItems();
       },
 
       clearSearch: async () => {
-        set((state) => actions.setSearchTerm(state, ''));
-        set((state) => actions.setCurrentPage(state, 0));
+        set((state) => ({
+          ...state,
+          tableState: { ...state.tableState, searchTerm: '', currentPage: 0 }
+        }));
         await get().fetchItems();
       },
 
       handleSortingChange: async (sorting) => {
-        set((state) => actions.setSorting(state, sorting));
+        set((state) => ({
+          ...state,
+          tableState: { ...state.tableState, sorting }
+        }));
         await get().fetchItems();
       },
 
       handlePageSizeChange: async (newPageSize) => {
-        set((state) => actions.setPageSize(state, newPageSize));
-        set((state) => actions.setCurrentPage(state, 0));
+        set((state) => ({
+          ...state,
+          tableState: { ...state.tableState, pageSize: newPageSize, currentPage: 0 }
+        }));
         await get().fetchItems();
       },
 
       handlePageChange: async (newPage) => {
-        set((state) => actions.setCurrentPage(state, newPage));
+        set((state) => ({
+          ...state,
+          tableState: { ...state.tableState, currentPage: newPage }
+        }));
         await get().fetchItems();
       },
 
       // Organization-specific actions
       createOrganization: async (organization) => {
         try {
-          const newOrg = await mockApi.createOrganization(organization);
+          await mockApi.createOrganization(organization);
           // Refresh the list to include the new organization
           await get().fetchItems();
         } catch (error) {
-          set((state) => actions.setListError(state, error instanceof Error ? error.message : 'Failed to create organization'));
+          set({ listError: error instanceof Error ? error.message : 'Failed to create organization' });
         }
       },
 
@@ -235,7 +405,7 @@ export const useOrganizationStore = create<OrganizationStore>()(
           // Refresh the list to reflect changes
           await get().fetchItems();
         } catch (error) {
-          set((state) => actions.setListError(state, error instanceof Error ? error.message : 'Failed to update organization'));
+          set({ listError: error instanceof Error ? error.message : 'Failed to update organization' });
         }
       },
 
@@ -245,7 +415,7 @@ export const useOrganizationStore = create<OrganizationStore>()(
           // Refresh the list to reflect changes
           await get().fetchItems();
         } catch (error) {
-          set((state) => actions.setListError(state, error instanceof Error ? error.message : 'Failed to delete organization'));
+          set({ listError: error instanceof Error ? error.message : 'Failed to delete organization' });
         }
       },
 
@@ -258,7 +428,7 @@ export const useOrganizationStore = create<OrganizationStore>()(
         await get().fetchItems();
       },
 
-      getChildOrganizations: async (parentId) => {
+      getChildOrganizations: async () => {
         // This would be a specific API call for child organizations
         await get().fetchItems();
       }
