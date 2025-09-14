@@ -5,7 +5,7 @@ import type {
   SidebarState,
   SidebarActions,
   SidebarData
-} from "../components/app-sidebar"
+} from "../components/sidebar-types"
 
 interface useAppSidebarHandleProps {
   initialData: SidebarData
@@ -113,13 +113,17 @@ export function useAppSidebarHandle({
     // Find active nav item by ID
     const activeNavItem = initialData.navMain.find(item => item.id === selection.activeNavItemId)
     if (activeNavItem) {
-      breadcrumbs.push({ title: activeNavItem.title, url: activeNavItem.url })
+      // Use path for internal routes, url for external routes
+      const itemUrl = activeNavItem.isExternal ? (activeNavItem as any).url : (activeNavItem as any).path
+      breadcrumbs.push({ title: activeNavItem.title, url: itemUrl || '#' })
 
       // Find active sub-item by ID
       if (selection.activeSubItemId) {
         const activeSubItem = activeNavItem.items.find(item => item.id === selection.activeSubItemId)
         if (activeSubItem) {
-          breadcrumbs.push({ title: activeSubItem.title, url: activeSubItem.url })
+          // Use path for internal routes, url for external routes
+          const subItemUrl = activeSubItem.isExternal ? (activeSubItem as any).url : (activeSubItem as any).path
+          breadcrumbs.push({ title: activeSubItem.title, url: subItemUrl || '#' })
         }
       }
     }
@@ -128,7 +132,9 @@ export function useAppSidebarHandle({
     if (selection.activeProjectId) {
       const activeProject = initialData.projects.find(project => project.id === selection.activeProjectId)
       if (activeProject) {
-        breadcrumbs.push({ title: activeProject.name, url: activeProject.url })
+        // Use path for internal routes, url for external routes
+        const projectUrl = activeProject.isExternal ? (activeProject as any).url : (activeProject as any).path
+        breadcrumbs.push({ title: activeProject.name, url: projectUrl || '#' })
       }
     }
 

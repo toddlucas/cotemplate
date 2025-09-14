@@ -6,6 +6,12 @@ export const userListHandle = {
   icon: 'users',
   path: '/identity/users',
 
+  // Custom breadcrumb configuration for this route
+  breadcrumbs: [
+    { title: 'Models', url: '/models' },
+    { title: 'Users', url: '/identity/users' }
+  ],
+
   // Sidebar configuration for this route
   sidebar: {
     // When this route is active, set these sidebar states

@@ -1,4 +1,5 @@
-import { Outlet, useMatches } from "react-router-dom"
+import { Fragment } from "react"
+import { Outlet } from "react-router-dom"
 import { AppSidebar } from "$/features/dashboard/components/app-sidebar"
 import { type SidebarHandle } from "$/features/dashboard/components/sidebar-types"
 import {
@@ -17,6 +18,7 @@ import {
 } from "$/components/ui/sidebar"
 import { useAppSidebarHandle } from '$/features/dashboard/hooks/use-sidebar-handle'
 import { AppSidebarProvider } from '$/features/dashboard/contexts/sidebar-context'
+import { useBreadcrumbs } from '$/features/dashboard/hooks/use-breadcrumbs'
 import { data } from '../constants/sidebar-data' // REVIEW: Why is this needed?
 
 export type DashboardLayoutHandle = {
@@ -24,22 +26,15 @@ export type DashboardLayoutHandle = {
 }
 
 export default function DashboardLayout() {
-  // const matches = useMatches();
-  // // Get the active sidebar handle from the current route
-  // // This can be used to customize sidebar behavior per route
-  // const activeSidebar = [...matches].reverse().find(m =>
-  //   m.handle && typeof m.handle === 'object' && 'sidebar' in m.handle
-  // )?.handle as DashboardLayoutHandle | undefined;
-
-  // TODO: Use activeSidebar to customize sidebar behavior
-  // For example: activeSidebar?.sidebar.actions.onNavItemSelect(...)
+  // Get breadcrumbs for the current route
+  const breadcrumbs = useBreadcrumbs({ data })
 
   // The layout creates the sidebar handle instance
   const sidebarHandle = useAppSidebarHandle({
     initialData: data,
     initialSelection: {
       activeTeamId: "acme-inc",
-      activeNavItemId: "models", // This would be set based on current route
+      activeNavItemId: "models",
       expandedItems: ["models"]
     }
   })
@@ -58,15 +53,24 @@ export default function DashboardLayout() {
               />
               <Breadcrumb>
                 <BreadcrumbList>
-                  <BreadcrumbItem className="hidden md:block">
-                    <BreadcrumbLink href="#">
-                      Building Your Application
-                    </BreadcrumbLink>
-                  </BreadcrumbItem>
-                  <BreadcrumbSeparator className="hidden md:block" />
-                  <BreadcrumbItem>
-                    <BreadcrumbPage>Data Fetching</BreadcrumbPage>
-                  </BreadcrumbItem>
+                  {breadcrumbs.map((breadcrumb: any, index: number) => (
+                    <Fragment key={index}>
+                      {index > 0 && <BreadcrumbSeparator className="hidden md:block" />}
+                      <BreadcrumbItem className={index === 0 ? "hidden md:block" : ""}>
+                        {breadcrumb.url && index < breadcrumbs.length - 1 ? (
+                          <BreadcrumbLink
+                            href={breadcrumb.url}
+                            target={breadcrumb.target}
+                            rel={breadcrumb.isExternal ? "noopener noreferrer" : undefined}
+                          >
+                            {breadcrumb.title}
+                          </BreadcrumbLink>
+                        ) : (
+                          <BreadcrumbPage>{breadcrumb.title}</BreadcrumbPage>
+                        )}
+                      </BreadcrumbItem>
+                    </Fragment>
+                  ))}
                 </BreadcrumbList>
               </Breadcrumb>
             </div>
