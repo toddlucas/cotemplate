@@ -1,6 +1,5 @@
 import { useLocation } from 'react-router-dom'
-import { useAppSidebarHandle } from '$/features/dashboard/hooks/use-sidebar-handle'
-import type { SidebarData } from '../components/sidebar-types'
+import type { SidebarData, SidebarSelection } from '../components/sidebar-types'
 
 export interface BreadcrumbItem {
   title: string
@@ -16,13 +15,66 @@ export interface RouteBreadcrumbHandle {
 
 interface UseBreadcrumbsProps {
   data: SidebarData
+  selection?: Partial<SidebarSelection>
 }
 
-export function useBreadcrumbs({ data }: UseBreadcrumbsProps) {
+// Pure function to generate breadcrumbs from data + selection
+export function generateBreadcrumbsFromSelection(data: SidebarData, selection: Partial<SidebarSelection>): BreadcrumbItem[] {
+  const breadcrumbs: BreadcrumbItem[] = []
+
+  // Find active nav item by ID
+  if (selection.activeNavItemId) {
+    const activeNavItem = data.navMain.find(item => item.id === selection.activeNavItemId)
+    if (activeNavItem) {
+      // Use path for internal routes, url for external routes
+      const itemUrl = activeNavItem.isExternal ? (activeNavItem as any).url : (activeNavItem as any).path
+      breadcrumbs.push({
+        title: activeNavItem.title,
+        url: itemUrl || '#',
+        isExternal: activeNavItem.isExternal
+      })
+
+      // Find active sub-item by ID
+      if (selection.activeSubItemId) {
+        const activeSubItem = activeNavItem.items.find(item => item.id === selection.activeSubItemId)
+        if (activeSubItem) {
+          const subItemUrl = activeSubItem.isExternal ? (activeSubItem as any).url : (activeSubItem as any).path
+          breadcrumbs.push({
+            title: activeSubItem.title,
+            url: subItemUrl || '#',
+            isExternal: activeSubItem.isExternal
+          })
+        }
+      }
+    }
+  }
+
+  // Find active project by ID
+  if (selection.activeProjectId) {
+    const activeProject = data.projects.find(project => project.id === selection.activeProjectId)
+    if (activeProject) {
+      const projectUrl = activeProject.isExternal ? (activeProject as any).url : (activeProject as any).path
+      breadcrumbs.push({
+        title: activeProject.name,
+        url: projectUrl || '#',
+        isExternal: activeProject.isExternal
+      })
+    }
+  }
+
+  return breadcrumbs
+}
+
+export function useBreadcrumbs({ data, selection }: UseBreadcrumbsProps) {
   const location = useLocation()
   const currentPathname = location.pathname
 
-  // For dashboard routes, use the sidebar-based breadcrumbs
+  // If selection is provided, use it for breadcrumb generation
+  if (selection?.activeNavItemId) {
+    return generateBreadcrumbsFromSelection(data, selection)
+  }
+
+  // Fallback to path-based detection for dashboard routes
   const isDashboardRoute = currentPathname.startsWith('/dashboard') ||
     currentPathname.startsWith('/identity') ||
     currentPathname.startsWith('/models') ||
@@ -48,24 +100,13 @@ export function useBreadcrumbs({ data }: UseBreadcrumbsProps) {
       activeNavItemId = "dashboard"
     }
 
-    const sidebarHandle = useAppSidebarHandle({
-      initialData: data,
-      initialSelection: {
-        activeTeamId: "acme-inc",
-        activeNavItemId,
-        activeSubItemId,
-        expandedItems: [activeNavItemId]
-      }
+    // Use the pure function with path-derived selection
+    return generateBreadcrumbsFromSelection(data, {
+      activeTeamId: "acme-inc",
+      activeNavItemId,
+      activeSubItemId,
+      expandedItems: [activeNavItemId]
     })
-
-    const sidebarBreadcrumbs = sidebarHandle.getActiveBreadcrumbs()
-
-    // Convert sidebar breadcrumbs to our format
-    return sidebarBreadcrumbs.map((bc: any) => ({
-      title: bc.title,
-      url: bc.url,
-      isExternal: false
-    }))
   }
 
   // For other routes, generate breadcrumbs from the path

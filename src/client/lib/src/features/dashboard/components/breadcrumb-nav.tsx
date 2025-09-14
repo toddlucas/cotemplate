@@ -9,15 +9,16 @@ import {
   BreadcrumbSeparator,
 } from "$/components/ui/breadcrumb"
 import { useBreadcrumbs, type BreadcrumbItem as BreadcrumbItemType } from "../hooks/use-breadcrumbs"
-import type { SidebarData } from "./sidebar-types"
+import type { SidebarData, SidebarSelection } from "./sidebar-types"
 
 interface BreadcrumbNavProps {
   data: SidebarData
   className?: string
+  selection?: Partial<SidebarSelection>
 }
 
-export function BreadcrumbNav({ data, className }: BreadcrumbNavProps) {
-  const breadcrumbs = useBreadcrumbs({ data })
+export function BreadcrumbNav({ data, className, selection }: BreadcrumbNavProps) {
+  const breadcrumbs = useBreadcrumbs({ data, selection })
 
   if (breadcrumbs.length === 0) {
     return null

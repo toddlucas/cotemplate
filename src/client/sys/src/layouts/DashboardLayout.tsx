@@ -39,7 +39,10 @@ export default function DashboardLayout() {
                 orientation="vertical"
                 className="mr-2 data-[orientation=vertical]:h-4"
               />
-              <BreadcrumbNav data={data} />
+              <BreadcrumbNav
+                data={data}
+                selection={sidebarHandle.selection}
+              />
             </div>
           </header>
           <div className="p-4 pt-0">

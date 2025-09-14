@@ -6,6 +6,7 @@ import type {
   SidebarActions,
   SidebarData
 } from "../components/sidebar-types"
+import { generateBreadcrumbsFromSelection } from "./use-breadcrumbs"
 
 interface useAppSidebarHandleProps {
   initialData: SidebarData
@@ -108,37 +109,14 @@ export function useAppSidebarHandle({
   }, [selection])
 
   const getActiveBreadcrumbs = useCallback(() => {
-    const breadcrumbs: Array<{ title: string; url: string }> = []
+    // Use the shared breadcrumb generation function
+    const breadcrumbItems = generateBreadcrumbsFromSelection(initialData, selection)
 
-    // Find active nav item by ID
-    const activeNavItem = initialData.navMain.find(item => item.id === selection.activeNavItemId)
-    if (activeNavItem) {
-      // Use path for internal routes, url for external routes
-      const itemUrl = activeNavItem.isExternal ? (activeNavItem as any).url : (activeNavItem as any).path
-      breadcrumbs.push({ title: activeNavItem.title, url: itemUrl || '#' })
-
-      // Find active sub-item by ID
-      if (selection.activeSubItemId) {
-        const activeSubItem = activeNavItem.items.find(item => item.id === selection.activeSubItemId)
-        if (activeSubItem) {
-          // Use path for internal routes, url for external routes
-          const subItemUrl = activeSubItem.isExternal ? (activeSubItem as any).url : (activeSubItem as any).path
-          breadcrumbs.push({ title: activeSubItem.title, url: subItemUrl || '#' })
-        }
-      }
-    }
-
-    // Find active project by ID
-    if (selection.activeProjectId) {
-      const activeProject = initialData.projects.find(project => project.id === selection.activeProjectId)
-      if (activeProject) {
-        // Use path for internal routes, url for external routes
-        const projectUrl = activeProject.isExternal ? (activeProject as any).url : (activeProject as any).path
-        breadcrumbs.push({ title: activeProject.name, url: projectUrl || '#' })
-      }
-    }
-
-    return breadcrumbs
+    // Convert to the format expected by the sidebar handle
+    return breadcrumbItems.map(item => ({
+      title: item.title,
+      url: item.url || '#'
+    }))
   }, [selection, initialData])
 
   return {
