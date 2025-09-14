@@ -154,25 +154,71 @@ public class Entity : EntityModel, ITemporal
             .HasIndex(b => new { b.TenantId, b.StatusId});
 
         // Seed data (optional)
-        var createdAt = new DateTime(2024, 12, 1, 0, 0, 0, DateTimeKind.Utc);
-        modelBuilder.Entity<TRecord>().HasData(new TRecord
-        {
-            Id = 1,
+        var createdAt1 = new DateTime(2024, 1, 15, 0, 0, 0, DateTimeKind.Utc);
+        var createdAt2 = new DateTime(2024, 1, 20, 0, 0, 0, DateTimeKind.Utc);
+        var createdAt3 = new DateTime(2024, 3, 25, 0, 0, 0, DateTimeKind.Utc);
+        var updatedAt1 = new DateTime(2024, 12, 19, 0, 0, 0, DateTimeKind.Utc);
+        var updatedAt2 = new DateTime(2024, 12, 19, 0, 0, 0, DateTimeKind.Utc);
+        var updatedAt3 = new DateTime(2024, 12, 15, 0, 0, 0, DateTimeKind.Utc);
+
+        modelBuilder.Entity<TRecord>().HasData(
+            new TRecord
+            {
+                Id = 1,
 #if RESELLER
-            GroupId = IdentitySeedData.GroupId,
+                GroupId = IdentitySeedData.GroupId,
 #endif
-            TenantId = IdentitySeedData.TenantId,
-            OrgId = 1,
-            Name = "Sample LLC",
-            LegalName = "Sample LLC",
-            EntityTypeId = nameof(EntityType.llc),
-            FormationDate = new DateTime(2024, 1, 1, 0, 0, 0, DateTimeKind.Utc),
-            JurisdictionCountry = "US",
-            JurisdictionRegion = "US-CA",
-            OwnershipModelId = nameof(OwnershipModel.member_managed),
-            StatusId = nameof(EntityStatus.active),
-            CreatedAt = createdAt,
-            UpdatedAt = createdAt
-        });
+                TenantId = IdentitySeedData.TenantId,
+                OrgId = 1,
+                Name = "Acme Corp LLC",
+                LegalName = "Acme Corporation LLC",
+                EntityTypeId = nameof(EntityType.llc),
+                FormationDate = new DateTime(2024, 1, 1, 0, 0, 0, DateTimeKind.Utc),
+                JurisdictionCountry = "US",
+                JurisdictionRegion = "US-DE",
+                OwnershipModelId = nameof(OwnershipModel.member_managed),
+                StatusId = nameof(EntityStatus.active),
+                CreatedAt = createdAt1,
+                UpdatedAt = updatedAt1
+            },
+            new TRecord
+            {
+                Id = 2,
+#if RESELLER
+                GroupId = IdentitySeedData.GroupId,
+#endif
+                TenantId = IdentitySeedData.TenantId,
+                OrgId = 1,
+                Name = "Acme Holdings Inc",
+                LegalName = "Acme Holdings Incorporated",
+                EntityTypeId = nameof(EntityType.c_corp),
+                FormationDate = new DateTime(2024, 1, 5, 0, 0, 0, DateTimeKind.Utc),
+                JurisdictionCountry = "US",
+                JurisdictionRegion = "US-DE",
+                OwnershipModelId = nameof(OwnershipModel.board_managed),
+                StatusId = nameof(EntityStatus.active),
+                CreatedAt = createdAt2,
+                UpdatedAt = updatedAt2
+            },
+            new TRecord
+            {
+                Id = 3,
+#if RESELLER
+                GroupId = IdentitySeedData.GroupId,
+#endif
+                TenantId = IdentitySeedData.TenantId,
+                OrgId = 2,
+                Name = "Acme Sub LLC",
+                LegalName = "Acme Subsidiary LLC",
+                EntityTypeId = nameof(EntityType.llc),
+                FormationDate = new DateTime(2024, 3, 1, 0, 0, 0, DateTimeKind.Utc),
+                JurisdictionCountry = "US",
+                JurisdictionRegion = "US-CA",
+                OwnershipModelId = nameof(OwnershipModel.member_managed),
+                StatusId = nameof(EntityStatus.active),
+                CreatedAt = createdAt3,
+                UpdatedAt = updatedAt3
+            }
+        );
     }
 }

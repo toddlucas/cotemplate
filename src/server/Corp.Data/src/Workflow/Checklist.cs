@@ -167,22 +167,26 @@ public class Checklist : ChecklistModel, ITemporal
             .HasIndex(b => new { b.TenantId, b.PersonId });
 
         // Seed data (optional)
-        var createdAt = new DateTime(2024, 12, 1, 0, 0, 0, DateTimeKind.Utc);
-        modelBuilder.Entity<TRecord>().HasData(new TRecord
-        {
-            Id = 1,
+        var createdAt1 = new DateTime(2024, 1, 15, 0, 0, 0, DateTimeKind.Utc);
+        var updatedAt1 = new DateTime(2024, 12, 19, 0, 0, 0, DateTimeKind.Utc);
+
+        modelBuilder.Entity<TRecord>().HasData(
+            new TRecord
+            {
+                Id = 1,
 #if RESELLER
-            GroupId = IdentitySeedData.GroupId,
+                GroupId = IdentitySeedData.GroupId,
 #endif
-            TenantId = IdentitySeedData.TenantId,
-            OrgId = 1,
-            EntityId = 1,
-            TemplateId = 1,
-            Name = "Sample Checklist",
-            StatusId = nameof(ChecklistStatus.active),
-            CreatedFromId = nameof(SourceType.system),
-            CreatedAt = createdAt,
-            UpdatedAt = createdAt
-        });
+                TenantId = IdentitySeedData.TenantId,
+                OrgId = 1,
+                EntityId = 1,
+                TemplateId = 1,
+                Name = "Compliance Checklist",
+                StatusId = nameof(ChecklistStatus.active),
+                CreatedFromId = nameof(SourceType.system),
+                CreatedAt = createdAt1,
+                UpdatedAt = updatedAt1
+            }
+        );
     }
 }

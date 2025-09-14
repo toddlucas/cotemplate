@@ -112,19 +112,59 @@ public class Organization : OrganizationModel, ITemporal
             .HasFilter("code IS NOT NULL");
 
         // Seed data (optional)
-        var createdAt = new DateTime(2024, 12, 1, 0, 0, 0, DateTimeKind.Utc);
-        modelBuilder.Entity<TRecord>().HasData(new TRecord
-        {
-            Id = 1,
+        var createdAt1 = new DateTime(2024, 1, 15, 0, 0, 0, DateTimeKind.Utc);
+        var createdAt2 = new DateTime(2024, 3, 20, 0, 0, 0, DateTimeKind.Utc);
+        var createdAt3 = new DateTime(2024, 2, 10, 0, 0, 0, DateTimeKind.Utc);
+        var updatedAt1 = new DateTime(2024, 12, 19, 0, 0, 0, DateTimeKind.Utc);
+        var updatedAt2 = new DateTime(2024, 12, 15, 0, 0, 0, DateTimeKind.Utc);
+        var updatedAt3 = new DateTime(2024, 11, 30, 0, 0, 0, DateTimeKind.Utc);
+
+        modelBuilder.Entity<TRecord>().HasData(
+            new TRecord
+            {
+                Id = 1,
 #if RESELLER
-            GroupId = IdentitySeedData.GroupId,
+                GroupId = IdentitySeedData.GroupId,
 #endif
-            TenantId = IdentitySeedData.TenantId,
-            Name = "Sample Organization",
-            Code = "SAMPLE",
-            Status = "active",
-            CreatedAt = createdAt,
-            UpdatedAt = createdAt
-        });
+                TenantId = IdentitySeedData.TenantId,
+                Name = "Acme Corporation",
+                Code = "ACME",
+                ParentOrgId = null,
+                Status = "active",
+                Metadata = "Primary organization",
+                CreatedAt = createdAt1,
+                UpdatedAt = updatedAt1
+            },
+            new TRecord
+            {
+                Id = 2,
+#if RESELLER
+                GroupId = IdentitySeedData.GroupId,
+#endif
+                TenantId = IdentitySeedData.TenantId,
+                Name = "Acme Subsidiary",
+                Code = "ACME-SUB",
+                ParentOrgId = 1,
+                Status = "active",
+                Metadata = "Subsidiary organization",
+                CreatedAt = createdAt2,
+                UpdatedAt = updatedAt2
+            },
+            new TRecord
+            {
+                Id = 3,
+#if RESELLER
+                GroupId = IdentitySeedData.GroupId,
+#endif
+                TenantId = IdentitySeedData.TenantId,
+                Name = "Beta Industries",
+                Code = "BETA",
+                ParentOrgId = null,
+                Status = "inactive",
+                Metadata = "Secondary organization",
+                CreatedAt = createdAt3,
+                UpdatedAt = updatedAt3
+            }
+        );
     }
 }

@@ -189,23 +189,66 @@ public class TaskRecord : TaskModel, ITemporal
             .HasIndex(b => new { b.TenantId, b.AssigneePersonId });
 
         // Seed data (optional)
-        var createdAt = new DateTime(2024, 12, 1, 0, 0, 0, DateTimeKind.Utc);
-        modelBuilder.Entity<TRecord>().HasData(new TRecord
-        {
-            Id = 1,
+        var createdAt1 = new DateTime(2024, 1, 15, 0, 0, 0, DateTimeKind.Utc);
+        var createdAt2 = new DateTime(2024, 1, 20, 0, 0, 0, DateTimeKind.Utc);
+        var createdAt3 = new DateTime(2024, 3, 25, 0, 0, 0, DateTimeKind.Utc);
+        var updatedAt1 = new DateTime(2024, 12, 19, 0, 0, 0, DateTimeKind.Utc);
+        var updatedAt2 = new DateTime(2024, 12, 19, 0, 0, 0, DateTimeKind.Utc);
+        var updatedAt3 = new DateTime(2024, 12, 15, 0, 0, 0, DateTimeKind.Utc);
+
+        modelBuilder.Entity<TRecord>().HasData(
+            new TRecord
+            {
+                Id = 1,
 #if RESELLER
-            GroupId = IdentitySeedData.GroupId,
+                GroupId = IdentitySeedData.GroupId,
 #endif
-            TenantId = IdentitySeedData.TenantId,
-            OrgId = 1,
-            EntityId = 1,
-            Name = "Sample Task",
-            StatusId = "todo",
-            PriorityId = nameof(Priority.normal),
-            AssigneePersonId = 1,
-            DueAt = createdAt.AddDays(30),
-            CreatedAt = createdAt,
-            UpdatedAt = createdAt
-        });
+                TenantId = IdentitySeedData.TenantId,
+                OrgId = 1,
+                EntityId = 1,
+                Name = "Annual Review",
+                StatusId = nameof(TaskStatus.todo),
+                PriorityId = nameof(Priority.normal),
+                AssigneePersonId = 1,
+                DueAt = createdAt1.AddDays(30),
+                CreatedAt = createdAt1,
+                UpdatedAt = updatedAt1
+            },
+            new TRecord
+            {
+                Id = 2,
+#if RESELLER
+                GroupId = IdentitySeedData.GroupId,
+#endif
+                TenantId = IdentitySeedData.TenantId,
+                OrgId = 1,
+                EntityId = 2,
+                Name = "Budget Planning",
+                StatusId = nameof(TaskStatus.done),
+                PriorityId = nameof(Priority.high),
+                AssigneePersonId = 2,
+                DueAt = createdAt2.AddDays(15),
+                CompletedAt = createdAt2.AddDays(10),
+                CreatedAt = createdAt2,
+                UpdatedAt = updatedAt2
+            },
+            new TRecord
+            {
+                Id = 3,
+#if RESELLER
+                GroupId = IdentitySeedData.GroupId,
+#endif
+                TenantId = IdentitySeedData.TenantId,
+                OrgId = 2,
+                EntityId = 3,
+                Name = "Q4 Report",
+                StatusId = nameof(TaskStatus.todo),
+                PriorityId = nameof(Priority.normal),
+                AssigneePersonId = 3,
+                DueAt = createdAt3.AddDays(45),
+                CreatedAt = createdAt3,
+                UpdatedAt = updatedAt3
+            }
+        );
     }
 }
