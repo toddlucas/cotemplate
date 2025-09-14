@@ -6,6 +6,7 @@ import { OrganizationMemberRole } from '$/models/access';
 import { EntityType, EntityStatus } from '$/models/business';
 import { TaskStatus } from '$/models/workflow/task-status';
 import { ChecklistStatus } from '$/models/workflow/checklist-status';
+import * as organizationApi from '../api/organizationApi';
 
 // Mock API functions - replace with actual API calls
 const mockOrganizations: OrganizationModel[] = [
@@ -101,61 +102,101 @@ const mockOrganizationDetails: Record<number, OrganizationDetailModel> = {
   }
 };
 
+// For now, we'll use mock data but with real API structure
+// This will be replaced when the server endpoints are ready
+const useMockData = true;
+
 const mockApi = {
-  async getOrganizations(page: number = 0, pageSize: number = 10, search?: string): Promise<{ items: OrganizationModel[], totalCount: number }> {
-    // Simulate API delay
-    await new Promise(resolve => setTimeout(resolve, 500));
+  async getOrganizations(page: number = 0, pageSize: number = 10, search?: string, sorting?: Array<{ id: string; desc: boolean }>): Promise<{ items: OrganizationModel[], totalCount: number }> {
+    if (useMockData) {
+      // Simulate API delay
+      await new Promise(resolve => setTimeout(resolve, 500));
 
-    let filtered = mockOrganizations;
+      let filtered = mockOrganizations;
 
-    if (search) {
-      const searchLower = search.toLowerCase();
-      filtered = mockOrganizations.filter(org =>
-        org.name.toLowerCase().includes(searchLower) ||
-        org.code?.toLowerCase().includes(searchLower) ||
-        org.status?.toLowerCase().includes(searchLower)
-      );
+      if (search) {
+        const searchLower = search.toLowerCase();
+        filtered = mockOrganizations.filter(org =>
+          org.name.toLowerCase().includes(searchLower) ||
+          org.code?.toLowerCase().includes(searchLower) ||
+          org.status?.toLowerCase().includes(searchLower)
+        );
+      }
+
+      // Apply sorting if provided
+      if (sorting && sorting.length > 0) {
+        const sort = sorting[0];
+        filtered.sort((a, b) => {
+          const aValue = a[sort.id as keyof OrganizationModel];
+          const bValue = b[sort.id as keyof OrganizationModel];
+
+          if (aValue === bValue) return 0;
+          if (aValue == null) return 1;
+          if (bValue == null) return -1;
+
+          const comparison = aValue < bValue ? -1 : 1;
+          return sort.desc ? -comparison : comparison;
+        });
+      }
+
+      const start = page * pageSize;
+      const end = start + pageSize;
+      const items = filtered.slice(start, end);
+
+      return {
+        items,
+        totalCount: filtered.length
+      };
+    } else {
+      return await organizationApi.fetchOrganizations(page, pageSize, search, sorting);
     }
-
-    const start = page * pageSize;
-    const end = start + pageSize;
-    const items = filtered.slice(start, end);
-
-    return {
-      items,
-      totalCount: filtered.length
-    };
   },
 
   async getOrganization(id: number): Promise<OrganizationDetailModel | null> {
-    await new Promise(resolve => setTimeout(resolve, 300));
-    return mockOrganizationDetails[id] || null;
+    if (useMockData) {
+      await new Promise(resolve => setTimeout(resolve, 300));
+      return mockOrganizationDetails[id] || null;
+    } else {
+      return await organizationApi.fetchOrganizationDetails(id);
+    }
   },
 
   async createOrganization(organization: Omit<OrganizationModel, 'id'>): Promise<OrganizationModel> {
-    await new Promise(resolve => setTimeout(resolve, 500));
-    const newOrg: OrganizationModel = {
-      ...organization,
-      id: Math.max(...mockOrganizations.map(o => o.id)) + 1
-    };
-    mockOrganizations.push(newOrg);
-    return newOrg;
+    if (useMockData) {
+      await new Promise(resolve => setTimeout(resolve, 500));
+      const newOrg: OrganizationModel = {
+        ...organization,
+        id: Math.max(...mockOrganizations.map(o => o.id)) + 1
+      };
+      mockOrganizations.push(newOrg);
+      return newOrg;
+    } else {
+      return await organizationApi.createOrganization(organization);
+    }
   },
 
   async updateOrganization(organization: OrganizationModel): Promise<OrganizationModel> {
-    await new Promise(resolve => setTimeout(resolve, 500));
-    const index = mockOrganizations.findIndex(org => org.id === organization.id);
-    if (index !== -1) {
-      mockOrganizations[index] = organization;
+    if (useMockData) {
+      await new Promise(resolve => setTimeout(resolve, 500));
+      const index = mockOrganizations.findIndex(org => org.id === organization.id);
+      if (index !== -1) {
+        mockOrganizations[index] = organization;
+      }
+      return organization;
+    } else {
+      return await organizationApi.updateOrganization(organization);
     }
-    return organization;
   },
 
   async deleteOrganization(id: number): Promise<void> {
-    await new Promise(resolve => setTimeout(resolve, 500));
-    const index = mockOrganizations.findIndex(org => org.id === id);
-    if (index !== -1) {
-      mockOrganizations.splice(index, 1);
+    if (useMockData) {
+      await new Promise(resolve => setTimeout(resolve, 500));
+      const index = mockOrganizations.findIndex(org => org.id === id);
+      if (index !== -1) {
+        mockOrganizations.splice(index, 1);
+      }
+    } else {
+      await organizationApi.deleteOrganization(id);
     }
   }
 };
@@ -323,7 +364,8 @@ export const useOrganizationStore = create<OrganizationStore>()(
           const { items, totalCount } = await mockApi.getOrganizations(
             state.tableState.currentPage,
             state.tableState.pageSize,
-            state.tableState.searchTerm || undefined
+            state.tableState.searchTerm || undefined,
+            state.tableState.sorting
           );
 
           set({ items, totalCount });
