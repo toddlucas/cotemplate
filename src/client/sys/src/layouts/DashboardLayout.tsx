@@ -1,15 +1,7 @@
-import { Fragment } from "react"
 import { Outlet } from "react-router-dom"
 import { AppSidebar } from "$/features/dashboard/components/app-sidebar"
 import { type SidebarHandle } from "$/features/dashboard/components/sidebar-types"
-import {
-  Breadcrumb,
-  BreadcrumbItem,
-  BreadcrumbLink,
-  BreadcrumbList,
-  BreadcrumbPage,
-  BreadcrumbSeparator,
-} from "$/components/ui/breadcrumb"
+import { BreadcrumbNav } from "$/features/dashboard/components/breadcrumb-nav"
 import { Separator } from "$/components/ui/separator"
 import {
   SidebarInset,
@@ -18,7 +10,6 @@ import {
 } from "$/components/ui/sidebar"
 import { useAppSidebarHandle } from '$/features/dashboard/hooks/use-sidebar-handle'
 import { AppSidebarProvider } from '$/features/dashboard/contexts/sidebar-context'
-import { useBreadcrumbs } from '$/features/dashboard/hooks/use-breadcrumbs'
 import { data } from '../constants/sidebar-data' // REVIEW: Why is this needed?
 
 export type DashboardLayoutHandle = {
@@ -26,9 +17,6 @@ export type DashboardLayoutHandle = {
 }
 
 export default function DashboardLayout() {
-  // Get breadcrumbs for the current route
-  const breadcrumbs = useBreadcrumbs({ data })
-
   // The layout creates the sidebar handle instance
   const sidebarHandle = useAppSidebarHandle({
     initialData: data,
@@ -51,28 +39,7 @@ export default function DashboardLayout() {
                 orientation="vertical"
                 className="mr-2 data-[orientation=vertical]:h-4"
               />
-              <Breadcrumb>
-                <BreadcrumbList>
-                  {breadcrumbs.map((breadcrumb: any, index: number) => (
-                    <Fragment key={index}>
-                      {index > 0 && <BreadcrumbSeparator className="hidden md:block" />}
-                      <BreadcrumbItem className={index === 0 ? "hidden md:block" : ""}>
-                        {breadcrumb.url && index < breadcrumbs.length - 1 ? (
-                          <BreadcrumbLink
-                            href={breadcrumb.url}
-                            target={breadcrumb.target}
-                            rel={breadcrumb.isExternal ? "noopener noreferrer" : undefined}
-                          >
-                            {breadcrumb.title}
-                          </BreadcrumbLink>
-                        ) : (
-                          <BreadcrumbPage>{breadcrumb.title}</BreadcrumbPage>
-                        )}
-                      </BreadcrumbItem>
-                    </Fragment>
-                  ))}
-                </BreadcrumbList>
-              </Breadcrumb>
+              <BreadcrumbNav data={data} />
             </div>
           </header>
           <div className="p-4 pt-0">
