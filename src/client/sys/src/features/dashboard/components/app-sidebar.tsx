@@ -79,7 +79,8 @@ export type SidebarNavMainItem = BaseSidebarItem & {
   icon: LucideIcon
   isActive?: boolean
   items: SidebarNavItem[]
-} & (InternalRoute | ExternalRoute)
+  expandOnly?: boolean  // If true, item only expands/collapses, doesn't navigate or become active
+} & (InternalRoute | ExternalRoute | { expandOnly: true })
 
 // Project with base types
 export type SidebarProject = BaseSidebarItem & {
@@ -290,6 +291,29 @@ const data: SidebarData = {
         },
       ],
     },
+    {
+      id: "tools",
+      title: "Tools",
+      icon: Command,
+      expandOnly: true,  // This item only expands/collapses, doesn't navigate
+      items: [
+        {
+          id: "calculator",
+          title: "Calculator",
+          path: "/tools/calculator",
+        },
+        {
+          id: "converter",
+          title: "Unit Converter",
+          path: "/tools/converter",
+        },
+        {
+          id: "generator",
+          title: "Code Generator",
+          path: "/tools/generator",
+        },
+      ],
+    },
   ],
   projects: [
     {
@@ -351,6 +375,10 @@ export function isExternalItem<T extends BaseSidebarItem>(item: T): item is T & 
 
 export function isInternalItem<T extends BaseSidebarItem>(item: T): item is T & InternalRoute {
   return !item.isExternal
+}
+
+export function isExpandOnlyItem<T extends BaseSidebarItem & { expandOnly?: boolean }>(item: T): item is T & { expandOnly: true } {
+  return item.expandOnly === true
 }
 
 export { data }

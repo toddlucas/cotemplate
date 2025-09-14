@@ -18,7 +18,7 @@ import {
 } from "$/components/ui/sidebar"
 import { useAppSidebar } from "../contexts/sidebar-context"
 import type { SidebarNavMainItem } from "./app-sidebar"
-import { isExternalItem } from "./app-sidebar"
+import { isExternalItem, isExpandOnlyItem } from "./app-sidebar"
 
 export function NavMain({
   items,
@@ -32,7 +32,8 @@ export function NavMain({
       <SidebarMenu>
         {items.map((item) => {
           const isExpanded = sidebarHandle.isItemExpanded(item.id)
-          const isActive = sidebarHandle.isItemActive(item.id)
+          const isExpandOnly = isExpandOnlyItem(item)
+          const isActive = isExpandOnly ? false : sidebarHandle.isItemActive(item.id)
 
           return (
             <Collapsible
@@ -46,7 +47,11 @@ export function NavMain({
                 <CollapsibleTrigger asChild>
                   <SidebarMenuButton
                     tooltip={item.title}
-                    onClick={() => sidebarHandle.actions.onNavItemSelect(item.id)}
+                    onClick={() => {
+                      if (!isExpandOnly) {
+                        sidebarHandle.actions.onNavItemSelect(item.id)
+                      }
+                    }}
                     isActive={isActive}
                   >
                     {item.icon && <item.icon />}
