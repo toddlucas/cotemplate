@@ -51,7 +51,7 @@ public class Document : DocumentModel, ITemporal
     /// <summary>
     /// The extracted fields from this document.
     /// </summary>
-    public ExtractedField[] ExtractedFields { get; set; } = [];
+    public ICollection<ExtractedField> ExtractedFields { get; set; } = new List<ExtractedField>();
 
     /// <summary>
     /// The document category enumeration.

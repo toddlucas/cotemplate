@@ -49,17 +49,17 @@ public class Entity : EntityModel, ITemporal
     /// <summary>
     /// The entity roles.
     /// </summary>
-    public EntityRole[] Roles { get; set; } = [];
+    public ICollection<EntityRole> Roles { get; set; } = new List<EntityRole>();
 
     /// <summary>
     /// The parent entity relationships.
     /// </summary>
-    public EntityRelationship[] ParentRelationships { get; set; } = [];
+    public ICollection<EntityRelationship> ParentRelationships { get; set; } = new List<EntityRelationship>();
 
     /// <summary>
     /// The child entity relationships.
     /// </summary>
-    public EntityRelationship[] ChildRelationships { get; set; } = [];
+    public ICollection<EntityRelationship> ChildRelationships { get; set; } = new List<EntityRelationship>();
 
     #endregion Navigation properties
 

@@ -20,7 +20,7 @@ public class Person : PersonModel, ITemporal
     /// <summary>
     /// The organization memberships.
     /// </summary>
-    public OrganizationMember[] OrganizationMemberships { get; set; } = [];
+    public ICollection<OrganizationMember> OrganizationMemberships { get; set; } = new List<OrganizationMember>();
 
     #endregion Navigation properties
 

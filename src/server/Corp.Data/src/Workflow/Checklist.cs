@@ -52,7 +52,7 @@ public class Checklist : ChecklistModel, ITemporal
     /// <summary>
     /// The tasks in this checklist.
     /// </summary>
-    public TaskRecord[] Tasks { get; set; } = [];
+    public ICollection<TaskRecord> Tasks { get; set; } = new List<TaskRecord>();
 
     /// <summary>
     /// The checklist status enumeration.

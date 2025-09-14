@@ -22,7 +22,7 @@ public class ChecklistTemplate : ChecklistTemplateModel, ITemporal
     /// <summary>
     /// The task templates in this checklist template.
     /// </summary>
-    public TaskTemplate[] TaskTemplates { get; set; } = [];
+    public ICollection<TaskTemplate> TaskTemplates { get; set; } = new List<TaskTemplate>();
 
     /// <summary>
     /// The checklist scope enumeration.

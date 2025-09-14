@@ -31,12 +31,12 @@ public class Organization : OrganizationModel, ITemporal
     /// <summary>
     /// The organization members.
     /// </summary>
-    public OrganizationMember[] Members { get; set; } = [];
+    public ICollection<OrganizationMember> Members { get; set; } = new List<OrganizationMember>();
 
     /// <summary>
     /// The child organizations.
     /// </summary>
-    public Organization[] ChildOrganizations { get; set; } = [];
+    public ICollection<Organization> ChildOrganizations { get; set; } = new List<Organization>();
 
     /// <summary>
     /// The parent organization.

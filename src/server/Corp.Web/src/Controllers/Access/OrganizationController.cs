@@ -1,4 +1,4 @@
-using Microsoft.AspNetCore.Authorization;
+﻿using Microsoft.AspNetCore.Authorization;
 
 using Corp.Access;
 using Corp.Pagination;
@@ -75,7 +75,7 @@ public class OrganizationController(
     {
         // No need to manually call _guard.EnsureReadAsync() - the aspect handles it!
 
-        PagedResult<OrganizationModel> result = await _organizationService.GetPagedAsync(query, cancellationToken);
+        PagedResult<OrganizationModel, string?> result = await _organizationService.GetPagedAsync(query, cancellationToken);
         return Ok(result);
     }
 
