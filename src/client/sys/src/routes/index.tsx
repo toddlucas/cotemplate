@@ -49,6 +49,17 @@ import Dashboard from "$/features/dashboard/views/Dashboard";
 // Identity views
 import { userListHandle } from "../features/identity/views";
 import UserList from "../features/identity/views/UserList";
+
+// Organization views
+import {
+  OrganizationList,
+  OrganizationDetail,
+  OrganizationForm,
+  organizationListHandle,
+  organizationDetailHandle,
+  organizationFormHandle
+} from "../features/organization/views";
+
 import ThemeView from "$/features/theme/views/ThemeView";
 
 const PlatformRoutes = () => (
@@ -105,7 +116,13 @@ const PlatformRoutes = () => (
         <Route path="dashboard" element={<Dashboard />} />
       </Route>
       <Route element={<DashboardLayout />}>
-      <Route path="identity/users" element={<UserList />} handle={userListHandle} />
+        <Route path="identity/users" element={<UserList />} handle={userListHandle} />
+
+        {/* Organization routes */}
+        <Route path="organization" element={<OrganizationList />} handle={organizationListHandle} />
+        <Route path="organization/new" element={<OrganizationForm />} handle={organizationFormHandle} />
+        <Route path="organization/:id" element={<OrganizationDetail />} handle={organizationDetailHandle} />
+        <Route path="organization/:id/edit" element={<OrganizationForm />} handle={organizationFormHandle} />
       </Route>
     </Route>
   </Routes>

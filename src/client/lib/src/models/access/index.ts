@@ -3,5 +3,7 @@
  * Any changes made to this file can be lost when this file is regenerated.
  */
 
+export * from './organization-detail-model';
 export * from './organization-member-model';
 export * from './organization-member-role';
+export * from './organization-model';

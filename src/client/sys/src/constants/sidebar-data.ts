@@ -81,6 +81,11 @@ export const data: SidebarData = {
           path: "/identity/users",
         },
         {
+          id: "organizations",
+          title: "Organizations",
+          path: "/organization",
+        },
+        {
           id: "explorer",
           title: "Explorer",
           path: "/models/explorer",

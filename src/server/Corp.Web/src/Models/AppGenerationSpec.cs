@@ -38,6 +38,7 @@ public class AppGenerationSpec : BaseGenerationSpec
         AddInterface<ProblemDetailsModel>();
         AddInterface<ValidationProblemDetailsModel>();
 
+        AddInterface<ITemporal>();
         AddInterface<PagedQuery>();
         AddInterface(typeof(PagedResult<>));
 
@@ -46,6 +47,8 @@ public class AppGenerationSpec : BaseGenerationSpec
         AddEnum<OrganizationMemberRole>(accessPath);
         AddInterface<OrganizationMemberModel>(accessPath)
             .Member(x => nameof(x.RoleId)).Type(nameof(OrganizationMemberRole), "./organization-member-role");
+        AddInterface<OrganizationModel>(accessPath);
+        AddInterface<OrganizationDetailModel>(accessPath);
 
         // Business enums
         const string businessPath = "business";
