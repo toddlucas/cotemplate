@@ -1,4 +1,5 @@
 import { Fragment } from "react"
+import { Link } from "react-router-dom"
 import {
   Breadcrumb,
   BreadcrumbItem,
@@ -30,13 +31,21 @@ export function BreadcrumbNav({ data, className }: BreadcrumbNavProps) {
             {index > 0 && <BreadcrumbSeparator className="hidden md:block" />}
             <BreadcrumbItem className={index === 0 ? "hidden md:block" : ""}>
               {breadcrumb.url && index < breadcrumbs.length - 1 ? (
-                <BreadcrumbLink
-                  href={breadcrumb.url}
-                  target={breadcrumb.target}
-                  rel={breadcrumb.isExternal ? "noopener noreferrer" : undefined}
-                >
-                  {breadcrumb.title}
-                </BreadcrumbLink>
+                breadcrumb.isExternal ? (
+                  <BreadcrumbLink
+                    href={breadcrumb.url}
+                    target={breadcrumb.target}
+                    rel="noopener noreferrer"
+                  >
+                    {breadcrumb.title}
+                  </BreadcrumbLink>
+                ) : (
+                  <BreadcrumbLink asChild>
+                    <Link to={breadcrumb.url}>
+                      {breadcrumb.title}
+                    </Link>
+                  </BreadcrumbLink>
+                )
               ) : (
                 <BreadcrumbPage>{breadcrumb.title}</BreadcrumbPage>
               )}
