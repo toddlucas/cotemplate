@@ -1,6 +1,9 @@
 ﻿using Metalama.Framework.Aspects;
 
-namespace Base.Data.Identity;
+using Base.Data;
+using Base.Data.Identity;
+
+namespace Microsoft.AspNetCore.Mvc;
 
 /// <summary>
 /// Metalama aspect that automatically ensures a write transaction is active before executing a method.

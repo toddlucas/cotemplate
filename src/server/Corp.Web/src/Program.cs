@@ -28,6 +28,7 @@ builder.Services.AddForegroundServices();
 builder.Services.AddAuthorizationBuilder()
     .AddDefaultPolicy(AppPolicy.RequireUserRole, policy => policy.RequireAuthenticatedUser())
     .AddPolicy(AppPolicy.RequireUserRole, policy => policy.RequireRole(AppRole.User))
+    .AddPolicy(AppPolicy.RequireResellerRole, policy => policy.RequireRole(AppRole.Reseller))
     .AddPolicy(AppPolicy.RequireAdminRole, policy => policy.RequireRole(AppRole.Admin));
 
 // https://learn.microsoft.com/en-us/aspnet/core/security/authentication/identity?view=aspnetcore-9.0&tabs=visual-studio#adddefaultidentity-and-addidentity

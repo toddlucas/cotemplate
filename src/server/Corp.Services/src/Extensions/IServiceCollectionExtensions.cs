@@ -9,6 +9,9 @@ public static class IServiceCollectionExtensions
         // Identity
         //serviceCollection.AddScoped<ProfileService>();
 
+        // Access
+        serviceCollection.AddScoped<Corp.Access.OrganizationService>();
+
         return serviceCollection;
     }
 }
