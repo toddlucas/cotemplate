@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 
+using Base.Identity;
 using Corp.Data;
 using Corp.Pagination;
 
@@ -13,12 +14,13 @@ using DetailModel = OrganizationDetailModel;
 /// <summary>
 /// Organization service for business logic and data operations.
 /// </summary>
-public class OrganizationService(CorpDbContext dbContext, ILogger<OrganizationService> logger)
+public class OrganizationService(CorpDbContext dbContext, ILogger<OrganizationService> logger, TenantContext<Guid> tenantContext)
 {
     private readonly ILogger _logger = logger;
     private readonly CorpDbContext _dbContext = dbContext;
     private readonly DbSet<Record> _dbSet = dbContext.Organizations;
     private readonly OrganizationQuery _query = new(dbContext.Organizations, logger);
+    private readonly TenantContext<Guid> _tenantContext = tenantContext;
 
     /// <summary>
     /// Gets a single organization by ID.
@@ -63,6 +65,10 @@ public class OrganizationService(CorpDbContext dbContext, ILogger<OrganizationSe
     public async Task<Model> CreateAsync(Model model)
     {
         Record record = model.ToRecord();
+        record.TenantId = _tenantContext.TenantId;
+#if RESELLER
+        record.GroupId = _tenantContext.CurrentGroupId;
+#endif
         record.CreatedAt = record.UpdatedAt = DateTime.UtcNow;
 
         _dbSet.Add(record);
