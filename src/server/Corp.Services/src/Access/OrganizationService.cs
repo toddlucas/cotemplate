@@ -2,6 +2,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 
 using Corp.Data;
+using Corp.Pagination;
 
 namespace Corp.Access;
 
@@ -186,5 +187,31 @@ public class OrganizationService(CorpDbContext dbContext, ILogger<OrganizationSe
     {
         Record[] records = await _query.FindByNameAndStatusAsync(name, status, cancellationToken);
         return records.ToModels();
+    }
+
+    /// <summary>
+    /// Gets a paginated list of organizations with search and sorting support.
+    /// </summary>
+    /// <param name="query">Pagination query parameters.</param>
+    /// <param name="cancellationToken">A cancellation token.</param>
+    /// <returns>A paginated result of organization models.</returns>
+    public async Task<PagedResult<Model>> GetPagedAsync(PagedQuery query, CancellationToken cancellationToken = default)
+    {
+        IQueryable<Record> queryable = _dbSet.AsQueryable();
+
+        query.Search((term) =>
+        {
+            queryable = queryable
+                .Where(o => o.Name.ToLower().Contains(term) ||
+                           o.Code!.ToLower().Contains(term) ||
+                           o.Metadata!.ToLower().Contains(term));
+        });
+
+        Record[] records = await queryable
+            .OrderByPage(query, nameof(Record.Name))
+            .Paginate(query, out int count)
+            .ToArrayAsync(cancellationToken);
+
+        return PagedResult.Create(records.ToModels(), count, (string?)null);
     }
 }

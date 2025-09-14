@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Authorization;
 
 using Corp.Access;
+using Corp.Pagination;
 
 namespace Corp.Controllers.Access;
 
@@ -63,16 +64,19 @@ public class OrganizationController(
     /// <summary>
     /// Returns a list of organizations.
     /// </summary>
+    /// <param name="query">Pagination query parameters.</param>
     /// <param name="cancellationToken">A cancellation token.</param>
-    /// <returns>A list of organizations.</returns>
+    /// <returns>A paginated list of organizations.</returns>
     [HttpGet]
     [TenantRead]
-    [Produces("application/json", Type = typeof(OrganizationModel[]))]
-    [EndpointDescription("Returns a list of organizations.")]
-    public async Task<ActionResult> List(CancellationToken cancellationToken)
+    [Produces("application/json", Type = typeof(PagedResult<OrganizationModel>))]
+    [EndpointDescription("Returns a paginated list of organizations.")]
+    public async Task<ActionResult> List([FromQuery] PagedQuery query, CancellationToken cancellationToken)
     {
-        OrganizationModel[] results = await _organizationService.ListAsync(cancellationToken);
-        return Ok(results);
+        // No need to manually call _guard.EnsureReadAsync() - the aspect handles it!
+
+        PagedResult<OrganizationModel> result = await _organizationService.GetPagedAsync(query, cancellationToken);
+        return Ok(result);
     }
 
     /// <summary>
