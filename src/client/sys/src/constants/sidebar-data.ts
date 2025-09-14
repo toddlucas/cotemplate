@@ -10,7 +10,7 @@ import {
   Settings2,
   SquareTerminal,
 } from "lucide-react"
-import type { SidebarData } from "../features/dashboard/components/sidebar-types"
+import type { SidebarData } from "$/features/dashboard/components/sidebar-types"
 
 // This is sample data.
 export const data: SidebarData = {

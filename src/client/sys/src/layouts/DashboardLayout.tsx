@@ -1,5 +1,6 @@
 import { Outlet, useMatches } from "react-router-dom"
-import { AppSidebar, type SidebarHandle } from "../features/dashboard/components/app-sidebar"
+import { AppSidebar } from "$/features/dashboard/components/app-sidebar"
+import { type SidebarHandle } from "$/features/dashboard/components/sidebar-types"
 import {
   Breadcrumb,
   BreadcrumbItem,
@@ -14,9 +15,9 @@ import {
   SidebarProvider,
   SidebarTrigger,
 } from "$/components/ui/sidebar"
-import { useAppSidebarHandle } from '../features/dashboard/hooks/use-sidebar-handle'
-import { AppSidebarProvider } from "../features/dashboard/contexts/sidebar-context"
-import { data } from '../features/dashboard/components/app-sidebar' // REVIEW: Why is this needed?
+import { useAppSidebarHandle } from '$/features/dashboard/hooks/use-sidebar-handle'
+import { AppSidebarProvider } from '$/features/dashboard/contexts/sidebar-context'
+import { data } from '../constants/sidebar-data' // REVIEW: Why is this needed?
 
 export type DashboardLayoutHandle = {
   sidebar: SidebarHandle;

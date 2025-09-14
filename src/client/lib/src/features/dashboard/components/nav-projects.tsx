@@ -25,8 +25,7 @@ import {
   useSidebar,
 } from "$/components/ui/sidebar"
 import { useAppSidebar } from "../contexts/sidebar-context"
-import type { SidebarProject } from "./app-sidebar"
-import { isExternalItem } from "./app-sidebar"
+import { isExternalItem, type SidebarProject } from "./sidebar-types"
 
 export function NavProjects({
   projects,

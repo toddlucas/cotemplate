@@ -17,8 +17,7 @@ import {
   SidebarMenuSubItem,
 } from "$/components/ui/sidebar"
 import { useAppSidebar } from "../contexts/sidebar-context"
-import type { SidebarNavMainItem } from "./app-sidebar"
-import { isExternalItem, isExpandOnlyItem } from "./app-sidebar"
+import { isExternalItem, isExpandOnlyItem, type SidebarNavMainItem } from "./sidebar-types"
 
 export function NavMain({
   items,

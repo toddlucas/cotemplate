@@ -44,7 +44,7 @@ import AuthViewsIndex from "$/features/auth/views";
 import AuthTestPage from "$/features/auth/views/AuthTestPage";
 
 // Dashboard views
-import Dashboard from "../features/dashboard/views/Dashboard";
+import Dashboard from "$/features/dashboard/views/Dashboard";
 
 // Identity views
 import { userListHandle } from "../features/identity/views";

@@ -1,4 +1,4 @@
-import type { SidebarHandle } from '../../dashboard/components/app-sidebar'
+import type { SidebarHandle } from "$/features/dashboard/components/sidebar-types"
 
 // Enhanced handle for UserList that includes sidebar integration
 export const userListHandle = {
