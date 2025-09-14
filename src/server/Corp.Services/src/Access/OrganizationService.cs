@@ -1,4 +1,4 @@
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 
 using Corp.Data;
@@ -195,7 +195,7 @@ public class OrganizationService(CorpDbContext dbContext, ILogger<OrganizationSe
     /// <param name="query">Pagination query parameters.</param>
     /// <param name="cancellationToken">A cancellation token.</param>
     /// <returns>A paginated result of organization models.</returns>
-    public async Task<PagedResult<Model>> GetPagedAsync(PagedQuery query, CancellationToken cancellationToken = default)
+    public async Task<PagedResult<Model, string?>> GetPagedAsync(PagedQuery query, CancellationToken cancellationToken = default)
     {
         IQueryable<Record> queryable = _dbSet.AsQueryable();
 
