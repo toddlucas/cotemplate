@@ -6,6 +6,7 @@ import {
   MoreHorizontal,
   Trash2,
 } from "lucide-react"
+import { Link } from "react-router-dom"
 
 import {
   DropdownMenu,
@@ -25,6 +26,7 @@ import {
 } from "$/components/ui/sidebar"
 import { useAppSidebar } from "../contexts/sidebar-context"
 import type { SidebarProject } from "./app-sidebar"
+import { isExternalItem } from "./app-sidebar"
 
 export function NavProjects({
   projects,
@@ -48,10 +50,17 @@ export function NavProjects({
                 isActive={isActive}
                 onClick={() => sidebarHandle.actions.onProjectSelect(item.id)}
               >
-                <a href={item.url}>
-                  <item.icon />
-                  <span>{item.name}</span>
-                </a>
+                {isExternalItem(item) ? (
+                  <a href={item.url} target={item.target || '_self'}>
+                    <item.icon />
+                    <span>{item.name}</span>
+                  </a>
+                ) : (
+                  <Link to={item.path} state={item.state}>
+                    <item.icon />
+                    <span>{item.name}</span>
+                  </Link>
+                )}
               </SidebarMenuButton>
             <DropdownMenu>
               <DropdownMenuTrigger asChild>

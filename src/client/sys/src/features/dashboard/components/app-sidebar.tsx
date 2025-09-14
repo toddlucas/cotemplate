@@ -28,6 +28,30 @@ import {
 import type { LucideIcon } from "lucide-react"
 
 //------------------------------
+// Base types for discriminated unions
+//------------------------------
+
+// Base interface for all sidebar items
+export interface BaseSidebarItem {
+  id: string
+  isExternal?: boolean
+}
+
+// Internal route properties
+export interface InternalRoute {
+  isExternal?: false
+  path: string
+  state?: any
+}
+
+// External URL properties
+export interface ExternalRoute {
+  isExternal: true
+  url: string
+  target?: '_blank' | '_self'
+}
+
+//------------------------------
 // Type definitions for the sidebar data structure
 //------------------------------
 
@@ -44,27 +68,24 @@ export interface SidebarTeam {
   plan: string
 }
 
-export interface SidebarNavItem {
-  id: string
+// Navigation item with base types
+export type SidebarNavItem = BaseSidebarItem & {
   title: string
-  url: string
-}
+} & (InternalRoute | ExternalRoute)
 
-export interface SidebarNavMainItem {
-  id: string
+// Main navigation item with base types
+export type SidebarNavMainItem = BaseSidebarItem & {
   title: string
-  url: string
   icon: LucideIcon
   isActive?: boolean
   items: SidebarNavItem[]
-}
+} & (InternalRoute | ExternalRoute)
 
-export interface SidebarProject {
-  id: string
+// Project with base types
+export type SidebarProject = BaseSidebarItem & {
   name: string
-  url: string
   icon: LucideIcon
-}
+} & (InternalRoute | ExternalRoute)
 
 export interface SidebarData {
   user: SidebarUser
@@ -72,7 +93,6 @@ export interface SidebarData {
   navMain: SidebarNavMainItem[]
   projects: SidebarProject[]
 }
-
 
 //------------------------------
 // Sidebar selection state types
@@ -155,108 +175,118 @@ const data: SidebarData = {
     {
       id: "playground",
       title: "Playground",
-      url: "#",
+      path: "/playground",
       icon: SquareTerminal,
       //isActive: true,
       items: [
         {
           id: "history",
           title: "History",
-          url: "#",
+          path: "/playground/history",
         },
         {
           id: "starred",
           title: "Starred",
-          url: "#",
+          path: "/playground/starred",
         },
         {
           id: "playground-settings",
           title: "Settings",
-          url: "#",
+          path: "/playground/settings",
         },
       ],
     },
     {
       id: "models",
       title: "Models",
-      url: "#",
+      path: "/models",
       icon: Bot,
       items: [
         {
           id: "genesis",
           title: "Genesis",
-          url: "#",
+          path: "/models/genesis",
         },
         {
           id: "users",
           title: "Users",
-          url: "#",
+          path: "/identity/users",
         },
         {
           id: "explorer",
           title: "Explorer",
-          url: "#",
+          path: "/models/explorer",
         },
         {
           id: "quantum",
           title: "Quantum",
-          url: "#",
+          path: "/models/quantum",
         },
       ],
     },
     {
       id: "documentation",
       title: "Documentation",
-      url: "#",
+      isExternal: true,
+      url: "https://docs.example.com",
+      target: "_blank",
       icon: BookOpen,
       items: [
         {
           id: "introduction",
           title: "Introduction",
-          url: "#",
+          isExternal: true,
+          url: "https://docs.example.com/intro",
+          target: "_blank",
         },
         {
           id: "get-started",
           title: "Get Started",
-          url: "#",
+          isExternal: true,
+          url: "https://docs.example.com/get-started",
+          target: "_blank",
         },
         {
           id: "tutorials",
           title: "Tutorials",
-          url: "#",
+          isExternal: true,
+          url: "https://docs.example.com/tutorials",
+          target: "_blank",
         },
         {
           id: "changelog",
           title: "Changelog",
-          url: "#",
+          isExternal: true,
+          url: "https://docs.example.com/changelog",
+          target: "_blank",
         },
       ],
     },
     {
       id: "settings",
       title: "Settings",
-      url: "#",
+      path: "/settings",
       icon: Settings2,
       items: [
         {
           id: "general",
           title: "General",
-          url: "#",
+          path: "/settings/general",
         },
         {
           id: "team",
           title: "Team",
-          url: "#",
+          path: "/settings/team",
         },
         {
           id: "billing",
           title: "Billing",
-          url: "#",
+          path: "/settings/billing",
         },
         {
           id: "limits",
           title: "Limits",
-          url: "#",
+          path: "/settings/limits",
         },
       ],
     },
@@ -265,19 +295,21 @@ const data: SidebarData = {
     {
       id: "design-engineering",
       name: "Design Engineering",
-      url: "#",
+      path: "/projects/design-engineering",
       icon: Frame,
     },
     {
       id: "sales-marketing",
       name: "Sales & Marketing",
-      url: "#",
+      path: "/projects/sales-marketing",
       icon: PieChart,
     },
     {
       id: "travel",
       name: "Travel",
-      url: "#",
+      isExternal: true,
+      url: "https://travel.example.com",
+      target: "_blank",
       icon: Map,
     },
   ],
@@ -307,6 +339,18 @@ export function AppSidebar({ sidebarHandle, ...props }: AppSidebarProps & Compon
       <SidebarRail />
     </Sidebar>
   )
+}
+
+//------------------------------
+// Generic type guards that work with any sidebar item
+//------------------------------
+
+export function isExternalItem<T extends BaseSidebarItem>(item: T): item is T & ExternalRoute {
+  return item.isExternal === true
+}
+
+export function isInternalItem<T extends BaseSidebarItem>(item: T): item is T & InternalRoute {
+  return !item.isExternal
 }
 
 export { data }

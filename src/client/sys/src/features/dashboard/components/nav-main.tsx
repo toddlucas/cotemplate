@@ -1,4 +1,5 @@
 import { ChevronRight } from "lucide-react"
+import { Link } from "react-router-dom"
 
 import {
   Collapsible,
@@ -17,6 +18,7 @@ import {
 } from "$/components/ui/sidebar"
 import { useAppSidebar } from "../contexts/sidebar-context"
 import type { SidebarNavMainItem } from "./app-sidebar"
+import { isExternalItem } from "./app-sidebar"
 
 export function NavMain({
   items,
@@ -63,12 +65,23 @@ export function NavMain({
                             asChild
                             isActive={isSubItemActive}
                           >
-                            <a
-                              href={subItem.url}
-                              onClick={() => sidebarHandle.actions.onSubItemSelect(subItem.id, item.id)}
-                            >
-                              <span>{subItem.title}</span>
-                            </a>
+                            {isExternalItem(subItem) ? (
+                              <a
+                                href={subItem.url}
+                                target={subItem.target || '_self'}
+                                onClick={() => sidebarHandle.actions.onSubItemSelect(subItem.id, item.id)}
+                              >
+                                <span>{subItem.title}</span>
+                              </a>
+                            ) : (
+                              <Link
+                                to={subItem.path}
+                                state={subItem.state}
+                                onClick={() => sidebarHandle.actions.onSubItemSelect(subItem.id, item.id)}
+                              >
+                                <span>{subItem.title}</span>
+                              </Link>
+                            )}
                           </SidebarMenuSubButton>
                         </SidebarMenuSubItem>
                       )
