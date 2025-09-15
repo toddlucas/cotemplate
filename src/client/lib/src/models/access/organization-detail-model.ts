@@ -17,5 +17,4 @@ export interface OrganizationDetailModel extends ITemporal, OrganizationModel {
     checklistInstances: ChecklistModel[];
     createdAt: Date;
     updatedAt: Date;
-    deletedAt?: Date;
 }

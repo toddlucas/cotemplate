@@ -6,5 +6,4 @@
 export interface ITemporal {
     createdAt: Date;
     updatedAt: Date;
-    deletedAt?: Date;
 }

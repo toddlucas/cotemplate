@@ -212,7 +212,7 @@ const OrganizationDetail = () => {
                 )}
 
                 {/* Temporal Information */}
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-4 pt-4 border-t">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4 pt-4 border-t">
                   <div>
                     <label className="text-sm font-medium text-muted-foreground">Created</label>
                     <p className="text-sm mt-1">
@@ -223,12 +223,6 @@ const OrganizationDetail = () => {
                     <label className="text-sm font-medium text-muted-foreground">Last Updated</label>
                     <p className="text-sm mt-1">
                       {organization.updatedAt ? new Date(organization.updatedAt).toLocaleDateString() : 'N/A'}
-                    </p>
-                  </div>
-                  <div>
-                    <label className="text-sm font-medium text-muted-foreground">Deleted</label>
-                    <p className="text-sm mt-1">
-                      {organization.deletedAt ? new Date(organization.deletedAt).toLocaleDateString() : 'N/A'}
                     </p>
                   </div>
                 </div>
