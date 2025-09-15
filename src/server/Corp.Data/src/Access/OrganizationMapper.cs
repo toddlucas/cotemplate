@@ -1,4 +1,4 @@
-using Corp.Business;
+﻿using Corp.Business;
 using Corp.Workflow;
 
 namespace Corp.Access;
@@ -43,7 +43,7 @@ public static partial class OrganizationMapper
     [MapperIgnoreTarget(nameof(DetailModel.ChecklistInstances))]
     [MapperIgnoreTarget(nameof(DetailModel.CreatedAt))]
     [MapperIgnoreTarget(nameof(DetailModel.UpdatedAt))]
-    [MapperIgnoreTarget(nameof(DetailModel.DeletedAt))]
+    //[MapperIgnoreTarget(nameof(DetailModel.DeletedAt))]
     public static partial DetailModel ToDetailModel(this Record source);
 
     /// <summary>
@@ -76,7 +76,7 @@ public static partial class OrganizationMapper
     [MapperIgnoreTarget(nameof(DetailModel.ChecklistInstances))]
     [MapperIgnoreTarget(nameof(DetailModel.CreatedAt))]
     [MapperIgnoreTarget(nameof(DetailModel.UpdatedAt))]
-    [MapperIgnoreTarget(nameof(DetailModel.DeletedAt))]
+    //[MapperIgnoreTarget(nameof(DetailModel.DeletedAt))]
     public static partial DetailModel[] ToDetailModels(this IEnumerable<Record> source);
 
     /// <summary>

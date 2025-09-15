@@ -2,7 +2,7 @@
 
 using TRecord = TaskTemplate;
 
-public class TaskTemplate : TaskTemplateModel, ITemporal
+public class TaskTemplate : TaskTemplateModel, ITemporalRecord
 {
     #region Internal properties
 
@@ -30,7 +30,7 @@ public class TaskTemplate : TaskTemplateModel, ITemporal
 
     #endregion Navigation properties
 
-    #region ITemporal
+    #region ITemporalRecord
 
     /// <summary>
     /// The created timestamp.
@@ -53,7 +53,7 @@ public class TaskTemplate : TaskTemplateModel, ITemporal
     [Description("The date and time this record was deleted, or null, in the format defined by RFC 3339, section 5.6, for example, 2017-07-21T17:32:28Z.")]
     public DateTime? DeletedAt { get; set; }
 
-    #endregion ITemporal
+    #endregion ITemporalRecord
 
     public static void OnModelCreating(ModelBuilder modelBuilder)
     {

@@ -95,9 +95,9 @@ public class TaskTemplateDetailModel : TaskTemplateModel, ITemporal
     /// <summary>
     /// The deleted timestamp.
     /// </summary>
-    [Display(Name = "Deleted at")]
-    [Description("The date and time this record was deleted, or null, in the format defined by RFC 3339, section 5.6, for example, 2017-07-21T17:32:28Z.")]
-    public DateTime? DeletedAt { get; set; }
+    //[Display(Name = "Deleted at")]
+    //[Description("The date and time this record was deleted, or null, in the format defined by RFC 3339, section 5.6, for example, 2017-07-21T17:32:28Z.")]
+    //public DateTime? DeletedAt { get; set; }
 
     #endregion ITemporal
 }

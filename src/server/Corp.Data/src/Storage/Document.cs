@@ -4,7 +4,7 @@ namespace Corp.Storage;
 
 using TRecord = Document;
 
-public class Document : DocumentModel, ITemporal
+public class Document : DocumentModel, ITemporalRecord
 {
     #region Internal properties
 
@@ -60,7 +60,7 @@ public class Document : DocumentModel, ITemporal
 
     #endregion Navigation properties
 
-    #region ITemporal
+    #region ITemporalRecord
 
     /// <summary>
     /// The created timestamp.
@@ -83,7 +83,7 @@ public class Document : DocumentModel, ITemporal
     [Description("The date and time this record was deleted, or null, in the format defined by RFC 3339, section 5.6, for example, 2017-07-21T17:32:28Z.")]
     public DateTime? DeletedAt { get; set; }
 
-    #endregion ITemporal
+    #endregion ITemporalRecord
 
     public static void OnModelCreating(ModelBuilder modelBuilder)
     {

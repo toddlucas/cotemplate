@@ -6,7 +6,7 @@ namespace Corp.Workflow;
 
 using TRecord = TaskRecord;
 
-public class TaskRecord : TaskModel, ITemporal
+public class TaskRecord : TaskModel, ITemporalRecord
 {
     #region Internal properties
 
@@ -72,7 +72,7 @@ public class TaskRecord : TaskModel, ITemporal
 
     #endregion Navigation properties
 
-    #region ITemporal
+    #region ITemporalRecord
 
     /// <summary>
     /// The created timestamp.
@@ -95,7 +95,7 @@ public class TaskRecord : TaskModel, ITemporal
     [Description("The date and time this record was deleted, or null, in the format defined by RFC 3339, section 5.6, for example, 2017-07-21T17:32:28Z.")]
     public DateTime? DeletedAt { get; set; }
 
-    #endregion ITemporal
+    #endregion ITemporalRecord
 
     public static void OnModelCreating(ModelBuilder modelBuilder)
     {

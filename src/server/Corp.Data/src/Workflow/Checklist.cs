@@ -5,7 +5,7 @@ namespace Corp.Workflow;
 
 using TRecord = Checklist;
 
-public class Checklist : ChecklistModel, ITemporal
+public class Checklist : ChecklistModel, ITemporalRecord
 {
     #region Internal properties
 
@@ -66,7 +66,7 @@ public class Checklist : ChecklistModel, ITemporal
 
     #endregion Navigation properties
 
-    #region ITemporal
+    #region ITemporalRecord
 
     /// <summary>
     /// The created timestamp.
@@ -89,7 +89,7 @@ public class Checklist : ChecklistModel, ITemporal
     [Description("The date and time this record was deleted, or null, in the format defined by RFC 3339, section 5.6, for example, 2017-07-21T17:32:28Z.")]
     public DateTime? DeletedAt { get; set; }
 
-    #endregion ITemporal
+    #endregion ITemporalRecord
 
     public static void OnModelCreating(ModelBuilder modelBuilder)
     {
