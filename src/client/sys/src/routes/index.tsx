@@ -1,8 +1,9 @@
-import { Routes, Route } from 'react-router-dom';
+import { createBrowserRouter } from 'react-router-dom';
 
 import Layout from '../layouts/Layout';
 import DashboardLayout from '../layouts/DashboardLayout';
 import AuthProtected from "./AuthProtected";
+import Shell from '../Shell';
 
 import App from '../App';
 
@@ -62,70 +63,207 @@ import {
 
 import ThemeView from "$/features/theme/views/ThemeView";
 
-const PlatformRoutes = () => (
-  <Routes>
-    {/* Public routes */}
-    <Route element={<Layout />}>
-      <Route path="/" element={<App />} />
+export const router = createBrowserRouter([
+  {
+    path: "/",
+    element: <Shell />,
+    children: [
+      {
+        path: "",
+        element: <Layout />,
+        children: [
+          {
+            path: "",
+            element: <App />,
+          },
+          // Auth routes
+          {
+            path: "signin",
+            element: <Login />,
+          },
+          {
+            path: "signout",
+            element: <Logout />,
+          },
+          {
+            path: "signup",
+            element: <Register />,
+          },
+          {
+            path: "forgot-password",
+            element: <ForgotPassword />,
+          },
+          {
+            path: "access-denied",
+            element: <AccessDenied />,
+          },
+          {
+            path: "confirm-email",
+            element: <ConfirmEmail />,
+          },
+          {
+            path: "confirm-email-change",
+            element: <ConfirmEmailChange />,
+          },
+          {
+            path: "external-login",
+            element: <ExternalLogin />,
+          },
+          {
+            path: "forgot-password-confirmation",
+            element: <ForgotPasswordConfirmation />,
+          },
+          {
+            path: "lockout",
+            element: <Lockout />,
+          },
+          {
+            path: "login-with-2fa",
+            element: <LoginWith2fa />,
+          },
+          {
+            path: "login-with-recovery-code",
+            element: <LoginWithRecoveryCode />,
+          },
+          {
+            path: "register-confirmation",
+            element: <RegisterConfirmation />,
+          },
+          {
+            path: "resend-email-confirmation",
+            element: <ResendEmailConfirmation />,
+          },
+          {
+            path: "reset-password",
+            element: <ResetPassword />,
+          },
+          {
+            path: "reset-password-confirmation",
+            element: <ResetPasswordConfirmation />,
+          },
+          // Test routes
+          {
+            path: "auth-test",
+            element: <AuthViewsIndex />,
+          },
+          {
+            path: "auth-system-test",
+            element: <AuthTestPage />,
+          },
+          {
+            path: "theme-test",
+            element: <ThemeView />,
+          },
+        ],
+      },
+      // Routes that require authentication
+      {
+        path: "",
+        element: <AuthProtected />,
+        children: [
+          {
+            path: "",
+            element: <Layout />,
+            children: [
+              {
+                path: "account/change-password",
+                element: <ChangePassword />,
+              },
+              {
+                path: "account/delete-personal-data",
+                element: <DeletePersonalData />,
+              },
+              {
+                path: "account/disable-2fa",
+                element: <Disable2fa />,
+              },
+              {
+                path: "account/download-personal-data",
+                element: <DownloadPersonalData />,
+              },
+              {
+                path: "account/email",
+                element: <Email />,
+              },
+              {
+                path: "account/enable-authenticator",
+                element: <EnableAuthenticator />,
+              },
+              {
+                path: "account/external-logins",
+                element: <ExternalLogins />,
+              },
+              {
+                path: "account/generate-recovery-codes",
+                element: <GenerateRecoveryCodes />,
+              },
+              {
+                path: "account/personal-data",
+                element: <PersonalData />,
+              },
+              {
+                path: "account/reset-authenticator",
+                element: <ResetAuthenticator />,
+              },
+              {
+                path: "account/set-password",
+                element: <SetPassword />,
+              },
+              {
+                path: "account/show-recovery-codes",
+                element: <ShowRecoveryCodes />,
+              },
+              {
+                path: "account/two-factor-authentication",
+                element: <TwoFactorAuthentication />,
+              },
+              {
+                path: "identity/user/list",
+                element: <UserList />,
+              },
+              // Dashboard routes
+              {
+                path: "dashboard",
+                element: <Dashboard />,
+              },
+            ],
+          },
+          {
+            path: "",
+            element: <DashboardLayout />,
+            children: [
+              {
+                path: "identity/users",
+                element: <UserList />,
+                handle: userListHandle,
+              },
+              // Organization routes
+              {
+                path: "organization",
+                element: <OrganizationList />,
+                handle: organizationListHandle,
+              },
+              {
+                path: "organization/new",
+                element: <OrganizationForm />,
+                handle: organizationFormHandle,
+              },
+              {
+                path: "organization/:id",
+                element: <OrganizationDetail />,
+                handle: organizationDetailHandle,
+              },
+              {
+                path: "organization/:id/edit",
+                element: <OrganizationForm />,
+                handle: organizationFormHandle,
+              },
+            ],
+          },
+        ],
+      },
+    ],
+  },
+]);
 
-      {/* Auth routes */}
-      <Route path="signin" element={<Login />} />
-      <Route path="signout" element={<Logout />} />
-      <Route path="signup" element={<Register />} />
-      <Route path="forgot-password" element={<ForgotPassword />} />
-      <Route path="access-denied" element={<AccessDenied />} />
-      <Route path="confirm-email" element={<ConfirmEmail />} />
-      <Route path="confirm-email-change" element={<ConfirmEmailChange />} />
-      <Route path="external-login" element={<ExternalLogin />} />
-      <Route path="forgot-password-confirmation" element={<ForgotPasswordConfirmation />} />
-      <Route path="lockout" element={<Lockout />} />
-      <Route path="login-with-2fa" element={<LoginWith2fa />} />
-      <Route path="login-with-recovery-code" element={<LoginWithRecoveryCode />} />
-      <Route path="register-confirmation" element={<RegisterConfirmation />} />
-      <Route path="resend-email-confirmation" element={<ResendEmailConfirmation />} />
-      <Route path="reset-password" element={<ResetPassword />} />
-      <Route path="reset-password-confirmation" element={<ResetPasswordConfirmation />} />
-
-      {/* Test routes */}
-      <Route path="auth-test" element={<AuthViewsIndex />} />
-      <Route path="auth-system-test" element={<AuthTestPage />} />
-
-      <Route path="theme-test" element={<ThemeView />} />
-    </Route>
-
-    {/* Routes that require authentication */}
-    <Route element={<AuthProtected />}>
-      <Route element={<Layout />}>
-        <Route path="account/change-password" element={<ChangePassword />} />
-        <Route path="account/delete-personal-data" element={<DeletePersonalData />} />
-        <Route path="account/disable-2fa" element={<Disable2fa />} />
-        <Route path="account/download-personal-data" element={<DownloadPersonalData />} />
-        <Route path="account/email" element={<Email />} />
-        <Route path="account/enable-authenticator" element={<EnableAuthenticator />} />
-        <Route path="account/external-logins" element={<ExternalLogins />} />
-        <Route path="account/generate-recovery-codes" element={<GenerateRecoveryCodes />} />
-        <Route path="account/personal-data" element={<PersonalData />} />
-        <Route path="account/reset-authenticator" element={<ResetAuthenticator />} />
-        <Route path="account/set-password" element={<SetPassword />} />
-        <Route path="account/show-recovery-codes" element={<ShowRecoveryCodes />} />
-        <Route path="account/two-factor-authentication" element={<TwoFactorAuthentication />} />
-
-        <Route path="identity/user/list" element={<UserList />} />
-
-        {/* Dashboard routes */}
-        <Route path="dashboard" element={<Dashboard />} />
-      </Route>
-      <Route element={<DashboardLayout />}>
-        <Route path="identity/users" element={<UserList />} handle={userListHandle} />
-
-        {/* Organization routes */}
-        <Route path="organization" element={<OrganizationList />} handle={organizationListHandle} />
-        <Route path="organization/new" element={<OrganizationForm />} handle={organizationFormHandle} />
-        <Route path="organization/:id" element={<OrganizationDetail />} handle={organizationDetailHandle} />
-        <Route path="organization/:id/edit" element={<OrganizationForm />} handle={organizationFormHandle} />
-      </Route>
-    </Route>
-  </Routes>
-);
-
-export default PlatformRoutes;
+export default router;

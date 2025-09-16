@@ -1,15 +1,13 @@
 import { StrictMode, Suspense } from 'react'
 import { createRoot } from 'react-dom/client'
-import { BrowserRouter } from "react-router-dom";
-import Shell from './Shell';
+import { RouterProvider } from "react-router-dom";
+import { router } from './routes';
 import './index.css'
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
-    <BrowserRouter>
-      <Suspense fallback={<div>Loading...</div>}>
-        <Shell />
-      </Suspense>
-    </BrowserRouter>
+    <Suspense fallback={<div>Loading...</div>}>
+      <RouterProvider router={router} />
+    </Suspense>
   </StrictMode>,
 );

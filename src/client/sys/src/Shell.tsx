@@ -1,12 +1,12 @@
 import { useContainerResource } from './container';
 import { ContainerProvider } from '$/platform/di/ContainerContext';
-import Routes from "./routes";
+import { Outlet } from 'react-router-dom';
 
 function Shell() {
   const container = useContainerResource();
   return (
     <ContainerProvider container={container}>
-      <Routes />
+      <Outlet />
     </ContainerProvider>
   );
 }
