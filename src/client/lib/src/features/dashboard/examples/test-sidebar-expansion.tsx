@@ -1,8 +1,8 @@
 import { useEffect } from 'react'
-import { useSidebar } from '../contexts/sidebar-context'
+import { useAppSidebar } from '../contexts/sidebar-context'
 
 export function TestSidebarExpansion() {
-  const sidebarHandle = useSidebar()
+  const sidebarHandle = useAppSidebar()
 
   // Test the expansion on mount
   useEffect(() => {

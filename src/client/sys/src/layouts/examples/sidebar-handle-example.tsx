@@ -1,5 +1,5 @@
-import { useAppSidebarHandle } from "../hooks/use-sidebar-handle"
-import { data } from "../components/app-sidebar"
+import { useAppSidebarHandle } from '$/features/dashboard/hooks/use-sidebar-handle'
+import { data } from '../../constants/sidebar-data'
 
 // Example of how to use the sidebar handle in a route component
 export function ExampleRouteWithSidebar() {

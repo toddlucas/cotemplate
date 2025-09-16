@@ -41,7 +41,6 @@ export default function DashboardLayout() {
               />
               <BreadcrumbNav
                 data={data}
-                selection={sidebarHandle.selection}
               />
             </div>
           </header>

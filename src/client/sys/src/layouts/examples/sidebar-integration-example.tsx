@@ -1,7 +1,8 @@
 import React from 'react'
-import { useAppSidebarHandle } from '../hooks/use-sidebar-handle'
-import { data } from '../components/app-sidebar'
-import type { SidebarHandle } from '../components/app-sidebar'
+import { useAppSidebarHandle } from '$/features/dashboard/hooks/use-sidebar-handle'
+import { data } from '../../constants/sidebar-data'
+import type { SidebarHandle } from '$/features/dashboard/components/sidebar-types'
+import UserListWithSidebarExample from '../../features/identity/views/UserList-with-sidebar-example'
 
 //------------------------------
 // 1. LAYOUT LEVEL - DashboardLayout.tsx
@@ -195,7 +196,7 @@ export function UserListExample({ sidebarHandle }: UserListProps) {
 
 export const routeConfig = {
   path: '/identity/users',
-  element: <UserListExample />,
+  element: <UserListWithSidebarExample />,
   handle: {
     sidebar: {
       // This would be the sidebar handle for this specific route

@@ -1,5 +1,6 @@
 import { useLocation } from 'react-router-dom'
 import type { SidebarData, SidebarSelection } from '../components/sidebar-types'
+import { useCurrentRouteSelection } from './sidebar-utils'
 
 export interface BreadcrumbItem {
   title: string
@@ -8,14 +9,8 @@ export interface BreadcrumbItem {
   target?: string
 }
 
-export interface RouteBreadcrumbHandle {
-  breadcrumbs?: BreadcrumbItem[]
-  breadcrumbTitle?: string
-}
-
 interface UseBreadcrumbsProps {
   data: SidebarData
-  selection?: Partial<SidebarSelection>
 }
 
 // Pure function to generate breadcrumbs from data + selection
@@ -65,9 +60,10 @@ export function generateBreadcrumbsFromSelection(data: SidebarData, selection: P
   return breadcrumbs
 }
 
-export function useBreadcrumbs({ data, selection }: UseBreadcrumbsProps) {
+export function useBreadcrumbs({ data }: UseBreadcrumbsProps) {
   const location = useLocation()
   const currentPathname = location.pathname
+  const selection = useCurrentRouteSelection()
 
   // If selection is provided, use it for breadcrumb generation
   if (selection?.activeNavItemId) {

@@ -1,4 +1,4 @@
-import { useState, useCallback, useMemo } from "react"
+import { useState, useCallback, useMemo, useEffect } from "react"
 import type {
   SidebarHandle,
   SidebarSelection,
@@ -7,6 +7,7 @@ import type {
   SidebarData
 } from "../components/sidebar-types"
 import { generateBreadcrumbsFromSelection } from "./use-breadcrumbs"
+import { useCurrentRouteSelection } from "./sidebar-utils"
 
 interface useAppSidebarHandleProps {
   initialData: SidebarData
@@ -19,14 +20,45 @@ export function useAppSidebarHandle({
   initialSelection = {},
   initialState = {}
 }: useAppSidebarHandleProps): SidebarHandle {
+  const currentRouteSelection = useCurrentRouteSelection()
+
   // Selection state
-  const [selection, setSelection] = useState<SidebarSelection>({
-    activeTeamId: initialSelection.activeTeamId,
-    activeNavItemId: initialSelection.activeNavItemId,
-    activeSubItemId: initialSelection.activeSubItemId,
-    activeProjectId: initialSelection.activeProjectId,
-    expandedItems: initialSelection.expandedItems || [],
+  const [selection, setSelection] = useState<SidebarSelection>(() => {
+    // Get initial selection from route matches
+    if (currentRouteSelection.activeNavItemId) {
+      return {
+        activeTeamId: currentRouteSelection.activeTeamId,
+        activeNavItemId: currentRouteSelection.activeNavItemId,
+        activeSubItemId: currentRouteSelection.activeSubItemId,
+        activeProjectId: currentRouteSelection.activeProjectId,
+        expandedItems: currentRouteSelection.expandedItems || [],
+      }
+    }
+
+    // Fallback to initial selection if no route provides sidebar data
+    return {
+      activeTeamId: initialSelection.activeTeamId,
+      activeNavItemId: initialSelection.activeNavItemId,
+      activeSubItemId: initialSelection.activeSubItemId,
+      activeProjectId: initialSelection.activeProjectId,
+      expandedItems: initialSelection.expandedItems || [],
+    }
   })
+
+  // Update selection when route changes
+  useEffect(() => {
+    if (currentRouteSelection.activeNavItemId) {
+      setSelection(prev => ({
+        ...prev,
+        activeTeamId: currentRouteSelection.activeTeamId ?? prev.activeTeamId,
+        activeNavItemId: currentRouteSelection.activeNavItemId ?? prev.activeNavItemId,
+        activeSubItemId: currentRouteSelection.activeSubItemId ?? prev.activeSubItemId,
+        activeProjectId: currentRouteSelection.activeProjectId ?? prev.activeProjectId,
+        expandedItems: currentRouteSelection.expandedItems ?? prev.expandedItems,
+      }))
+    }
+    // If no route provides sidebar data, keep current selection (don't reset to initial)
+  }, [currentRouteSelection])
 
   // UI state
   const [state, setState] = useState<SidebarState>({

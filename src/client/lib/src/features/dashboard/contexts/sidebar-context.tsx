@@ -1,5 +1,5 @@
 import { createContext, useContext, type ReactNode } from 'react'
-import type { SidebarHandle } from '../components/app-sidebar'
+import type { SidebarHandle } from '../components/sidebar-types'
 
 // Create the context
 const SidebarContext = createContext<SidebarHandle | null>(null)
